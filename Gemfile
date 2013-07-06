@@ -6,7 +6,13 @@ gem 'eventmachine'  , require: 'em/pure_ruby'
 gem 'rails'         , '~>4.0.0'
 gem 'rake'          , '~>10.1.0'
 
+gem 'redis'         , '~>3.0.4'
 gem 'mongoid'       , github: 'mongoid/mongoid', ref: '3b1ada6' # 4.0.0(master)
+
+gem 'geocoder'      , '~>1.1.8'
+gem 'craftoid'      , github: 'arbind/craftoid', ref: '11f3ff4bd7'
+
+gem 'omniauth-twitter'
 
 gem 'sass-rails'    , '~>4.0.0'
 gem 'haml-rails'    , '~>0.4'
