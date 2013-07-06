@@ -1,4 +1,15 @@
 HoverCraftService::Application.routes.draw do
+
+  root 'dashboard#show', as: :dashboard
+
+  get 'auth/login' => 'auth#new', as: :login
+  get 'auth/logout' => 'auth#logout', as: :logout
+
+  get 'auth/streamer' => 'auth#auth_streamer', as: :authorize_streamer
+
+  get 'auth/:provider/callback' => 'auth#oauth_sign_in'
+  get 'auth/:provider/failure' => 'auth#oauth_failure'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -39,7 +50,7 @@ HoverCraftService::Application.routes.draw do
   #       get 'recent', on: :collection
   #     end
   #   end
-  
+
   # Example resource route with concerns:
   #   concern :toggleable do
   #     post 'toggle'

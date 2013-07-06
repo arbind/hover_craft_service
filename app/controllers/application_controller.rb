@@ -1,5 +1,30 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+  before_action :current_user
+  rescue_from Exception, :with => :bounce
+
+  protected
+
+  def current_user
+    @current_user ||= TwitterUser.where(twitter_id: session[:current_user]).first
+  rescue
+    ensure_logout
+  end
+
+  def ensure_login
+    redirect_to login_path unless current_user
+  end
+
+  def ensure_logout
+    session.delete :current_user
+    session.delete :signup_streamer
+    @current_user = nil
+  end
+
+  def bounce(exception)
+    ensure_logout
+    notice = exception.to_s
+    p notice
+    redirect_to login_path, notice: notice
+  end
 end
