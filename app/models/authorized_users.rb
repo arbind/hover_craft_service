@@ -1,0 +1,31 @@
+class AuthorizedUsers
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
+  field :authorizations, type: Hash, default: {}
+
+  private_class_method :new
+  @@instance = AuthorizedUsers.first_or_create
+
+  def self.service
+    return @@instance
+  end
+
+  def authorized?(twitter_id)
+    authorizations.include? twitter_id
+  end
+
+  def authorize(twitter_id_name_hash)
+    twitter_id_name_hash.each do |twitter_id, name|
+      authorizations[twitter_id] = name
+    end
+    save
+  end
+
+  def unauthorize(twitter_id_name_hash)
+    twitter_id_name_hash.each do |twitter_id, name|
+      authorizations.delete twitter_id
+    end
+    save
+  end
+end
