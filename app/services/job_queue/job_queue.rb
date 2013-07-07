@@ -15,22 +15,26 @@ class JobQueue
     entry
   end
 
-  def self.any?(group)
-    entry = JobQueue.where(group: group).limit(1).first
+  def self.any_jobs_for_group?(group)
+    !!peek_at_group(group)
+  end
+
+  def self.any?(key)
+    !!peek(key)
   end
 
   def self.dequeue(key)
     entry = peek(key)
     return nil unless entry
     entry.delete
-    entry.job
+    entry
   end
 
   def self.dequeue_from_group(group)
     entry = peek_at_group(group)
     return nil unless entry
     entry.delete
-    entry.job
+    entry
   end
 
   def self.peek(key)
