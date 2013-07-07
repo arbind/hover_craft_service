@@ -11,7 +11,7 @@ class TwitterJobs
 
   def self.refresh_all_tweet_streamers
     TweetStreamer.all.each do |tweet_streamer|
-      queue_tweet_streamer tweet_streamer
+      refresh_tweet_streamer tweet_streamer
     end
   end
 

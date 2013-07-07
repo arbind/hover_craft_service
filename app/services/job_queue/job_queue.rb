@@ -11,7 +11,7 @@ class JobQueue
 
   def self.enqueue(key, uid, job, group=nil)
     entry = JobQueue.where(group: group, key: key, uid: uid).first_or_create
-    JobQueue.update_attributes job: job
+    entry.update_attributes job: job
     entry
   end
 
