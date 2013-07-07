@@ -24,3 +24,4 @@ puts ":: Running in rake task"  if ENV["IN_RAKE"]
 puts ":: Running in console"    if ENV["IN_CONSOLE"]
 
 LAUNCH_BACKGROUND_THREADS = ENV["IN_SERVER"] and !Rails.env.test?
+DELAY_STARTUP_OF_BACKGROUND_THREADS = 6 #0 # wait to launch threads (seconds)
