@@ -1,66 +1,44 @@
 
-# How often to look for new TwitterCrafts (friends_ids of a TweetStreamer)
-TWEET_STREAMER_REFRESH_INTERVAL = 10 #*60 # seconds
-
-TWITTER_REQUEST_INTERVAL = {
-  refresh_all_tweet_streamers: TWEET_STREAMER_REFRESH_INTERVAL,
-  tweet_streamer: INTERVAL_FOR_TWITTER_RATE_LIMITS[:friend_ids],
-  twitter_craft:  INTERVAL_FOR_TWITTER_RATE_LIMITS[:users],
-}
-
-TWITTER_JOB_THREADS = {}
-
 module BackgroundTwitterJobs
+  # Allow time for the server to start up before kicking off the thread
+  @options = { launch_delay: ENV["STARTUP_DELAY_OF_BACKGROUND_THREADS"].to_i }
 
-  def self.refresh_all_tweet_streamers
+  # queue jobs to :pull_streamer_friend_ids
+  # only run if all other twitter jobs have completed
+  def self.launch_job_to_refresh_streamers
     key = :refresh_all_tweet_streamers
-    return if TWITTER_JOB_THREADS[key]
-    interval = TWITTER_REQUEST_INTERVAL[key]
-    description = "Refresh TweetStreamers every #{interval} seconds"
-    puts ":: Launched Thread to #{description}"
-    TWITTER_JOB_THREADS[key] = Thread.new do
-      Thread.current[:name] = key
-      Thread.current[:description] = description
-      sleep DELAY_STARTUP_OF_BACKGROUND_THREADS
-      loop do
-        sleep interval
-        puts ":: #{description}"
-        begin
-          TwitterJobs.refresh_all_tweet_streamers
-        rescue Exception => ex
-          puts ex.message
-        end
+    interval = ENV["TWEET_STREAMER_REFRESH_INTERVAL"] ||10 # 10*60 # seconds
+    BackgroundThreads.launch key, interval, @options do
+      unless JobQueue.any_jobs_for_group?(:twitter)
+        TwitterJobs.refresh_all_tweet_streamers
+      else
+        puts ":: skipped refresh_all_tweet_streamers: twitter jobs still running"
       end
     end
   end
 
-  def self.process_job(key)
-    return if TWITTER_JOB_THREADS[key]
-    interval = TWITTER_REQUEST_INTERVAL[key]
-    description = "Process :#{key} job every #{interval} seconds"
-    puts ":: Launched Thread to #{description}"
-    TWITTER_JOB_THREADS[key] = Thread.new do
-      Thread.current[:name] = key
-      Thread.current[:description] = description
-      sleep DELAY_STARTUP_OF_BACKGROUND_THREADS
-      loop do
-        sleep interval
-        puts ":: #{description}"
-        begin
-          TwitterJobs.process_next_job key
-        rescue Exception => ex
-          puts ex.message
-        end
-      end
+  # Pull TweetStreamer friend_ids and look for any new friends
+  # Queue newfound friends to :create_hover_crafts_for_streamer_friends
+  def self.launch_job_to_pull_streamer_friend_ids
+    key = :pull_streamer_friend_ids
+    interval = 12 # INTERVAL_FOR_TWITTER_RATE_LIMITS[:friend_ids]
+    BackgroundThreads.launch key, interval, @options do
+      TwitterJobs.process_next_job key
+    end
+  end
+
+  # Populate new HoverCraft with Twitter info (of a streamer friend)
+  def self.launch_job_to_create_hover_crafts_for_streamer_friends
+    key = :create_hover_crafts_for_streamer_friends
+    interval = 12 # INTERVAL_FOR_TWITTER_RATE_LIMITS[:users]
+    BackgroundThreads.launch key, interval, @options do
+      TwitterJobs.process_next_job key
     end
   end
 end
 
-if LAUNCH_BACKGROUND_THREADS
-  # Queue all Tweet Streamers to be refreshed
-  BackgroundTwitterJobs.refresh_all_tweet_streamers
-  # Pull friends ids from TweetStreamer and queue each to become a TwitterCraft
-  BackgroundTwitterJobs.process_job(:tweet_streamer)
-  # Pull a twitter user as a new TwitterCraft (creating a Root HoverCraft)
-  BackgroundTwitterJobs.process_job(:twitter_craft)
+if ENV["LAUNCH_BACKGROUND_THREADS"]
+  BackgroundTwitterJobs.launch_job_to_refresh_streamers
+  BackgroundTwitterJobs.launch_job_to_pull_streamer_friend_ids
+  # BackgroundTwitterJobs.launch_job_to_create_hover_crafts_for_streamer_friends
 end
