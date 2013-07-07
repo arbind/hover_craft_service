@@ -4,26 +4,20 @@ class TwitterApi # via http://sferik.github.io/twitter/
     self
   end
 
-  def self.user(screen_name, options)
-    tid = id_for(twitter_id)
-    user = Twitter.user(tid, options)
+  def self.user(screen_name, options={})
+    user = Twitter.user(screen_name, options)
   end
 
-  def self.friends(twitter_id, options={})
-    tid = id_for(twitter_id)
-    cursor = Twitter.friends(tid, options)
+  def self.users(twitter_id_array, options={})
+    user = Twitter.users(twitter_id_array, options)
   end
 
-  def self.friend_ids(twitter_id, options={})
-    tid = id_for(twitter_id)
-    cursor = Twitter.friend_ids(tid, options)
+  def self.friends(screen_name, options={})
+    cursor = Twitter.friends(screen_name, options)
   end
 
-private
-
-  def id_for(twitter_id)
-    id = twitter_id.to_i
-    id = twitter_id if 0 == id
+  def self.friend_ids(screen_name, options={})
+    cursor = Twitter.friend_ids(screen_name, options)
   end
 
 end
