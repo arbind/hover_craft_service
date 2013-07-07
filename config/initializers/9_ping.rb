@@ -1,25 +1,17 @@
-PING_INTERVAL = 8*60 # in seconds
+PING_INTERVAL = 8*60 # seconds
 
 module BackgroundPing
   def self.start
     ping_uri = URI.parse("#{ENV['APPLICATION_URL']}/ping")
+
+    # Allow time for the server to start up before kicking off the thread
+    options = { launch_delay: ENV["STARTUP_DELAY_OF_BACKGROUND_THREADS"] }
+    key = :ping
     interval = PING_INTERVAL
-    description = "Ping #{ping_uri} every #{PING_INTERVAL} minutes"
-    puts ":: Launched Thread to #{description}"
-    ping_thread = Thread.new do
-      Thread.current[:name] = :ping
-      Thread.current[:description] = description
-      sleep DELAY_STARTUP_OF_BACKGROUND_THREADS
-      loop do
-        sleep interval
-        begin
-          Net::HTTP.get_response(ping_uri)
-        rescue Exception => ex
-          puts ex.message
-        end
-      end
+    BackgroundThreads.launch key, interval, options do
+      Net::HTTP.get_response(ping_uri)
     end
   end
 end
 
-BackgroundPing.start if LAUNCH_BACKGROUND_THREADS
+BackgroundPing.start if ENV["LAUNCH_BACKGROUND_THREADS"]
