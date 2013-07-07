@@ -26,9 +26,19 @@ class JobQueue
     entry.job
   end
 
-  def self.peek(key)
-    entry = JobQueue.where(key: key).asc(:created_at).limit(1).first
-    return nil if entry.nil?
+  def self.dequeue_from_group(group)
+    entry = peek_at_group(group)
+    return nil unless entry
+    entry.delete
     entry.job
   end
+
+  def self.peek(key)
+    JobQueue.where(key: key).asc(:created_at).limit(1).first
+  end
+
+  def self.peek_at_group(group)
+    JobQueue.where(group: group).asc(:created_at).limit(1).first
+  end
+
 end
