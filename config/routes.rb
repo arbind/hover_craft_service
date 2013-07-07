@@ -1,7 +1,7 @@
 HoverCraftService::Application.routes.draw do
 
-  get "tweet_streamers/index"
-  get "tweet_streamers/show"
+  get '/ping' => 'root#ping', as: :ping
+
   root 'dashboard#show', as: :dashboard
 
   get 'auth/login' => 'auth#new', as: :login
