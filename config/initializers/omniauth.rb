@@ -3,5 +3,5 @@ if defined?(Rails::Server) and SECRET::TWITTER::KEY == LOCAL::TWITTER::KEY
 end
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :twitter, TWITTER[:KEY], TWITTER[:SECRET]
+  provider :twitter, SECRET::TWITTER::KEY, SECRET::TWITTER::SECRET
 end

@@ -1,4 +1,4 @@
-class DashboardController < ProtectedApplicationController
+class DashboardController < ApplicationProtectedController
   def show
   end
 end

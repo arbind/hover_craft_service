@@ -1,25 +1,25 @@
-class TweetStreamer < TwitterUser
+class TweetStreamer
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Geocoder::Model::Mongoid
+  include GeoAliases
 
   field :twitter_id
+  field :name
+  field :screen_name
+  field :twitter_account_created_at
+
   field :token
   field :secret
 
-  field :screen_name
-  field :name
-  field :twitter_account_created_at
-
-  field :utc_offset
-  field :time_zone
-  field :geo_enabled
-  field :statuses_count
   field :lang
-  field :default_profile_image
-  field :friends, type: Array, default: []
+  field :geo_enabled
+  field :friends        , type: Array   , default: []
 
-  field :address, default: nil
-  field :coordinates, type: Array, default: []
+  # geocoder fields
+  field :address                        , default: nil
+  field :location_hash  , type: Hash    , default: {}
+  field :coordinates    , type: Array   , default: []
 
   geocoded_by :address
   reverse_geocoded_by :coordinates

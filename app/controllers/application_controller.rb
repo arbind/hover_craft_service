@@ -3,13 +3,15 @@ class ApplicationController < ActionController::Base
   before_action :current_user
   rescue_from Exception, :with => :bounce
 
-  protected
+  helper_method :current_user
 
   def current_user
     @current_user ||= TwitterUser.where(twitter_id: session[:current_user]).first
   rescue
     ensure_logout
   end
+
+  protected
 
   def ensure_login
     redirect_to login_path unless current_user

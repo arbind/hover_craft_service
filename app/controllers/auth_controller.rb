@@ -7,22 +7,17 @@ class AuthController < ApplicationController
     ensure_logout
   end
 
-  def auth_streamer
-    session[:signup_streamer] = true
-    redirect_to '/auth/twitter'
-  end
-
   def logout
     ensure_logout
     redirect_to login_path
   end
 
   def oauth_sign_in # actually sign in in here!
-    ensure_logout
     signup_streamer = session.delete :signup_streamer
     if signup_streamer
-      authorize_streamer
-      redirect_to streamers_path
+      tweet_streamer = authorize_streamer
+      notice = "#{tweet_streamer.screen_name} is authorized as a Tweet Streamer"
+      redirect_to tweet_streamers_path, notice: notice
     else
       sign_in
       redirect_to dashboard_path
@@ -37,12 +32,25 @@ class AuthController < ApplicationController
   protected
 
   def sign_in
+    ensure_logout
     ensure_authorized_user
     params = user_hash
     tid = params[:twitter_id]
     u = TwitterUser.where(twitter_id: tid).first_or_create
     u.update_attributes(params)
     session[:current_user] = tid
+  end
+
+  def authorize_streamer
+    ensure_tweet_streamer
+    params = streamer_hash
+    tid = params[:twitter_id]
+    u = TweetStreamer.where(twitter_id: tid).first_or_create
+    u.update_attributes(params)
+    u
+  end
+
+  def ensure_tweet_streamer
   end
 
   def ensure_authorized_user

@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %title Hover Craft Service
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1"}
+    = stylesheet_link_tag    "application", media: "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+  %body
+    .menu-bar
+      %ul
+        %li
+          %a{href: tweet_streamers_path} streamers
+      =image_tag(current_user.image, alt: current_user.name)
+      %a.logout{href: logout_path, title: 'logout'}= current_user.screen_name
+    %p
+    - flash.each do |name, msg|
+      %div(class=name)= msg
+    = yield
