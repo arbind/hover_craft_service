@@ -40,5 +40,5 @@ end
 if ENV["LAUNCH_BACKGROUND_THREADS"]
   BackgroundTwitterJobs.launch_job_to_refresh_streamers
   BackgroundTwitterJobs.launch_job_to_pull_streamer_friend_ids
-  # BackgroundTwitterJobs.launch_job_to_create_hover_crafts_for_streamer_friends
+  BackgroundTwitterJobs.launch_job_to_create_hover_crafts_for_streamer_friends
 end
