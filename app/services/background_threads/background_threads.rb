@@ -16,14 +16,14 @@ module BackgroundThreads
       puts ":: BackgroundThreads launched [every #{interval}s]: #{description}"
       sleep launch_delay if 0 < launch_delay
       loop do
-        sleep interval
         puts ":: BackgroundThreads runing [every #{interval}s]: #{description}"
         begin
           yield
         rescue Exception => ex
+          puts ex
           puts ex.message
-          e.backtrace
         end
+        sleep interval
       end
     end
   end
