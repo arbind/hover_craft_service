@@ -15,5 +15,5 @@ end
 
 if ENV["LAUNCH_BACKGROUND_THREADS"]
   # wait to launch threads (seconds)
-  ENV["STARTUP_DELAY_OF_BACKGROUND_THREADS"] ||= 6.to_s # in seconds
+  ENV["STARTUP_DELAY_OF_BACKGROUND_THREADS"] ||= "10" # in seconds
 end

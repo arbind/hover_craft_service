@@ -3,18 +3,20 @@ Twitter.configure do |config|
   config.consumer_secret = SECRET::TWITTER::SECRET
 end
 
-# Eventually Use TwitterClientPool instead:
-# Twitter::Client.new consumer_key: SECRET::TWITTER::KEY, consumer_secret: SECRET::TWITTER::SECRET
+# Eventually Use Pool TwitterClients instead:
+# Twitter::Client.new consumer_key: SECRET::TWITTER1::KEY, consumer_secret: SECRET::TWITTER1::SECRET
+# Twitter::Client.new consumer_key: SECRET::TWITTER2::KEY, consumer_secret: SECRET::TWITTER2::SECRET
+# Twitter::Client.new consumer_key: SECRET::TWITTER3::KEY, consumer_secret: SECRET::TWITTER3::SECRET
 
-
-# twitter rate limit window
-TWITTER_RATE_LIMIT_WINDOW = 15 * 60 # in seconds
+# twitter rate limit window (for each deveoper app, for each twitter resource)
+ENV["TWITTER_RATE_LIMIT_WINDOW"] ||= "15" # in minutes
 
 # number of seconds to wait before making next twitter request
 def wait_time_for_request_limit_of(num_requests_per_window)
+  window = 60 * ENV["TWITTER_RATE_LIMIT_WINDOW"].to_i # in seconds
   num_requests = num_requests_per_window - 1
   safety_seconds = 2
-  (TWITTER_RATE_LIMIT_WINDOW / num_requests) + safety_seconds
+  (window / num_requests) + safety_seconds
 end
 
 # request limits for each resource per application

@@ -5,12 +5,12 @@ module BackgroundTwitterJobs
 
   # queue jobs to :pull_streamer_friend_ids
   # only run if all other twitter jobs have completed
-  def self.launch_job_to_refresh_streamers
+  def self.launch_job_to_pull_twitter_crafts_from_all_streamers
     key = :refresh_all_tweet_streamers
-    interval = ENV["TWEET_STREAMER_REFRESH_INTERVAL"] ||10 # 10*60 # seconds
+    interval = ENV["TWEET_STREAMER_REFRESH_INTERVAL"] || 30 #10*60 # seconds
     BackgroundThreads.launch key, interval, @options do
       unless JobQueue.any_jobs_for_group?(:twitter)
-        TwitterJobs.refresh_all_tweet_streamers
+        TwitterJobs.pull_twitter_crafts_from_all_streamers
       else
         puts ":: skipped refresh_all_tweet_streamers: twitter jobs still running"
       end
@@ -21,7 +21,7 @@ module BackgroundTwitterJobs
   # Queue newfound friends to :create_hover_crafts_for_streamer_friends
   def self.launch_job_to_pull_streamer_friend_ids
     key = :pull_streamer_friend_ids
-    interval = 12 # INTERVAL_FOR_TWITTER_RATE_LIMITS[:friend_ids]
+    interval = INTERVAL_FOR_TWITTER_RATE_LIMITS[:friend_ids]
     BackgroundThreads.launch key, interval, @options do
       TwitterJobs.process_next_job key
     end
@@ -30,7 +30,7 @@ module BackgroundTwitterJobs
   # Populate new HoverCraft with Twitter info (of a streamer friend)
   def self.launch_job_to_create_hover_crafts_for_streamer_friends
     key = :create_hover_crafts_for_streamer_friends
-    interval = 12 # INTERVAL_FOR_TWITTER_RATE_LIMITS[:users]
+    interval = INTERVAL_FOR_TWITTER_RATE_LIMITS[:users]
     BackgroundThreads.launch key, interval, @options do
       TwitterJobs.process_next_job key
     end
@@ -38,7 +38,7 @@ module BackgroundTwitterJobs
 end
 
 if ENV["LAUNCH_BACKGROUND_THREADS"]
-  BackgroundTwitterJobs.launch_job_to_refresh_streamers
+  BackgroundTwitterJobs.launch_job_to_pull_twitter_crafts_from_all_streamers
   BackgroundTwitterJobs.launch_job_to_pull_streamer_friend_ids
   BackgroundTwitterJobs.launch_job_to_create_hover_crafts_for_streamer_friends
 end

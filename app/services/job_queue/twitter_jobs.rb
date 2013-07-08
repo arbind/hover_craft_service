@@ -9,20 +9,20 @@ class TwitterJobs
     process entry if entry
   end
 
-  def self.refresh_all_tweet_streamers
+  def self.pull_twitter_crafts_from_all_streamers
     TweetStreamer.all.each do |tweet_streamer|
-      refresh_tweet_streamer tweet_streamer
+      pull_twitter_crafts_from_streamer tweet_streamer
     end
   end
 
-  def self.refresh_tweet_streamer(tweet_streamer)
-    pull_streamer_friend_ids tweet_streamer.screen_name
+  def self.pull_twitter_crafts_from_streamer(tweet_streamer)
+    q_pull_streamer_friend_ids tweet_streamer.screen_name
   end
 
 private
 
   # Queue job to find any new TweetStreamer friends
-  def self.pull_streamer_friend_ids(screen_name, cursor = -1)
+  def self.q_pull_streamer_friend_ids(screen_name, cursor = -1)
     key = :pull_streamer_friend_ids
     return unless screen_name
     group = :twitter
@@ -37,19 +37,18 @@ private
     return unless twitter_ids and twitter_ids.any?
     group = :twitter
 
-    batch_of_100_ids = twitter_ids.each_slice(100).to_a
-    p "batch_of_100_ids"
-    p batch_of_100_ids
-    batch_of_100_ids.each do |ids_for_100_friends|
-      uid   = ids_for_100_friends.first
-      job   = { twitter_ids: ids_for_100_friends }
+    batch_size = 100
+    batches_of_ids = twitter_ids.each_slice(batch_size).to_a
+    batches_of_ids.each do |batch_of_friend_ids|
+      uid   = batch_of_friend_ids.first
+      job   = { twitter_ids: batch_of_friend_ids }
       JobQueue.enqueue(key, uid, job, group)
     end
   end
 
   def self.process(entry)
-    method ="process_#{entry[:key]}".to_sym
-    send method, entry[:job]
+    method ="process_#{entry['key']}".to_sym
+    send method, entry['job']
   end
 
   # Job Processors
@@ -59,19 +58,30 @@ private
   # 2. detect new friends
   # 3. queue newfound friends to become a HoverCraft
   def self.process_pull_streamer_friend_ids(job)
-    streamer_tid = job['screen_name']
+    streamer_screen_name = job['screen_name']
     next_cursor = job['cursor'] || -1
     next_cursor = next_cursor.to_i
-    cursor = TwitterApi.service.friend_ids(streamer_tid, cursor: next_cursor)
+    cursor = TwitterApi.service.friend_ids(streamer_screen_name, cursor: next_cursor)
     if (0 < cursor.next) # reque this job with the next page of results
-      pull_streamer_friend_ids streamer_tid, cursor.next
+      q_pull_streamer_friend_ids streamer_screen_name, cursor.next
     end
-    friend_ids = cursor.ids.map &:to_s
-    hover_crafts = HoverCraft.in twitter_id: friend_ids
-    hover_craft_ids = hover_crafts.map &:twitter_id
+    friend_ids = cursor.ids.select{ |id| TwitterApi.service.valid_id?(id) }
+    friend_ids = friend_ids.map! &:to_s
 
+    hover_craft_ids = []
+    batch_size = 100
+    batches_of_ids = friend_ids .each_slice(batch_size).to_a
+    batches_of_ids.each do |batch_of_friend_ids|
+      hover_crafts = HoverCraft.in twitter_id: batch_of_friend_ids
+      hover_craft_ids += hover_crafts.map &:twitter_id
+    end
     new_friend_ids = friend_ids - hover_craft_ids
     new_friend_ids = new_friend_ids.map &:to_i
+
+    msg =  "#{streamer_screen_name} has #{new_friend_ids.count} new friends "
+    msg += "( #{friend_ids.count} total )"
+    puts msg
+
     q_create_hover_crafts_for_streamer_friends new_friend_ids
   end
 
@@ -80,17 +90,18 @@ private
   # 2. create a new HoverCrafts for each friend
   # 3. populate the HoverCraft with friend's twitter info
   def self.process_create_hover_crafts_for_streamer_friends(job)
-    tids = job[:twitter_ids]
-    users = TwitterApi.service.users(tid)
+    tids = job['twitter_ids']
+    users = TwitterApi.service.users(tids)
     users.each do |user_profile|
-      params = hover_craft_info_for_twitter_user user_profile.to_hash
+      params = hover_craft_attributes_for user_profile
       hc = HoverCraft.where(twitter_id: params[:twitter_id]).first_or_create
       hc.update_attributes params
     end
   end
 
-  def hover_craft_attributes_for(twitter_user_profile)
-    twitter_profile = twitter_user_profile.slice *twitter_profile_attributes
+  def self.hover_craft_attributes_for(twitter_user_profile)
+    twitter_profile = twitter_user_profile.to_hash
+    twitter_profile.slice! *twitter_profile_attributes
     {
       twitter_id:           twitter_profile[:id_str],
       twitter_name:         twitter_profile[:name],
@@ -100,7 +111,7 @@ private
     }
   end
 
-  def twitter_profile_attributes
+  def self.twitter_profile_attributes
     [
       :id_str,
       :screen_name,
