@@ -1,0 +1,8 @@
+export TWITTER_KEY=twitter123
+export TWITTER_SECRET=twitterABC
+
+export YELP_YWS_ID=yelpID
+export YELP_CONSUMER_KEY=yelp123
+export YELP_CONSUMER_SECRET=yelpABC
+export YELP_TOKEN=yelp456
+export YELP_TOKEN_SECRET=yelpXYZ

@@ -15,6 +15,9 @@ gem 'craftoid'          , github: 'arbind/craftoid', ref: '11f3ff4bd7'
 gem 'omniauth-twitter'  , '~>1.0.0'
 
 gem 'twitter'           , '~>4.8.1'
+gem 'yelpster'          , '~>1.1.4'
+
+gem 'nokogiri'
 
 gem 'sass-rails'        , '~>4.0.0'
 gem 'haml-rails'        , '~>0.4'
