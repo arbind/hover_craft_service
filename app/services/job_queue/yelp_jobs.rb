@@ -37,7 +37,7 @@ private
     hover_craft = HoverCraft.where(id:hover_craft_id).first
     return unless hover_craft
     biz = YelpApi.service.biz_for_name(biz_name, place)
-    return unless biz
+    biz ||= HashObject.new({yelp_id: ""})
     hover_craft.update_attributes biz.to_hover_craft
   end
 end

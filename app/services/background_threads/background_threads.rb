@@ -1,4 +1,5 @@
 BACKGROUND_THREADS = {}
+_ALARM = "!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 
 module BackgroundThreads
   def self.launch(name, interval, options={})
@@ -18,7 +19,9 @@ module BackgroundThreads
         begin
           yield
         rescue Exception => ex
+          puts _ALARM
           puts ex.message
+          puts _ALARM
         end
         sleep interval
       end

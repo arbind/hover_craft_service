@@ -134,5 +134,12 @@ private
       :profile_sidebar_fill_color,
     ]
   end
+
+  def self.final_location_of_url(twitter_url)
+    return nil unless twitter_url
+    Web.final_location_of_url twitter_url
+  end
+
+
 end
 

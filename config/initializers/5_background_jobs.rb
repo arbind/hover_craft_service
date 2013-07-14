@@ -1,5 +1,5 @@
 
-module BackgroundTwitterJobs
+module BackgroundJobs
   # Allow time for the server to start up before kicking off the thread
   @options = { launch_delay: ENV["STARTUP_DELAY_OF_BACKGROUND_THREADS"].to_i }
 
@@ -50,11 +50,32 @@ module BackgroundTwitterJobs
     end
   end
 
+  def self.launch_job_to_find_final_location_of_twitter_website_url
+    key = :find_final_location_of_twitter_website_url
+    interval = 8
+    BackgroundThreads.launch key, interval, @options do
+      hover_crafts = HoverCraft.where(twitter_website_url: /t\.co/)
+      hover_crafts.each do |hover_craft|
+        url = nil
+        begin
+          puts hover_craft.twitter_website_url
+          url = Web.final_location_of_url hover_craft.twitter_website_url
+        rescue Exception => e
+          puts ":: Error to #{key} for #{hover_craft.twitter_website_url}"
+          puts e.message
+          puts e.inspect
+        ensure
+          hover_craft.update_attributes({twitter_website_url: url}) if url
+        end
+      end
+    end
+  end
 end
 
 if ENV["LAUNCH_BACKGROUND_THREADS"]
-  BackgroundTwitterJobs.launch_job_to_pull_twitter_crafts_from_all_streamers
-  BackgroundTwitterJobs.launch_job_to_pull_streamer_friend_ids
-  BackgroundTwitterJobs.launch_job_to_create_hover_crafts_for_streamer_friends
-  BackgroundTwitterJobs.launch_job_to_pull_yelp_craft_for_twitter
+  BackgroundJobs.launch_job_to_pull_twitter_crafts_from_all_streamers
+  BackgroundJobs.launch_job_to_pull_streamer_friend_ids
+  BackgroundJobs.launch_job_to_create_hover_crafts_for_streamer_friends
+  BackgroundJobs.launch_job_to_pull_yelp_craft_for_twitter
+  BackgroundJobs.launch_job_to_find_final_location_of_twitter_website_url
 end
