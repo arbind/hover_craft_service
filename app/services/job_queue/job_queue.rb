@@ -45,4 +45,7 @@ class JobQueue
     JobQueue.where(group: group).asc(:created_at).limit(1).first
   end
 
+  def job
+    HashObject.new self[:job]
+  end
 end

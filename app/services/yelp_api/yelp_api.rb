@@ -4,6 +4,8 @@ class YelpApi
   V2_MAX_RESULTS_LIMIT = 20
   V2_MAX_RADIUS_FILTER = 40000 #in meters (~25 miles)
 
+  def self.service() self end
+
   def initialize() @yelp_client = Yelp::Client.new end
 
   def self.yelp() instance.yelp_client end

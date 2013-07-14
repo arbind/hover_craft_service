@@ -1,9 +1,7 @@
 class TwitterApi # via http://sferik.github.io/twitter/
   INVALID_IDS = {} # move this into redis as it gets bigger
 
-  def self.service
-    self
-  end
+  def self.service() self end
 
   def self.valid_id?(twitter_id)
     INVALID_IDS[twitter_id.to_i].nil?

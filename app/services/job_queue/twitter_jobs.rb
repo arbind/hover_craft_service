@@ -1,14 +1,6 @@
 # assumes all friends of a TweetStreamer are verified TwitterCrafts
-class TwitterJobs
-  def service
-    self
-  end
-
-  def self.process_next_job(key)
-    entry = JobQueue.dequeue key
-    process entry if entry
-  end
-
+class TwitterJobs < JobServiceBase
+  GROUP = :twitter
   def self.pull_twitter_crafts_from_all_streamers
     TweetStreamer.all.each do |tweet_streamer|
       pull_twitter_crafts_from_streamer tweet_streamer
@@ -16,39 +8,35 @@ class TwitterJobs
   end
 
   def self.pull_twitter_crafts_from_streamer(tweet_streamer)
-    q_pull_streamer_friend_ids tweet_streamer.screen_name
+    q_pull_streamer_friend_ids tweet_streamer
   end
 
 private
 
   # Queue job to find any new TweetStreamer friends
-  def self.q_pull_streamer_friend_ids(screen_name, cursor = -1)
+  def self.q_pull_streamer_friend_ids(tweet_streamer, cursor = -1)
     key = :pull_streamer_friend_ids
-    return unless screen_name
-    group = :twitter
-    uid   = screen_name
-    job   = { screen_name: screen_name, cursor: cursor }
-    JobQueue.enqueue(key, uid, job, group)
+    return unless tweet_streamer and tweet_streamer.screen_name
+    uid   = tweet_streamer.screen_name
+    job   = {
+      streamer_id: tweet_streamer.id,
+      cursor: cursor
+    }
+    JobQueue.enqueue(key, uid, job, GROUP)
   end
 
   # Queue newfound friends of TweetStreamers to become new HoverCrafts
-  def self.q_create_hover_crafts_for_streamer_friends(twitter_ids)
+  def self.q_create_hover_crafts_for_streamer_friends(twitter_ids, streamer_id)
     key   = :create_hover_crafts_for_streamer_friends
     return unless twitter_ids and twitter_ids.any?
-    group = :twitter
 
     batch_size = 100
     batches_of_ids = twitter_ids.each_slice(batch_size).to_a
     batches_of_ids.each do |batch_of_friend_ids|
       uid   = batch_of_friend_ids.first
-      job   = { twitter_ids: batch_of_friend_ids }
-      JobQueue.enqueue(key, uid, job, group)
+      job   = { twitter_ids: batch_of_friend_ids, streamer_id: streamer_id }
+      JobQueue.enqueue(key, uid, job, GROUP)
     end
-  end
-
-  def self.process(entry)
-    method ="process_#{entry['key']}".to_sym
-    send method, entry['job']
   end
 
   # Job Processors
@@ -58,12 +46,14 @@ private
   # 2. detect new friends
   # 3. queue newfound friends to become a HoverCraft
   def self.process_pull_streamer_friend_ids(job)
-    streamer_screen_name = job['screen_name']
-    next_cursor = job['cursor'] || -1
+    streamer_id = job.streamer_id
+    streamer = TweetStreamer.where(id:streamer_id).first
+    return unless streamer
+    next_cursor = job.cursor || -1
     next_cursor = next_cursor.to_i
-    cursor = TwitterApi.service.friend_ids(streamer_screen_name, cursor: next_cursor)
+    cursor = TwitterApi.service.friend_ids(streamer.screen_name, cursor: next_cursor)
     if (0 < cursor.next) # reque this job with the next page of results
-      q_pull_streamer_friend_ids streamer_screen_name, cursor.next
+      q_pull_streamer_friend_ids streamer.screen_name, cursor.next
     end
     friend_ids = cursor.ids.select{ |id| TwitterApi.service.valid_id?(id) }
     friend_ids = friend_ids.map! &:to_s
@@ -78,11 +68,11 @@ private
     new_friend_ids = friend_ids - hover_craft_ids
     new_friend_ids = new_friend_ids.map &:to_i
 
-    msg =  "#{streamer_screen_name} has #{new_friend_ids.count} new friends "
+    msg =  "#{streamer.screen_name} has #{new_friend_ids.count} new friends "
     msg += "( #{friend_ids.count} total )"
     puts msg
 
-    q_create_hover_crafts_for_streamer_friends new_friend_ids
+    q_create_hover_crafts_for_streamer_friends new_friend_ids, streamer_id
   end
 
   # Process newfound friends of TweetStreamers to become new HoverCrafts
@@ -90,12 +80,15 @@ private
   # 2. create a new HoverCrafts for each friend
   # 3. populate the HoverCraft with friend's twitter info
   def self.process_create_hover_crafts_for_streamer_friends(job)
-    tids = job['twitter_ids']
+    tids = job.twitter_ids
+    streamer_id = job.streamer_id
     users = TwitterApi.service.users(tids)
     users.each do |user_profile|
       params = hover_craft_attributes_for user_profile
-      hc = HoverCraft.where(twitter_id: params[:twitter_id]).first_or_create
-      hc.update_attributes params
+      params[:tweet_streamer_id] = streamer_id
+      hover_craft = HoverCraft.where(twitter_id: params[:twitter_id]).first_or_create
+      hover_craft.update_attributes params
+      YelpJobs.service.pull_yelp_craft_for_new_twitter_craft hover_craft
     end
   end
 
@@ -106,7 +99,7 @@ private
       twitter_id:           twitter_profile[:id_str],
       twitter_name:         twitter_profile[:name],
       twitter_screen_name:  twitter_profile[:screen_name],
-      twitter_website:      twitter_profile[:url],
+      twitter_website_url:  twitter_profile[:url],
       twitter_profile:      twitter_profile,
     }
   end
