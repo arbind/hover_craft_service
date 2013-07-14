@@ -9,6 +9,11 @@ module BackgroundTwitterJobs
     key = :refresh_all_tweet_streamers
     interval = ENV["TWEET_STREAMER_REFRESH_INTERVAL"] || 30 #10*60 # seconds
     BackgroundThreads.launch key, interval, @options do
+      unless JobQueue.any_jobs_for_group?(:yelp)
+          YelpJobs.pull_yelp_craft_for_new_twitter_crafts
+      else
+        puts ":: skipped pull_yelp_craft_for_new_twitter_crafts: yelp jobs still running"
+      end
       unless JobQueue.any_jobs_for_group?(:twitter)
         TwitterJobs.pull_twitter_crafts_from_all_streamers
       else
@@ -35,10 +40,21 @@ module BackgroundTwitterJobs
       TwitterJobs.process_next_job key
     end
   end
+
+  # Populate new HoverCraft with Yelp info
+  def self.launch_job_to_pull_yelp_craft_for_twitter
+    key = :pull_yelp_craft_for_twitter
+    interval = INTERVAL_FOR_YELP_RATE_LIMIT
+    BackgroundThreads.launch key, interval, @options do
+      YelpJobs.process_next_job key
+    end
+  end
+
 end
 
 if ENV["LAUNCH_BACKGROUND_THREADS"]
   BackgroundTwitterJobs.launch_job_to_pull_twitter_crafts_from_all_streamers
   BackgroundTwitterJobs.launch_job_to_pull_streamer_friend_ids
   BackgroundTwitterJobs.launch_job_to_create_hover_crafts_for_streamer_friends
+  BackgroundTwitterJobs.launch_job_to_pull_yelp_craft_for_twitter
 end
