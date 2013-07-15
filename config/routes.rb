@@ -10,6 +10,7 @@ HoverCraftService::Application.routes.draw do
   get 'auth/:provider/callback' => 'auth#oauth_sign_in'
   get 'auth/:provider/failure' => 'auth#oauth_failure'
 
+  resources :background_threads, only: [:index]
   resources :tweet_streamers, except: [:update]
 
   # The priority is based upon order of creation: first created -> highest priority.

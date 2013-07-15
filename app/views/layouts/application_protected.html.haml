@@ -11,6 +11,8 @@
       %ul
         %li
           %a{href: tweet_streamers_path} streamers
+        %li
+          %a{href: background_threads_path} threads
       =image_tag(current_user.image, alt: current_user.name)
       %a.logout{href: logout_path, title: 'logout'}= current_user.screen_name
     %p

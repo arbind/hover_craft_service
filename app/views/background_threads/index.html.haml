@@ -1,0 +1,19 @@
+%table
+  %caption Background Threads
+  %thead
+    %tr
+      %th thread
+      %th run
+      %th status
+      %th next run
+      %th last run
+      %th errors
+  %tbody.threads
+    - BACKGROUND_THREADS.each do |key, thread|
+      %tr
+        %td.name=               thread[:name]
+        %td.run_number=         thread[:run_number]
+        %td.status=             thread[:status]
+        %td.next_run=           time_ago_in_words thread[:next_run]
+        %td.last_run_completed= thread[:last_run_completed]
+        %td.errors=             thread[:errors].map(&:message).join('<br>').html_safe
