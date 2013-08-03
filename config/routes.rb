@@ -1,4 +1,15 @@
-HoverCraftService::Application.routes.draw do
+require 'sidekiq/web'
+  HoverCraftService::Application.routes.draw do
+
+  class AuthConstraint
+    def self.admin?(request)
+      AuthorizedUsers.service.authorized? request.session[:current_user]
+    end
+  end
+
+  constraints lambda {|request| AuthConstraint.admin?(request) } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   get '/ping' => 'root#ping', as: :ping
 
