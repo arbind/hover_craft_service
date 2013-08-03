@@ -1,28 +1,46 @@
-== README
+login with LAStreamer
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+1 Retrieve all twitter that LAStreamer is Followings
+2 Create HoverCraft for each with its known TwitterCraft
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+1 Search Yelp for TwitterCraft's name in Streamer's city for the YelpCraft
+2 Add Website Craft for each TwitterCraft that has a website
+3 Scan WebsiteCraft for FacebookCraft and YelpCraft
+4 Cross reference YelpCraft from 1 and 3
+5 Cross reference website urls from FacebookCraft, TwitterCraft and YelpCraft
+6 Etc
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+
+
+tasks:
+
+process:
+create tweet streamer for a city
+set the location of the tweet streamer to the city
+find all food trucks in that city and have the tweet streamer follow them
+login and authorize hovercraft app with the tweet streamer
+---
+HoverCraft app:
+for each tweet streamer
+  get list of friends
+  for each friend
+    create a hovercraft using the friends twitter id
+    use the twitter name to search and search for it on yelp
+    add the yelp biz to the hover craft if found
+    determine the website for the food truck using twittercraft  and yelpcraft
+    find links on the website
+    for each link
+      add facebook to the HoverCraft
+      add yelp to the hovercraft if not already found
+
+
+
+
+
+
+find_new_twitter_ids_for_streamer
+create_hovercraft_for_twitter_id
+find_yelp_biz_for_hovercraft
+find_website_for_hovercraft
+scrape_site_for_links (scrape_webpage_for_info)
