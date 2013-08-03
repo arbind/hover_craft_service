@@ -1,14 +1,18 @@
 
 module BackgroundJobs
   # Allow time for the server to start up before kicking off the thread
-  @options = { launch_delay: ENV["STARTUP_DELAY_OF_BACKGROUND_THREADS"].to_i }
+
+
+  def self.delay_launch(seconds)
+    { launch_delay: (seconds+ENV["STARTUP_DELAY_OF_BACKGROUND_THREADS"].to_i) }
+  end
 
   # queue jobs to :pull_streamer_friend_ids
   # only run if all other twitter jobs have completed
   def self.launch_job_to_pull_twitter_crafts_from_all_streamers
     key = :refresh_all_tweet_streamers
     interval = ENV["TWEET_STREAMER_REFRESH_INTERVAL"] || 30 #10*60 # seconds
-    BackgroundThreads.launch key, interval, @options do
+    BackgroundThreads.launch key, interval, delay_launch(0) do
       unless JobQueue.any_jobs_for_group?(:yelp)
           YelpJobs.pull_yelp_craft_for_new_twitter_crafts
       else
@@ -27,7 +31,7 @@ module BackgroundJobs
   def self.launch_job_to_pull_streamer_friend_ids
     key = :pull_streamer_friend_ids
     interval = INTERVAL_FOR_TWITTER_RATE_LIMITS[:friend_ids]
-    BackgroundThreads.launch key, interval, @options do
+    BackgroundThreads.launch key, interval, delay_launch(4) do
       TwitterJobs.process_next_job key
     end
   end
@@ -36,7 +40,7 @@ module BackgroundJobs
   def self.launch_job_to_create_hover_crafts_for_streamer_friends
     key = :create_hover_crafts_for_streamer_friends
     interval = INTERVAL_FOR_TWITTER_RATE_LIMITS[:users]
-    BackgroundThreads.launch key, interval, @options do
+    BackgroundThreads.launch key, interval, delay_launch(8) do
       TwitterJobs.process_next_job key
     end
   end
@@ -45,7 +49,7 @@ module BackgroundJobs
   def self.launch_job_to_pull_yelp_craft_for_twitter
     key = :pull_yelp_craft_for_twitter
     interval = INTERVAL_FOR_YELP_RATE_LIMIT
-    BackgroundThreads.launch key, interval, @options do
+    BackgroundThreads.launch key, interval, delay_launch(12) do
       YelpJobs.process_next_job key
     end
   end
@@ -53,7 +57,7 @@ module BackgroundJobs
   def self.launch_job_to_find_final_location_of_twitter_website_url
     key = :find_final_location_of_twitter_website_url
     interval = 8
-    BackgroundThreads.launch key, interval, @options do
+    BackgroundThreads.launch key, interval, delay_launch(20) do
       hover_crafts = HoverCraft.where(twitter_website_url: /t\.co/)
       hover_crafts.each do |hover_craft|
         url = nil

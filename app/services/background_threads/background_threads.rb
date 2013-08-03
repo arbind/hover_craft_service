@@ -12,6 +12,8 @@ module BackgroundThreads
       Thread.current[:name] = name
       Thread.current[:description] = description
       Thread.current[:run_number] = 0
+      Thread.current[:default_interval] = interval
+      Thread.current[:interval] = interval
       Thread.current[:errors] = []
       Thread.current[:last_run_started] = nil
       Thread.current[:last_run_completed] = nil
@@ -33,7 +35,7 @@ module BackgroundThreads
         end
         Thread.current[:status] = :sleeping unless :failed == Thread.current[:status]
         Thread.current[:next_run] = Time.now + interval
-        sleep interval
+        sleep Thread.current[:interval]
       end
     end
   end
