@@ -11,9 +11,9 @@
   %tbody.threads
     - BACKGROUND_THREADS.each do |key, thread|
       %tr
-        %td.name=               thread[:name]
-        %td.run_number=         thread[:run_number]
-        %td.status=             thread[:status]
-        %td.next_run=           time_ago_in_words thread[:next_run]
-        %td.last_run_completed= thread[:last_run_completed]
-        %td.errors=             thread[:errors].map(&:message).join('<br>').html_safe
+        %td.name=     thread[:name]
+        %td.run=      thread[:run_number]
+        %td.status=   thread[:status]
+        %td.next_run= time_ago_in_words thread[:next_run] if thread[:next_run]
+        %td.last_run= thread[:last_run_completed]
+        %td.errors=   thread[:errors].map(&:message).join('<br>').html_safe
