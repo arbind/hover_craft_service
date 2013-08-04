@@ -4,26 +4,33 @@ require 'sidekiq/testing'
 describe WorkerDetectNewStreamerFriends do
 
   shared_examples_for 'a worker to DetectNewStreamerFriends' do
-    it 'schedules all friends to be turned into hovercrafts' do
+    it 'calls the Twitter.friends API' do
+      options = { cursor: -1 }
+      options[:cursor] = work_data['cursor'] if work_data['cursor']
+      Twitter.should_receive(:friend_ids).with(streamer.tid, options)
+      subject.perform work_data
+    end
+    it 'schedules batches of friends to be turned into hovercrafts' do
       batches_of_ids = new_friend_ids.each_slice(TWITTER_FETCH_USERS_BATCH_SIZE).to_a
       batches_of_ids.each do |ids|
-        WorkerCreateHoverCraftsForNewStreamerFriends.should_receive(:schedule).with streamer.id, ids
+        new_job_data = WorkerCreateHoverCraftsForNewStreamerFriends.work_data streamer.id, ids
+        WorkerCreateHoverCraftsForNewStreamerFriends.should_receive(:schedule).with new_job_data
       end
-      subject.perform streamer.id
+      subject.perform work_data
     end
-    it 'queues a WorkerCreateHoverCraftsForNewStreamerFriends job' do
+    it 'queues batch of WorkerCreateHoverCraftsForNewStreamerFriends' do
       batches_of_ids = new_friend_ids.each_slice(TWITTER_FETCH_USERS_BATCH_SIZE).to_a
       expect {
-        subject.perform streamer.id
+        subject.perform work_data
       }.to change(WorkerCreateHoverCraftsForNewStreamerFriends.jobs, :size).by(batches_of_ids.size)
     end
   end
 
   let (:subject)          { WorkerDetectNewStreamerFriends.new }
-
-  let (:cursor)           { double Twitter::Cursor, ids: friend_ids, next: next_page}
+  let (:work_data)        { WorkerDetectNewStreamerFriends.work_data streamer.id }
+  let (:cursor)           { double Twitter::Cursor, ids: friend_ids, next: next_cursor_page}
   let (:friend_tids)      { (1000..1010).to_a }
-  let (:next_page)        { 0 }
+  let (:next_cursor_page) { 0 }
 
   let!(:streamer)         { create TweetStreamer }
   let (:friend_ids)       { friend_tids.map &:to_s }
@@ -55,17 +62,19 @@ describe WorkerDetectNewStreamerFriends do
 
     it_behaves_like 'a worker to DetectNewStreamerFriends'
     it 'schedules only the new friends to be turned into hovercrafts' do
-      WorkerCreateHoverCraftsForNewStreamerFriends.should_receive(:schedule).with streamer.id, new_friend_ids
-      subject.perform streamer.id
+      new_job_data = WorkerCreateHoverCraftsForNewStreamerFriends.work_data streamer.id, new_friend_ids
+      WorkerCreateHoverCraftsForNewStreamerFriends.should_receive(:schedule).with new_job_data
+      subject.perform work_data
     end
   end
 
   context 'Given multiple pages of friends' do
-    let (:next_page)        { 1 }
+    let (:next_cursor_page)        { 1 }
     it_behaves_like 'a worker to DetectNewStreamerFriends'
-    it 'reschedules the job for the next page' do
-      WorkerDetectNewStreamerFriends.should_receive(:schedule).with streamer.id, next_page
-      subject.perform streamer.id
+    it 'schedules another job to process the next page' do
+      next_job_data = WorkerDetectNewStreamerFriends.work_data streamer.id, next_cursor_page
+      WorkerDetectNewStreamerFriends.should_receive(:schedule).with next_job_data
+      subject.perform work_data
     end
   end
 end
