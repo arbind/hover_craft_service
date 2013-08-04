@@ -10,19 +10,21 @@ describe WorkerDetectNewStreamerFriends do
       Twitter.should_receive(:friend_ids).with(streamer.tid, options)
       subject.perform work_data
     end
-    it 'schedules batches of friends to be turned into hovercrafts' do
-      batches_of_ids = new_friend_ids.each_slice(TWITTER_FETCH_USERS_BATCH_SIZE).to_a
-      batches_of_ids.each do |ids|
-        new_job_data = WorkerCreateHoverCraftsForNewStreamerFriends.work_data streamer.id, ids
-        WorkerCreateHoverCraftsForNewStreamerFriends.should_receive(:schedule).with new_job_data
-      end
-      subject.perform work_data
-    end
-    it 'queues batch of WorkerCreateHoverCraftsForNewStreamerFriends' do
-      batches_of_ids = new_friend_ids.each_slice(TWITTER_FETCH_USERS_BATCH_SIZE).to_a
-      expect {
+
+    describe 'batch the friend ids' do # to match the limit(100) when calling Twitter.users
+      let (:batches_of_ids) { new_friend_ids.each_slice(TWITTER_FETCH_USERS_BATCH_SIZE).to_a }
+      it 'schedules WorkerCreateHoverCraftsForNewStreamerFriends in batches of friend ids' do
+        batches_of_ids.each do |ids|
+          new_job_data = WorkerCreateHoverCraftsForNewStreamerFriends.work_data streamer.id, ids
+          WorkerCreateHoverCraftsForNewStreamerFriends.should_receive(:schedule).with new_job_data
+        end
         subject.perform work_data
-      }.to change(WorkerCreateHoverCraftsForNewStreamerFriends.jobs, :size).by(batches_of_ids.size)
+      end
+      it 'schedules WorkerCreateHoverCraftsForNewStreamerFriends for each batch' do
+        expect {
+          subject.perform work_data
+        }.to change(WorkerCreateHoverCraftsForNewStreamerFriends.jobs, :size).by(batches_of_ids.size)
+      end
     end
   end
 
@@ -32,7 +34,7 @@ describe WorkerDetectNewStreamerFriends do
   let (:friend_tids)      { (1000..1010).to_a }
   let (:next_cursor_page) { 0 }
 
-  let!(:streamer)         { create TweetStreamer }
+  let!(:streamer)         { create :tweet_streamer }
   let (:friend_ids)       { friend_tids.map &:to_s }
   let (:new_friend_ids)   { new_friend_tids.map &:to_s }
 
@@ -42,16 +44,26 @@ describe WorkerDetectNewStreamerFriends do
     Twitter.stub(:friend_ids).and_return cursor
   end
 
-  context 'Process all streamer friends for the 1st time' do
+  context 'Process friends for the 1st time' do
     it_behaves_like 'a worker to DetectNewStreamerFriends'
   end
 
-  context 'Given a large number of new friends' do
+  context 'Process a page with a large number of friends in batches' do
     let (:friend_tids)      { (1000..1310).to_a }
     it_behaves_like 'a worker to DetectNewStreamerFriends'
   end
 
-  context 'Process only new streamer friends that were added' do
+  context 'Processes multiple pages of friends' do
+    let (:next_cursor_page)        { 1 }
+    it_behaves_like 'a worker to DetectNewStreamerFriends'
+    it 'schedules another job to process the next page' do
+      next_job_data = WorkerDetectNewStreamerFriends.work_data streamer.id, next_cursor_page
+      WorkerDetectNewStreamerFriends.should_receive(:schedule).with next_job_data
+      subject.perform work_data
+    end
+  end
+
+  context 'Process only the new friends' do
     let (:existing_friend_tids) { [ friend_tids[0], friend_tids[2], friend_tids[-2] ] }
     let (:new_friend_tids)      { friend_tids - existing_friend_tids }
     before do
@@ -64,16 +76,6 @@ describe WorkerDetectNewStreamerFriends do
     it 'schedules only the new friends to be turned into hovercrafts' do
       new_job_data = WorkerCreateHoverCraftsForNewStreamerFriends.work_data streamer.id, new_friend_ids
       WorkerCreateHoverCraftsForNewStreamerFriends.should_receive(:schedule).with new_job_data
-      subject.perform work_data
-    end
-  end
-
-  context 'Given multiple pages of friends' do
-    let (:next_cursor_page)        { 1 }
-    it_behaves_like 'a worker to DetectNewStreamerFriends'
-    it 'schedules another job to process the next page' do
-      next_job_data = WorkerDetectNewStreamerFriends.work_data streamer.id, next_cursor_page
-      WorkerDetectNewStreamerFriends.should_receive(:schedule).with next_job_data
       subject.perform work_data
     end
   end

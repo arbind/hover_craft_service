@@ -16,7 +16,7 @@ describe WorkerCreateHoverCraftsForNewStreamerFriends do
   end
 
   shared_examples_for 'a worker to CreateHoverCraftsForNewStreamerFriends' do
-    describe 'Batches ids' do #  to match the limit(100) for a call to Twitter.users([...])
+    describe 'Batch the ids' do #  to match the limit(100) for a call to Twitter.users([...])
       it 'reschedules all but the 1st batch' do
         remaining_batches_of_ids = batches_of_ids[1..-1]
         remaining_batches_of_ids.each do |ids|
@@ -51,7 +51,7 @@ describe WorkerCreateHoverCraftsForNewStreamerFriends do
   let (:new_friend_tids)    { (1000..1010).to_a }
   let (:new_friend_ids)     { new_friend_tids.map &:to_s }
 
-  let!(:streamer)           { create TweetStreamer }
+  let!(:streamer)           { create :tweet_streamer }
   let (:twitter_profiles)   { create_twitter_profiles(first_batch_of_tids) }
   let (:batches_of_ids)     { new_friend_ids.each_slice(TWITTER_FETCH_USERS_BATCH_SIZE).to_a }
   let (:first_batch_of_ids) { batches_of_ids.first }
