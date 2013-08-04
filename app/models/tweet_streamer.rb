@@ -27,4 +27,6 @@ class TweetStreamer
   before_save :geocode_this_location!
 
   index({twitter_id: 1}, { unique: true, sparse: true })
+
+  def tid() twitter_id.to_i end
 end
