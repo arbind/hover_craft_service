@@ -8,12 +8,12 @@ puts ":: Running in console"    if ENV["IN_CONSOLE"]
 
 
 # launch background threads or not
-ENV["LAUNCH_BACKGROUND_THREADS"] ||= (ENV["IN_SERVER"] and !Rails.env.test?).to_s
+ENV["LAUNCH_BACKGROUND_THREADS"] ||= (!ENV["IN_SERVER"].nil?).to_s
 if ["", "no", "0", "false"].include? ENV["LAUNCH_BACKGROUND_THREADS"].downcase
   ENV.delete("LAUNCH_BACKGROUND_THREADS")
 end
 
 if ENV["LAUNCH_BACKGROUND_THREADS"]
   # wait to launch threads (seconds)
-  ENV["STARTUP_DELAY_OF_BACKGROUND_THREADS"] ||= "10" # in seconds
+  ENV["STARTUP_DELAY_OF_BACKGROUND_THREADS"] ||= "4" # in seconds
 end

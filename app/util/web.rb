@@ -10,16 +10,15 @@ class Web
   def select_first(css) select_all(css).first end
 
   def self.final_location_of_url(url)
-    return "" if url.nil? or url.empty?
+    return "" if url.nil? or url.strip.empty?
     final_location = nil
-    open(url) {|resp| final_location=resp.base_uri}
+    open(url.strip) {|resp| final_location=resp.base_uri}
     final_location.to_s
   rescue OpenURI::HTTPError => e
     if e.message.match /404/ # 404 Not Found
       final_location = ""
     else
-      puts ":: Error finding final_location_of_url #{url}"
-      puts e.message
+      Rails.logger.error ":: Error finding final_location_of_url #{url}: #{e.message}"
     end
   rescue SocketError => e
     # No DNS
@@ -29,12 +28,10 @@ class Web
       # redirection forbidden: http://abc.com/tacs -> https://abc.com/taco
       final_location = e.message.split('->').last.strip
     else
-      puts ":: Error finding final_location_of_url #{url}"
-      puts e.message
+      Rails.logger.error ":: Error finding final_location_of_url #{url}: #{e.message}"
     end
   rescue Exception => e
-    puts ":: Error finding final_location_of_url #{url}"
-    puts e.message
+    Rails.logger.error ":: Error finding final_location_of_url #{url}: #{e.message}"
   end
 
 end

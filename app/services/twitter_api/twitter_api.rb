@@ -16,17 +16,19 @@ class TwitterApi # via http://sferik.github.io/twitter/
     valid_friend_ids.map! &:to_s
   end
 
-  def self.users(twitter_id_array, options={})
-    return [] unless twitter_id_array and twitter_id_array.any?
-    users_array = Twitter.users(twitter_id_array, options)
+  def self.users(ids, options={})
+    tids = ids.map(&:to_i)
+    users_array = Twitter.users(tids, options)
+    users_array.map {|u| TwitterProfile.new u.to_hash }
   rescue Twitter::Error::NotFound => not_found
-    twitter_id_array.map {|id| INVALID_IDS[id] = :bad }
+    tids.map {|id| INVALID_IDS[id] = :bad }
     []
   end
 
   def self.user(screen_name, options={})
     return nil unless screen_name
     user = Twitter.user(screen_name, options)
+    TwitterProfile.new u.to_hash
   end
 
   def self.friends(screen_name, options={})
