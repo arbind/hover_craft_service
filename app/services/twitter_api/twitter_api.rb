@@ -11,6 +11,11 @@ class TwitterApi # via http://sferik.github.io/twitter/
     cursor = Twitter.friend_ids(screen_name, options)
   end
 
+  def self.select_valid_friend_ids(friend_ids)
+    valid_friend_ids = friend_ids.select{ |id| valid_id?(id) }
+    valid_friend_ids.map! &:to_s
+  end
+
   def self.users(twitter_id_array, options={})
     return [] unless twitter_id_array and twitter_id_array.any?
     users_array = Twitter.users(twitter_id_array, options)
