@@ -43,8 +43,8 @@ private
 
   def resolve_twitter_website_urls(hover_craft_ids)
     hover_craft_ids.each do |hc_id|
-      job_data = WorkerResolveUrl.work_data hc_id, :twitter_website_url
-      WorkerResolveUrl.schedule job_data
+      job_data = WorkerResolveHoverCraftUrl.work_data hc_id, :twitter_website_url
+      WorkerResolveHoverCraftUrl.schedule job_data
     end
   end
 

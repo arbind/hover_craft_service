@@ -37,10 +37,10 @@ describe WorkerCreateHoverCraftsForNewStreamerFriends do
             subject.perform work_data
           }.to change(HoverCraft, :count).by(first_batch_of_ids.size)
         end
-        it 'schedules WorkerResolveUrl jobs for each new HoverCraft (to resolve t.co)' do
+        it 'schedules WorkerResolveHoverCraftUrl jobs for each new HoverCraft (to resolve t.co)' do
           expect {
             subject.perform work_data
-          }.to change(WorkerResolveUrl.jobs, :size).by(first_batch_of_ids.size)
+          }.to change(WorkerResolveHoverCraftUrl.jobs, :size).by(first_batch_of_ids.size)
         end
       end
     end
