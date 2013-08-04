@@ -1,4 +1,3 @@
-gem 'sidekiq', ">= 0"
 WORKER_THREADS ||= {}
 
 module SidekiqProcess
