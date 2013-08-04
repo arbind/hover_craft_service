@@ -24,7 +24,10 @@ private
   end
 
   def create_hover_crafts_for_new_streamer_friends(streamer_id, friend_ids)
-    WorkerCreateHoverCraftsForNewStreamerFriends.schedule streamer_id, friend_ids
+    batches_of_ids = friend_ids.each_slice(batch_size).to_a
+    batches_of_ids.each do |ids|
+      WorkerCreateHoverCraftsForNewStreamerFriends.schedule streamer_id, ids
+    end
   end
 
   def schedule_next_page(streamer, cursor)
@@ -42,7 +45,7 @@ private
   end
 
   def batch_size
-    100
+    TWITTER_FETCH_USERS_BATCH_SIZE
   end
 
   def log(info)

@@ -5,13 +5,17 @@ describe WorkerDetectNewStreamerFriends do
 
   shared_examples_for 'a worker to DetectNewStreamerFriends' do
     it 'schedules all friends to be turned into hovercrafts' do
-      WorkerCreateHoverCraftsForNewStreamerFriends.should_receive(:schedule).with streamer.id, new_friend_ids
+      batches_of_ids = new_friend_ids.each_slice(TWITTER_FETCH_USERS_BATCH_SIZE).to_a
+      batches_of_ids.each do |ids|
+        WorkerCreateHoverCraftsForNewStreamerFriends.should_receive(:schedule).with streamer.id, ids
+      end
       subject.perform streamer.id
     end
     it 'queues a WorkerCreateHoverCraftsForNewStreamerFriends job' do
+      batches_of_ids = new_friend_ids.each_slice(TWITTER_FETCH_USERS_BATCH_SIZE).to_a
       expect {
         subject.perform streamer.id
-      }.to change(WorkerCreateHoverCraftsForNewStreamerFriends.jobs, :size).by(1)
+      }.to change(WorkerCreateHoverCraftsForNewStreamerFriends.jobs, :size).by(batches_of_ids.size)
     end
   end
 
@@ -31,11 +35,16 @@ describe WorkerDetectNewStreamerFriends do
     Twitter.stub(:friend_ids).and_return cursor
   end
 
-  context 'Process Streamer friends for the 1st time' do
+  context 'Process all streamer friends for the 1st time' do
     it_behaves_like 'a worker to DetectNewStreamerFriends'
   end
 
-  context 'Process Streamer friends that were added' do
+  context 'Given a large number of new friends' do
+    let (:friend_tids)      { (1000..1310).to_a }
+    it_behaves_like 'a worker to DetectNewStreamerFriends'
+  end
+
+  context 'Process only new streamer friends that were added' do
     let (:existing_friend_tids) { [ friend_tids[0], friend_tids[2], friend_tids[-2] ] }
     let (:new_friend_tids)      { friend_tids - existing_friend_tids }
     before do

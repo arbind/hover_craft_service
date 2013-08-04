@@ -21,3 +21,5 @@ INTERVAL_FOR_TWITTER_RATE_LIMITS = {
   friends:    wait_time_for_request_limit_of(30, TWITTER_WINDOW),
   friend_ids: wait_time_for_request_limit_of(15, TWITTER_WINDOW),
 }
+
+TWITTER_FETCH_USERS_BATCH_SIZE = ENV["TWITTER_FETCH_USERS_BATCH_SIZE"] ? ENV["TWITTER_FETCH_USERS_BATCH_SIZE"].to_i : 100
