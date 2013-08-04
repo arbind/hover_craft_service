@@ -7,8 +7,8 @@ class TwitterApi # via http://sferik.github.io/twitter/
     INVALID_IDS[twitter_id.to_i].nil?
   end
 
-  def self.friend_ids(screen_name, options={})
-    cursor = Twitter.friend_ids(screen_name, options)
+  def self.friend_ids(tid, options={})
+    cursor = Twitter.friend_ids(tid, options)
   end
 
   def self.select_valid_friend_ids(friend_ids)
