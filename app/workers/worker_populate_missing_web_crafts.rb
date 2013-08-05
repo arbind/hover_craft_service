@@ -10,13 +10,19 @@ class WorkerPopulateMissingWebCrafts
     }
   end
 
-  def perform(data)
+  def perform
+    HoverCraft.with_missing_web_craft.each do |hc|
+      job_data = WorkerFindWebCrafts.work_data hc.id
+      WorkerFindWebCrafts.schedule job_data
+    end
+    log
   end
 
 private
 
   def log(info={})
-    msg = ""
+    count = HoverCraft.with_missing_web_craft
+    msg = "scheduled workers to FindWebCrafts for #{count} hover crafts"
     Rails.logger.info msg
   end
 end
