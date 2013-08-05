@@ -77,9 +77,11 @@ module BackgroundJobs
 end
 
 if ENV["LAUNCH_BACKGROUND_THREADS"]
-  BackgroundJobs.launch_job_to_pull_twitter_crafts_from_all_streamers
-  BackgroundJobs.launch_job_to_pull_streamer_friend_ids
-  BackgroundJobs.launch_job_to_create_hover_crafts_for_streamer_friends
-  BackgroundJobs.launch_job_to_pull_yelp_craft_for_twitter
-  BackgroundJobs.launch_job_to_find_final_location_of_twitter_website_url
+  # BackgroundJobs.launch_job_to_pull_twitter_crafts_from_all_streamers
+  # BackgroundJobs.launch_job_to_pull_streamer_friend_ids
+  # BackgroundJobs.launch_job_to_create_hover_crafts_for_streamer_friends
+  # BackgroundJobs.launch_job_to_pull_yelp_craft_for_twitter
+  # BackgroundJobs.launch_job_to_find_final_location_of_twitter_website_url
 end
+
+WorkerRefreshStreamers.schedule
