@@ -1,8 +1,7 @@
 class WorkerRefreshStreamers
   include Sidekiq::Worker
   include Sidekiq::ScheduledWorker
-  @perform_after = ENV["TWEET_STREAMER_REFRESH_INTERVAL"]
-  sidekiq_options :queue => :WorkerRefreshStreamers, :retry => false, :backtrace => true
+  @perform_after = ENV["TWEET_STREAMER_REFRESH_INTERVAL"] || 1
 
   def perform
     TweetStreamer.each do |s|

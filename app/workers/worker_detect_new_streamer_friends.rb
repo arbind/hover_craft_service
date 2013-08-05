@@ -2,7 +2,6 @@ class WorkerDetectNewStreamerFriends
   include Sidekiq::Worker
   include Sidekiq::ScheduledWorker
   @perform_after = INTERVAL_FOR_TWITTER_RATE_LIMITS[:friend_ids]
-  sidekiq_options :queue => :WorkerDetectNewStreamerFriends, :retry => false, :backtrace => true
 
   def self.work_data(streamer_id, cursor=-1)
     {

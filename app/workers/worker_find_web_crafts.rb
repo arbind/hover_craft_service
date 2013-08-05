@@ -2,7 +2,6 @@ class WorkerFindWebCrafts
   include Sidekiq::Worker
   include Sidekiq::ScheduledWorker
   @perform_after = 1
-  sidekiq_options :queue => :WorkerfindWebCrafts, :retry => false, :backtrace => true
 
   def self.work_data(hover_craft_id)
     {

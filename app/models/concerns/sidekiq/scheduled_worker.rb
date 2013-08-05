@@ -22,20 +22,35 @@ module Sidekiq
         @last_run_at ||= Time.now.to_f
       end
 
+      def interval_between_runs
+        return @interval_between_runs if @interval_between_runs
+        raise PerformAfterUndefined.new(name) unless @perform_after
+        @interval_between_runs = @perform_after.to_i
+        raise PerformAfterUndefined.new(name) if @interval_between_runs < 0.1
+        @interval_between_runs
+      end
+
       def next_run_at
-        raise PerformAfterUndefined.new(name) unless @perform_after and @perform_after >0.1 and @perform_after < 1_000_000_000
         mutex.synchronize {
           now = Time.now.to_f
-          if now > (last_run_at + @perform_after)
+          if now > (last_run_at + interval_between_runs)
             next_run = now
           else
-            next_run = last_run_at + @perform_after
+            next_run = last_run_at + interval_between_runs
           end
           @last_run_at = next_run
         }
       end
 
+      def config_scheduled_worker
+        if @config_scheduled_worker.nil?
+          @config_scheduled_worker = true
+          p ":queue => #{name.to_sym}, :retry => false, :backtrace => true"
+          sidekiq_options :queue => name.to_sym, :retry => false, :backtrace => true
+        end
+      end
       def schedule(*args)
+        config_scheduled_worker
         client_push('class' => self, 'args' => args, 'at' => next_run_at)
       end
     end

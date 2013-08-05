@@ -1,8 +1,7 @@
 class WorkerPopulateMissingWebCrafts
   include Sidekiq::Worker
   include Sidekiq::ScheduledWorker
-  @perform_after = 1
-  sidekiq_options :queue => :WorkerPopulateMissingWebCrafts, :retry => false, :backtrace => true
+  @perform_after = 5.minutes
 
   def self.work_data(hover_craft_id)
     {

@@ -2,7 +2,6 @@ class WorkerResolveHoverCraftUrl
   include Sidekiq::Worker
   include Sidekiq::ScheduledWorker
   @perform_after = 1
-  sidekiq_options :queue => :WorkerResolveUrl, :retry => false, :backtrace => true
 
   def self.work_data(hover_craft_id, url_attribute='twitter_website_url')
     {
