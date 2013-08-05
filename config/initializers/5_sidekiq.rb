@@ -1,5 +1,16 @@
 WORKER_THREADS ||= {}
 
+def sidekiq_workers
+  Dir.glob(File.join('app/workers', "*")).map{|fn| fn.split('/').last.split('.').first}.map(&:camelcase)
+end
+
+def sidekiq_launch_args
+  args = []
+  sidekiq_workers.each{|q| args << '-q' << q }
+  args << '-q' << 'default'
+  args
+end
+
 module SidekiqProcess
   def self.launch(options={})
     name = :sidekiq
@@ -11,7 +22,11 @@ module SidekiqProcess
       Thread.current[:name] = name
       Thread.current[:description] = description
       sleep launch_delay if 0 < launch_delay
+      old_ARGV = ARGV
+      ARGV.replace sidekiq_launch_args
+      p "starting sidekiq queues:", ARGV
       load Gem.bin_path('sidekiq', 'sidekiq', ">= 0")
+      ARGV.replace old_ARGV
     end
   end
 end
