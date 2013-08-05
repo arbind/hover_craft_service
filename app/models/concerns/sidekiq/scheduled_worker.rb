@@ -49,6 +49,7 @@ module Sidekiq
           sidekiq_options :queue => name.to_sym, :retry => false, :backtrace => true
         end
       end
+
       def schedule(*args)
         config_scheduled_worker
         client_push('class' => self, 'args' => args, 'at' => next_run_at)

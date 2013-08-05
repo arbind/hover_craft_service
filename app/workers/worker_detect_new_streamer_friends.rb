@@ -5,7 +5,7 @@ class WorkerDetectNewStreamerFriends
 
   def self.work_data(streamer_id, cursor=-1)
     {
-      "streamer_id" => streamer_id,
+      "streamer_id" => streamer_id.to_s,
       "cursor"      => cursor
     }
   end
@@ -13,7 +13,6 @@ class WorkerDetectNewStreamerFriends
   def perform(data)
     streamer_id     = data.fetch('streamer_id', nil)
     cursor_position = data.fetch('friend_ids', -1).to_i
-
     friend_ids = detect_new_streamer_friends streamer_id, cursor_position
     create_hover_crafts_for_new_streamer_friends streamer_id, friend_ids
   end

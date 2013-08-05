@@ -6,7 +6,7 @@ class WorkerCreateHoverCraftsForNewStreamerFriends
 
   def self.work_data(streamer_id, friend_ids)
     {
-      "streamer_id" => streamer_id,
+      "streamer_id" => streamer_id.to_s,
       "friend_ids"  => friend_ids
     }
   end
