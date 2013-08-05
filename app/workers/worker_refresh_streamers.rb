@@ -5,7 +5,10 @@ class WorkerRefreshStreamers
   sidekiq_options :queue => :WorkerRefreshStreamers, :retry => false, :backtrace => true
 
   def perform
-    TweetStreamer.each { |s| WorkerDetectNewStreamerFriends.schedule s.id }
+    TweetStreamer.each do |s|
+      job_data = WorkerDetectNewStreamerFriends.work_data s.id
+      WorkerDetectNewStreamerFriends.schedule job_data
+    end
     log
   end
 
