@@ -45,7 +45,6 @@ module Sidekiq
       def config_scheduled_worker
         if @config_scheduled_worker.nil?
           @config_scheduled_worker = true
-          p ":queue => #{name.to_sym}, :retry => false, :backtrace => true"
           sidekiq_options :queue => name.to_sym, :retry => false, :backtrace => true
         end
       end

@@ -6,6 +6,13 @@ FactoryGirl.define do
       twitter_screen_name   { FactoryGirl.generate :screen_name }
     end
 
+    factory :yelp_hover_craft do
+      yelp_id               { FactoryGirl.generate :yelp_id }
+      yelp_name             { FactoryGirl.generate :name }
+      yelp_href             { FactoryGirl.generate :yelp_href }
+    end
+
+
     factory :complete_hover_craft do
       craft_id  'craft_id'
       tweet_streamer_id 'tweet_streamer_id'

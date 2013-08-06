@@ -3,13 +3,13 @@ class HoverCraft
   include Mongoid::Timestamps
 
   # score constants
-  FIT_duplicate_crafts = -2 # flagen 2               hover crafts bind to the same already existing craft
-  FIT_need_to_explore = -1  # flag go               get hover crafts and explore this
+  FIT_duplicate_crafts = -2
+  FIT_need_to_explore = -1
   FIT_zero = 0              # its not a fit
-  FIT_missing_craft = 1     # missing info
-  FIT_check_manually = 3    # flagr ma              nual check
+  FIT_missing_craft = 1
+  FIT_check_manually = 3
   FIT_neutral = 5           # at least its not a bad fit
-  FIT_absolute = 8          # known to be a fit
+  FIT_absolute = 8          # known to be a good fit
 
   field :craft_id
 
@@ -45,7 +45,7 @@ class HoverCraft
   field :website_profile      , type: Hash
   field :website_craft        , type: Boolean
 
-  # manual overrides
+  # override flags
   field :approve_this         , type: Boolean
   field :flag_this            , type: Boolean # Needs follow up for corrections
   field :skip_this            , type: Boolean
@@ -54,11 +54,11 @@ class HoverCraft
   field :fit_score_name       , type: Integer, default: FIT_check_manually
   field :fit_score_website    , type: Integer, default: FIT_check_manually
   field :fit_score_username   , type: Integer, default: FIT_check_manually
-  # # field :fit_score_food, type: Integer, default: FIT_check_manually
-  # # field :fit_score_mobile, type: Integer, default: FIT_check_manually
+  field :fit_score_food       , type: Integer, default: FIT_check_manually
+  field :fit_score_mobile     , type: Integer, default: FIT_check_manually
 
-  scope :crafted          , exists(craft_id: true).desc(:fit_score)
-  scope :uncrafted        , exists(craft_id: false).desc(:fit_score)
+  scope :crafted          , excludes(craft_id: nil).desc(:fit_score)
+  scope :uncrafted        , where(craft_id: nil).desc(:fit_score)
 
   scope :approved         , where(approve_this: true)
   scope :flagged          , where(flag_this: true)
@@ -67,20 +67,20 @@ class HoverCraft
   scope :unflagged        , excludes(flag_this: true)
   scope :unskipped        , excludes(skip_this: true)
 
-  scope :with_yelp        , exists(yelp_id: true)
-  scope :with_twitter     , exists(twitter_id: true)
-  scope :with_website     , exists(website_url: true)
-  scope :with_facebook    , exists(facebook_id: true)
-  scope :with_streamer    , exists(tweet_streamer_id: true)
-
-  scope :without_yelp     , exists(yelp_id: false)
-  scope :without_twitter  , exists(twitter_id: false)
-  scope :without_website  , exists(website_url: false)
-  scope :without_facebook , exists(facebook_id: false)
-  scope :without_streamer , exists(tweet_streamer_id: false)
-
   # crafts with both twitter and yelp
-  scope :twelps,  exists(yelp_id: true).exists(twitter_id: true).desc(:yelp_name)
+  scope :twelps           , excludes(yelp_id: nil).excludes(twitter_id: nil).desc(:yelp_name)
+
+  scope :with_yelp        , excludes(yelp_id: nil)
+  scope :with_twitter     , excludes(twitter_id: nil)
+  scope :with_website     , excludes(website_url: nil)
+  scope :with_facebook    , excludes(facebook_id: nil)
+  scope :with_streamer    , excludes(tweet_streamer_id: nil)
+
+  scope :without_yelp     , where(yelp_id: nil)
+  scope :without_twitter  , where(twitter_id: nil)
+  scope :without_website  , where(website_url: nil)
+  scope :without_facebook , where(facebook_id: nil)
+  scope :without_streamer , where(tweet_streamer_id: nil)
 
   scope :with_missing_web_craft, any_of( {yelp_id: nil},
                                      {twitter_id: nil},
@@ -89,12 +89,12 @@ class HoverCraft
                                    ).desc(:yelp_name)
 
   # score scopes
-  scope :need_to_explore, where(fit_score: FIT_need_to_explore)
-  scope :check_manually,  where(fit_score: FIT_check_manually)
-  scope :missing_craft,   where(fit_score: FIT_missing_craft)
-  scope :zero_fit,        where(fit_score: FIT_zero)
-  scope :neutral_fit,     where(fit_score: FIT_neutral)
-  scope :absolute_fit,    where(fit_score: FIT_absolute)
+  scope :need_to_explore  , where(fit_score: FIT_need_to_explore)
+  scope :check_manually   , where(fit_score: FIT_check_manually)
+  scope :missing_craft    , where(fit_score: FIT_missing_craft)
+  scope :zero_fit         , where(fit_score: FIT_zero)
+  scope :neutral_fit      , where(fit_score: FIT_neutral)
+  scope :absolute_fit     , where(fit_score: FIT_absolute)
 
   def tweet_streamer
     TweetStreamer.where(id:tweet_streamer_id).first
