@@ -11,9 +11,9 @@ class HoverCraft
   FIT_neutral = 5           # at least its not a bad fit
   FIT_absolute = 8          # known to be a good fit
 
-  field :craft_id
+  belongs_to :tweet_streamer, inverse_of: nil
 
-  field :tweet_streamer_id
+  field :craft_id
 
   field :twitter_id
   field :twitter_name
@@ -50,12 +50,21 @@ class HoverCraft
   field :flag_this            , type: Boolean # Needs follow up for corrections
   field :skip_this            , type: Boolean
 
+  # scores
   field :fit_score            , type: Integer, default: FIT_check_manually
   field :fit_score_name       , type: Integer, default: FIT_check_manually
   field :fit_score_website    , type: Integer, default: FIT_check_manually
   field :fit_score_username   , type: Integer, default: FIT_check_manually
   field :fit_score_food       , type: Integer, default: FIT_check_manually
   field :fit_score_mobile     , type: Integer, default: FIT_check_manually
+
+  # score scopes
+  scope :need_to_explore  , where(fit_score: FIT_need_to_explore)
+  scope :check_manually   , where(fit_score: FIT_check_manually)
+  scope :missing_craft    , where(fit_score: FIT_missing_craft)
+  scope :zero_fit         , where(fit_score: FIT_zero)
+  scope :neutral_fit      , where(fit_score: FIT_neutral)
+  scope :absolute_fit     , where(fit_score: FIT_absolute)
 
   scope :crafted          , excludes(craft_id: nil).desc(:fit_score)
   scope :uncrafted        , where(craft_id: nil).desc(:fit_score)
@@ -74,7 +83,6 @@ class HoverCraft
   scope :with_twitter     , excludes(twitter_id: nil)
   scope :with_website     , excludes(website_url: nil)
   scope :with_facebook    , excludes(facebook_id: nil)
-  scope :with_streamer    , excludes(tweet_streamer_id: nil)
 
   scope :without_yelp     , where(yelp_id: nil)
   scope :without_twitter  , where(twitter_id: nil)
@@ -87,17 +95,5 @@ class HoverCraft
                                      {facebook_id: nil},
                                      {website_url: nil}
                                    ).desc(:yelp_name)
-
-  # score scopes
-  scope :need_to_explore  , where(fit_score: FIT_need_to_explore)
-  scope :check_manually   , where(fit_score: FIT_check_manually)
-  scope :missing_craft    , where(fit_score: FIT_missing_craft)
-  scope :zero_fit         , where(fit_score: FIT_zero)
-  scope :neutral_fit      , where(fit_score: FIT_neutral)
-  scope :absolute_fit     , where(fit_score: FIT_absolute)
-
-  def tweet_streamer
-    TweetStreamer.where(id:tweet_streamer_id).first
-  end
 
 end

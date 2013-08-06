@@ -85,7 +85,7 @@ private
     users = TwitterApi.service.users(tids)
     users.each do |user_profile|
       params = hover_craft_attributes_for user_profile
-      params[:tweet_streamer_id] = streamer_id
+      params[:tweet_streamer] = TweetStreamer.find streamer_id
       hover_craft = HoverCraft.where(twitter_id: params[:twitter_id]).first_or_create
       hover_craft.update_attributes params
       YelpJobs.service.pull_yelp_craft_for_new_twitter_craft hover_craft

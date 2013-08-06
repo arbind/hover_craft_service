@@ -31,7 +31,7 @@ private
     hover_craft_ids = []
     twitter_profiles.each do |profile|
       params = profile.to_hover_craft
-      params[:tweet_streamer_id] = streamer_id
+      params[:tweet_streamer] = TweetStreamer.find streamer_id
       hover_craft = HoverCraft.where(twitter_id: params[:twitter_id]).first_or_create
       hover_craft.update_attributes params
       hover_craft_ids.push hover_craft.id

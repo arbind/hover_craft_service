@@ -12,10 +12,10 @@ FactoryGirl.define do
       yelp_href             { FactoryGirl.generate :yelp_href }
     end
 
-
     factory :complete_hover_craft do
+      tweet_streamer
+
       craft_id  'craft_id'
-      tweet_streamer_id 'tweet_streamer_id'
 
       twitter_id            { FactoryGirl.generate :twitter_id }
       twitter_name          { FactoryGirl.generate :name }
@@ -30,7 +30,7 @@ FactoryGirl.define do
       yelp_website_url      'yelp_website_url'
       yelp_address          'yelp_address'
       yelp_categories       'yelp_categories'
-      yelp_craft true
+      yelp_craft            true
 
       facebook_id           'facebook_id'
       facebook_name         'facebook_name'
@@ -49,7 +49,7 @@ FactoryGirl.define do
       fit_score_username    5
 
       factory :missing_twitter do
-        tweet_streamer_id   nil
+        tweet_streamer      nil
         twitter_id          nil
         twitter_name        nil
         twitter_screen_name nil

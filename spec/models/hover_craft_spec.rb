@@ -2,6 +2,18 @@ require 'spec_helper'
 
 describe HoverCraft do
 
+  context :relations do
+
+    describe '#tweet_streamer' do
+      let (:screen_name) { 'govinda' }
+      let!(:streamer)    { create :tweet_streamer, screen_name: screen_name}
+      let!(:subject)     { create :hover_craft, tweet_streamer: streamer }
+      it '.crafted returns HoverCraft with a craft_id' do
+        expect(subject.tweet_streamer.screen_name).to eq screen_name
+      end
+    end
+  end
+
   context :crafted do
     describe 'crafted scopes' do
       let!(:existant)     { create_list :hover_craft, 3, craft_id: '123' }
@@ -75,18 +87,6 @@ describe HoverCraft do
       it '.without_facebook returns HoverCraft without facebook_id' do
         expect(HoverCraft.without_facebook.count).to eq non_existant.count
         expect(HoverCraft.without_facebook).to include *non_existant
-      end
-    end
-    describe 'streamer scopes' do
-      let!(:existant)     { create_list :hover_craft, 3, tweet_streamer_id: '123' }
-      let!(:non_existant) { create_list :hover_craft, 4, tweet_streamer_id: nil }
-      it '.with_streamer returns HoverCraft with a tweet_streamer_id' do
-        expect(HoverCraft.with_streamer.count).to eq existant.count
-        expect(HoverCraft.with_streamer).to include *existant
-      end
-      it '.without_streamer returns HoverCraft without tweet_streamer_id' do
-        expect(HoverCraft.without_streamer.count).to eq non_existant.count
-        expect(HoverCraft.without_streamer).to include *non_existant
       end
     end
   end

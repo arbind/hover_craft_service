@@ -37,6 +37,12 @@ describe WorkerCreateHoverCraftsForNewStreamerFriends do
             subject.perform work_data
           }.to change(HoverCraft, :count).by(first_batch_of_ids.size)
         end
+        it 'sets the tweet_streamer for the new HoverCraft' do
+          subject.perform work_data
+          HoverCraft.each do |hc|
+            expect(hc.tweet_streamer.id).to eq streamer.id
+          end
+        end
         it 'schedules WorkerResolveHoverCraftUrl jobs for each new HoverCraft (to resolve t.co)' do
           expect {
             subject.perform work_data

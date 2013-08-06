@@ -68,7 +68,7 @@ describe WorkerDetectNewStreamerFriends do
     let (:new_friend_tids)      { friend_tids - existing_friend_tids }
     before do
       existing_friend_tids.each do |tid|
-        create :twitter_hover_craft, tweet_streamer_id: streamer.id, twitter_id:"#{tid}"
+        create :twitter_hover_craft, tweet_streamer: streamer, twitter_id:"#{tid}"
       end
     end
 
