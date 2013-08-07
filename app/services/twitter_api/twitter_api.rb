@@ -11,7 +11,7 @@ class TwitterApi # via http://sferik.github.io/twitter/
     cursor = Twitter.friend_ids(tid, options)
   end
 
-  def self.select_valid_friend_ids(friend_ids)
+  def self.select_valid_ids(friend_ids)
     valid_friend_ids = friend_ids.select{ |id| valid_id?(id) }
     valid_friend_ids.map! &:to_s
   end

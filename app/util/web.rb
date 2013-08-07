@@ -12,26 +12,18 @@ class Web
   def self.final_location_of_url(url)
     return "" if url.nil? or url.strip.empty?
     final_location = nil
-    open(url.strip) {|resp| final_location=resp.base_uri}
+    begin
+      open(url.strip,'User-Agent' => 'ruby') {|resp| final_location=resp.base_uri}
+    rescue RuntimeError => e
+      if e.message.match /redirection forbidden/
+        final_location = e.message.split('->').last.strip
+        # redirection forbidden: http://abc.com/tacs -> https://abc.com/taco
+      end
+    rescue OpenURI::HTTPError => e
+      # 403 forbidden, 404 not found, etc
+    rescue SocketError => e
+      # No DNS
+    end
     final_location.to_s
-  rescue OpenURI::HTTPError => e
-    if e.message.match /404/ # 404 Not Found
-      final_location = ""
-    else
-      Rails.logger.error ":: Error finding final_location_of_url #{url}: #{e.message}"
-    end
-  rescue SocketError => e
-    # No DNS
-    final_location = ""
-  rescue RuntimeError => e
-    if e.message.match /redirection forbidden/
-      # redirection forbidden: http://abc.com/tacs -> https://abc.com/taco
-      final_location = e.message.split('->').last.strip
-    else
-      Rails.logger.error ":: Error finding final_location_of_url #{url}: #{e.message}"
-    end
-  rescue Exception => e
-    Rails.logger.error ":: Error finding final_location_of_url #{url}: #{e.message}"
   end
-
 end

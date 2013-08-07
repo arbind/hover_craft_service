@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'sidekiq/testing'
 
-describe WorkerFindWebCrafts do
+describe MissingWebCrafts do
   let (:subject)   { WorkerFindWebCrafts.new }
   it 'looks for a YelpCraft'
   it 'looks for a FacebookCraft'
