@@ -1,9 +1,9 @@
 class MissingWebCrafts < WorkerBase
   @perform_after = 5.minutes
 
-  def self.work_data(hover_craft_id)
+  def self.work_data(hover_craft)
     {
-      "hover_craft_id" => hover_craft_id.to_s
+      "hover_craft_id" => hover_craft.id.to_s
     }
   end
 end

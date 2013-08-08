@@ -1,4 +1,4 @@
-class Schedule
+class WorkLauncher
 
   def self.launch(worker, *args)
     launch_worker worker, *args
