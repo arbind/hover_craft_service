@@ -69,6 +69,14 @@ describe WorkHandler do
     it_behaves_like 'a work handler'
   end
 
+  describe :website_links do
+    let (:worker)         { WebsiteLinks }
+    let (:handler_class)  { WebsiteHandler }
+    let (:args)           { [hover_craft] }
+    let (:data)           { worker.work_data *args }
+    it_behaves_like 'a work handler'
+  end
+
   describe :missing_web_crafts do
     let (:worker)         { MissingWebCrafts }
     let (:handler_class)  { HoverCraftHandler }

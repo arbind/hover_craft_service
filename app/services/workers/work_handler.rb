@@ -35,13 +35,6 @@ class WorkHandler
     TwitterHandler.twitter_craft_create hover_craft
   end
 
-  def self.resolve_url(data)
-    url_attribute = data.fetch 'url_attribute'
-    hover_craft_id = data.fetch 'hover_craft_id'
-    hover_craft = HoverCraft.find hover_craft_id
-    HoverCraftHandler.resolve_url hover_craft, url_attribute
-  end
-
   def self.missing_web_crafts(nada={})
     HoverCraftHandler.missing_web_crafts
   end
@@ -51,6 +44,19 @@ class WorkHandler
     hover_craft_id = data.fetch 'hover_craft_id'
     hover_craft = HoverCraft.find hover_craft_id
     HoverCraftHandler.missing_web_crafts_new hover_craft
+  end
+
+  def self.resolve_url(data)
+    url_attribute = data.fetch 'url_attribute'
+    hover_craft_id = data.fetch 'hover_craft_id'
+    hover_craft = HoverCraft.find hover_craft_id
+    HoverCraftHandler.resolve_url hover_craft, url_attribute
+  end
+
+  def self.website_links(data)
+    hover_craft_id = data.fetch 'hover_craft_id'
+    hover_craft = HoverCraft.find hover_craft_id
+    WebsiteHandler.website_links hover_craft
   end
 
   def self.yelp_craft_new(data)
