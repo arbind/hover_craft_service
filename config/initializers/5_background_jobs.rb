@@ -86,4 +86,4 @@
 
 # WorkerRefreshStreamers.schedule
 
-WorkLauncher.launch :streamer_friends
+# WorkLauncher.launch :streamer_friends

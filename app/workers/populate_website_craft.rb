@@ -1,5 +1,5 @@
-class MissingWebCrafts < WorkerBase
-  @perform_after = 5.minutes
+class PopulateWebsiteCraft < WorkerBase
+  @perform_after = 1000000
 
   def self.work_data(hover_craft)
     {

@@ -5,7 +5,9 @@ describe :scheduled_workers do
   shared_examples_for 'a scheduled worker' do
     specify { expect(subject::perform_after.to_i).to be > rate }
     it '.work_data' do
-      expect(subject::work_data(*args)).to eq work_data
+      if args.any?
+        expect(subject::work_data(*args)).to eq work_data
+      end
     end
   end
 
@@ -25,107 +27,94 @@ describe :scheduled_workers do
     "hover_craft_id"=> hover_craft.id.to_s
   }}
 
-  let (:resolve_url_args)         { [hover_craft, url_attribute] }
-  let (:resolve_url_work_data)    {{
+  let (:hover_craft_resolve_url_args)         { [hover_craft, url_attribute] }
+  let (:hover_craft_resolve_url_work_data)    {{
     "hover_craft_id"=> hover_craft.id.to_s,
     "url_attribute" => url_attribute
   }}
 
-  let (:streamer_friends_new_args) { [streamer, page]}
-  let (:streamer_friends_new_work_data) {{
+  let (:populate_from_streamer_args) { [streamer, page]}
+  let (:populate_from_streamer_work_data) {{
     "streamer_id"=> streamer.id.to_s,
     "page"        => page
   }}
 
-  let (:streamer_friends_create_args) { [streamer, ids] }
-  let (:streamer_friends_create_work_data) {{
+  let (:populate_from_streamer_friends_args) { [streamer, ids] }
+  let (:populate_from_streamer_friends_work_data) {{
     "streamer_id"=> streamer.id.to_s,
     "friend_ids"  => ids
   }}
 
-  describe MissingWebCrafts do
-    let (:rate)      { 0 }
+  describe PopulateHoverCrafts do
+    subject          { PopulateHoverCrafts }
+    it_behaves_like 'a scheduled worker'
+  end
+
+  describe PopulateHoverCraft do
     let (:args)      { hover_craft_args }
     let (:work_data) { hover_craft_work_data }
-    subject          { MissingWebCrafts }
+    subject          { PopulateHoverCraft }
     it_behaves_like 'a scheduled worker'
   end
 
-  describe MissingWebCraftsNew do
-    let (:rate)      { 0 }
+  describe PopulateFromStreamers do
+    subject          { PopulateFromStreamer }
+    it_behaves_like 'a scheduled worker'
+  end
+
+  describe PopulateFromStreamer do
+    let (:args)      { populate_from_streamer_args }
+    let (:work_data) { populate_from_streamer_work_data }
+    subject          { PopulateFromStreamer }
+    it_behaves_like 'a scheduled worker'
+  end
+
+  describe PopulateFromStreamerFriends do
+    let (:args)      { populate_from_streamer_friends_args }
+    let (:work_data) { populate_from_streamer_friends_work_data }
+    subject          { PopulateFromStreamerFriends }
+    it_behaves_like 'a scheduled worker'
+  end
+
+  describe PopulateYelpCraft do
     let (:args)      { hover_craft_args }
     let (:work_data) { hover_craft_work_data }
-    subject          { MissingWebCraftsNew }
+    subject          { PopulateYelpCraft }
     it_behaves_like 'a scheduled worker'
   end
 
-  describe ResolveUrl do
-    let (:rate)      { 0 }
-    let (:args)      { resolve_url_args }
-    let (:work_data) { resolve_url_work_data }
-    subject          { ResolveUrl }
-    it_behaves_like 'a scheduled worker'
-  end
-
-  describe StreamerFriends do
-    let (:rate)      { 0 }
-    subject          { StreamerFriends }
-    it_behaves_like 'a scheduled worker'
-  end
-
-  describe StreamerFriendsCreate do
-    let (:rate)      { 0 }
-    let (:args)      { streamer_friends_create_args }
-    let (:work_data) { streamer_friends_create_work_data }
-    subject          { StreamerFriendsCreate }
-    it_behaves_like 'a scheduled worker'
-  end
-
-  describe StreamerFriendsNew do
-    let (:rate)      { 0 }
-    let (:args)      { streamer_friends_new_args }
-    let (:work_data) { streamer_friends_new_work_data }
-    subject          { StreamerFriendsNew }
-    it_behaves_like 'a scheduled worker'
-  end
-
-  describe TwitterCraftCreate do
-    let (:rate)      { 0 }
+  describe PopulateTwitterCraft do
     let (:args)      { hover_craft_args }
     let (:work_data) { hover_craft_work_data }
-    subject          { TwitterCraftCreate }
+    subject          { PopulateTwitterCraft }
     it_behaves_like 'a scheduled worker'
   end
 
-  describe TwitterCraftNew do
-    let (:rate)      { 0 }
+  describe PopulateFacebookCraft do
     let (:args)      { hover_craft_args }
     let (:work_data) { hover_craft_work_data }
-    subject          { TwitterCraftNew }
+    subject          { PopulateFacebookCraft }
     it_behaves_like 'a scheduled worker'
   end
 
-  describe WebsiteLinks do
-    let (:rate)      { 0 }
+  describe PopulateWebsiteCraft do
     let (:args)      { hover_craft_args }
     let (:work_data) { hover_craft_work_data }
-    subject          { WebsiteLinks }
+    subject          { PopulateWebsiteCraft }
     it_behaves_like 'a scheduled worker'
   end
 
-  describe YelpCraftCreate do
-    let (:rate)      { 0 }
-    let (:args)      { hover_craft_args }
-    let (:work_data) { hover_craft_work_data }
-    subject          { YelpCraftCreate }
+  describe HoverCraftResolveUrl do
+    let (:args)      { hover_craft_resolve_url_args }
+    let (:work_data) { hover_craft_resolve_url_work_data }
+    subject          { HoverCraftResolveUrl }
     it_behaves_like 'a scheduled worker'
   end
 
-  describe YelpCraftNew do
-    let (:rate)      { 0 }
+  describe WebsiteScanForLinks do
     let (:args)      { hover_craft_args }
     let (:work_data) { hover_craft_work_data }
-    subject          { YelpCraftNew }
+    subject          { WebsiteScanForLinks }
     it_behaves_like 'a scheduled worker'
   end
 

@@ -1,4 +1,4 @@
-class StreamerFriendsNew < WorkerBase
+class PopulateFromStreamer < WorkerBase
   @perform_after = INTERVAL_FOR_TWITTER_RATE_LIMITS[:friend_ids]
 
   def self.work_data(streamer, page=-1)

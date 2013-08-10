@@ -1,4 +1,4 @@
-class WebsiteLinks < WorkerBase
+class WebsiteScanForLinks < WorkerBase
   @perform_after = 1
 
   def self.work_data(hover_craft)

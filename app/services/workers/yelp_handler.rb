@@ -1,9 +1,28 @@
 class YelpHandler
 
-  def yelp_craft_new(hover_craft)
-  end
+  def populate_yelp_craft(hover_craft)
+#     key   = :pull_yelp_craft_for_twitter
+#     return unless hover_craft
+#     return if hover_craft.yelp_id
+#     return unless hover_craft.twitter_name and hover_craft.twitter_screen_name
+#     tweet_streamer = hover_craft.tweet_streamer
+#     place = tweet_streamer.address if tweet_streamer
+#     place ||= hover_craft.twitter_address
+#     return unless place
 
-  def yelp_craft_create(hover_craft)
+#     uid      = "yelp.for.#{hover_craft.twitter_screen_name}"
+#     biz_name = hover_craft.twitter_name
+#     job      = {hover_craft_id:hover_craft.id, biz_name: biz_name, place: place }
+#     JobQueue.enqueue(key, uid, job, GROUP)
+
+#     hover_craft_id = job.hover_craft_id
+#     biz_name = job.biz_name
+#     place = job.place
+#     hover_craft = HoverCraft.where(id:hover_craft_id).first
+#     return unless hover_craft
+#     biz = YelpApi.service.biz_for_name(biz_name, place)
+#     biz ||= HashObject.new({yelp_id: ""})
+#     hover_craft.update_attributes biz.to_hover_craft
   end
 
 end

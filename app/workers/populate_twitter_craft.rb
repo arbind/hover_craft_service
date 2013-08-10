@@ -1,4 +1,4 @@
-class TwitterCraftCreate < WorkerBase
+class PopulateTwitterCraft < WorkerBase
   @perform_after = 1000000
 
   def self.work_data(hover_craft)

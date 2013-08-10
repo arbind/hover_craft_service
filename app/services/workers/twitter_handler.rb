@@ -1,35 +1,32 @@
 class TwitterHandler
 
-  def twitter_craft_new(hover_craft)
+  def populate_twitter_craft(hover_craft)
   end
 
-  def twitter_craft_create(hover_craft)
-  end
-
-  def self.streamer_friends
+  def self.populate_from_streamers
     TweetStreamer.each {|streamer| WorkLauncher.launch :streamer_friends_new, streamer}
   end
 
   # detect new friends that have been added to a streamer
   # schedule a new HoverCraft to be created for each new friend
-  def self.streamer_friends_new(streamer, page=-1)
+  def self.populate_from_streamer(streamer, page=-1)
     cursor = TwitterApi.service.friend_ids(streamer.tid, cursor: page)
     new_friend_ids = detect_new_twitter_ids cursor.ids
 
     batches_of_ids = new_friend_ids.each_slice(batch_size).to_a
 
     batches_of_ids.each do |ids|
-      WorkLauncher.launch :streamer_friends_create, streamer, ids
+      WorkLauncher.launch :populate_from_streamer_friends, streamer, ids
     end
 
     if 0 < cursor.next # schedule a scan for the next page of friends
-      WorkLauncher.launch :streamer_friends_new, streamer, cursor.next
+      WorkLauncher.launch :populate_from_streamer, streamer, cursor.next
     end
   end
 
   # slice list of friend ids into batches of 100 (twitter limit)
   # schedule a new HoverCraft to be created for each new friend
-  def self.streamer_friends_create(streamer, friend_ids)
+  def self.populate_from_streamer_friends(streamer, friend_ids)
     batches_of_ids = friend_ids.each_slice(batch_size).to_a
     ids = batches_of_ids.shift # fetch only 100 ids at a time
 
@@ -37,11 +34,11 @@ class TwitterHandler
     hover_crafts = create_hover_crafts_for_twitter_profiles twitter_profiles, streamer
 
     hover_crafts.each do |hover_craft|
-      WorkLauncher.launch :resolve_url, hover_craft, :twitter_website_url
+      WorkLauncher.launch :hover_craft_resolve_url, hover_craft, :twitter_website_url
     end
 
     batches_of_ids.each do |ids|
-      WorkLauncher.launch :streamer_friends_create, streamer, ids
+      WorkLauncher.launch :populate_from_streamer_friends, streamer, ids
     end
   end
 

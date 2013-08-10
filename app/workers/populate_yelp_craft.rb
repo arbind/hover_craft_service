@@ -1,4 +1,4 @@
-class YelpCraftNew < WorkerBase
+class PopulateYelpCraft < WorkerBase
   @perform_after = 1000000
 
   def self.work_data(hover_craft)
