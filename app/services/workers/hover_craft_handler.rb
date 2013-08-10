@@ -20,7 +20,7 @@ class HoverCraftHandler
     return if !final_url.present? or first_url.eql? final_url
     hover_craft[url_attribute] = final_url
     hover_craft.save
-    WorkLauncher.launch :populate_website_craft, hover_craft
+    WorkLauncher.launch :populate_hover_craft, hover_craft
   end
 
 end

@@ -20,24 +20,72 @@ describe WorkHandler do
     end
   end
 
-  describe :streamer_friends do
-    let (:worker)         { StreamerFriends }
+  describe :populate_hover_crafts do
+    let (:worker)         { PopulateHoverCrafts }
+    let (:handler_class)  { HoverCraftHandler }
+    let (:args)           { nil }
+    let (:data)           { worker.work_data }
+    it_behaves_like 'a work handler'
+  end
+
+  describe :populate_hover_craft do
+    let (:worker)         { PopulateHoverCraft }
+    let (:handler_class)  { HoverCraftHandler }
+    let (:args)           { [hover_craft] }
+    let (:data)           { worker.work_data *args }
+    it_behaves_like 'a work handler'
+  end
+
+  describe :populate_twitter_craft do
+    let (:worker)         { PopulateTwitterCraft }
+    let (:handler_class)  { TwitterHandler }
+    let (:args)           { [hover_craft] }
+    let (:data)           { worker.work_data *args }
+    it_behaves_like 'a work handler'
+  end
+
+  describe :populate_yelp_craft do
+    let (:worker)         { PopulateYelpCraft }
+    let (:handler_class)  { YelpHandler }
+    let (:args)           { [hover_craft] }
+    let (:data)           { worker.work_data *args }
+    it_behaves_like 'a work handler'
+  end
+
+  describe :populate_facebook_craft do
+    let (:worker)         { PopulateFacebookCraft }
+    let (:handler_class)  { FacebookHandler }
+    let (:args)           { [hover_craft] }
+    let (:data)           { worker.work_data *args }
+    it_behaves_like 'a work handler'
+  end
+
+  describe :populate_website_craft do
+    let (:worker)         { PopulateWebsiteCraft }
+    let (:handler_class)  { WebsiteHandler }
+    let (:args)           { [hover_craft] }
+    let (:data)           { worker.work_data *args }
+    it_behaves_like 'a work handler'
+  end
+
+  describe :populate_from_streamers do
+    let (:worker)         { PopulateFromStreamers }
     let (:handler_class)  { TwitterHandler }
     let (:args)           { [] }
     let (:data)           { worker.work_data *args }
     it_behaves_like 'a work handler'
   end
 
-  describe :streamer_friends_new do
-    let (:worker)         { StreamerFriendsNew }
+  describe :populate_from_streamer do
+    let (:worker)         { PopulateFromStreamer }
     let (:handler_class)  { TwitterHandler }
     let (:args)           { [streamer, page] }
     let (:data)           { worker.work_data *args }
     it_behaves_like 'a work handler'
   end
 
-  describe :streamer_friends_create do
-    let (:worker)         { StreamerFriendsCreate }
+  describe :populate_from_streamer_friends do
+    let (:worker)         { PopulateFromStreamerFriends }
     let (:handler_class)  { TwitterHandler }
 
     let (:args)           { [streamer, ids] }
@@ -45,65 +93,17 @@ describe WorkHandler do
     it_behaves_like 'a work handler'
   end
 
-  describe :twitter_craft_new do
-    let (:worker)         { TwitterCraftNew }
-    let (:handler_class)  { TwitterHandler }
-    let (:args)           { [hover_craft] }
-    let (:data)           { worker.work_data *args }
-    it_behaves_like 'a work handler'
-  end
-
-  describe :twitter_craft_create do
-    let (:worker)         { TwitterCraftCreate }
-    let (:handler_class)  { TwitterHandler }
-    let (:args)           { [hover_craft] }
-    let (:data)           { worker.work_data *args }
-    it_behaves_like 'a work handler'
-  end
-
-  describe :resolve_url do
-    let (:worker)         { ResolveUrl }
+  describe :hover_craft_resolve_url do
+    let (:worker)         { HoverCraftResolveUrl }
     let (:handler_class)  { HoverCraftHandler }
     let (:args)           { [hover_craft, url_attribute] }
     let (:data)           { worker.work_data *args }
     it_behaves_like 'a work handler'
   end
 
-  describe :website_links do
-    let (:worker)         { WebsiteLinks }
+  describe :website_scan_for_links do
+    let (:worker)         { WebsiteScanForLinks }
     let (:handler_class)  { WebsiteHandler }
-    let (:args)           { [hover_craft] }
-    let (:data)           { worker.work_data *args }
-    it_behaves_like 'a work handler'
-  end
-
-  describe :missing_web_crafts do
-    let (:worker)         { MissingWebCrafts }
-    let (:handler_class)  { HoverCraftHandler }
-    let (:args)           { nil }
-    let (:data)           { worker.work_data }
-    it_behaves_like 'a work handler'
-  end
-
-  describe :missing_web_crafts_new do
-    let (:worker)         { MissingWebCraftsNew }
-    let (:handler_class)  { HoverCraftHandler }
-    let (:args)           { [hover_craft] }
-    let (:data)           { worker.work_data *args }
-    it_behaves_like 'a work handler'
-  end
-
-  describe :yelp_craft_new do
-    let (:worker)         { YelpCraftNew }
-    let (:handler_class)  { YelpHandler }
-    let (:args)           { [hover_craft] }
-    let (:data)           { worker.work_data *args }
-    it_behaves_like 'a work handler'
-  end
-
-  describe :yelp_craft_create do
-    let (:worker)         { YelpCraftCreate }
-    let (:handler_class)  { YelpHandler }
     let (:args)           { [hover_craft] }
     let (:data)           { worker.work_data *args }
     it_behaves_like 'a work handler'

@@ -57,6 +57,34 @@ describe :scheduled_workers do
     it_behaves_like 'a scheduled worker'
   end
 
+  describe PopulateTwitterCraft do
+    let (:args)      { hover_craft_args }
+    let (:work_data) { hover_craft_work_data }
+    subject          { PopulateTwitterCraft }
+    it_behaves_like 'a scheduled worker'
+  end
+
+  describe PopulateYelpCraft do
+    let (:args)      { hover_craft_args }
+    let (:work_data) { hover_craft_work_data }
+    subject          { PopulateYelpCraft }
+    it_behaves_like 'a scheduled worker'
+  end
+
+  describe PopulateFacebookCraft do
+    let (:args)      { hover_craft_args }
+    let (:work_data) { hover_craft_work_data }
+    subject          { PopulateFacebookCraft }
+    it_behaves_like 'a scheduled worker'
+  end
+
+  describe PopulateWebsiteCraft do
+    let (:args)      { hover_craft_args }
+    let (:work_data) { hover_craft_work_data }
+    subject          { PopulateWebsiteCraft }
+    it_behaves_like 'a scheduled worker'
+  end
+
   describe PopulateFromStreamers do
     subject          { PopulateFromStreamer }
     it_behaves_like 'a scheduled worker'
@@ -73,34 +101,6 @@ describe :scheduled_workers do
     let (:args)      { populate_from_streamer_friends_args }
     let (:work_data) { populate_from_streamer_friends_work_data }
     subject          { PopulateFromStreamerFriends }
-    it_behaves_like 'a scheduled worker'
-  end
-
-  describe PopulateYelpCraft do
-    let (:args)      { hover_craft_args }
-    let (:work_data) { hover_craft_work_data }
-    subject          { PopulateYelpCraft }
-    it_behaves_like 'a scheduled worker'
-  end
-
-  describe PopulateTwitterCraft do
-    let (:args)      { hover_craft_args }
-    let (:work_data) { hover_craft_work_data }
-    subject          { PopulateTwitterCraft }
-    it_behaves_like 'a scheduled worker'
-  end
-
-  describe PopulateFacebookCraft do
-    let (:args)      { hover_craft_args }
-    let (:work_data) { hover_craft_work_data }
-    subject          { PopulateFacebookCraft }
-    it_behaves_like 'a scheduled worker'
-  end
-
-  describe PopulateWebsiteCraft do
-    let (:args)      { hover_craft_args }
-    let (:work_data) { hover_craft_work_data }
-    subject          { PopulateWebsiteCraft }
     it_behaves_like 'a scheduled worker'
   end
 

@@ -1,7 +1,7 @@
 # require 'spec_helper'
 # require 'sidekiq/testing'
 
-# describe WorkerScanWebsiteForLinks do
+# describe :website_scan_for_links do
 #   let (:subject)   { WorkerScanWebsiteForLinks.new }
 #   context 'Given no WebsiteCraft' do
 #     it 'quits'

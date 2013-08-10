@@ -1,4 +1,4 @@
-describe :twitter_craft_create_spec do
+describe :populate_twitter_craft do
   # it 'populates the twitter_craft for a hover craft'
   # it 'schedules a ResolveUrl job for the twitter_website_url'
   # it 'identifies a potential twitter_craft for a hover craft'
