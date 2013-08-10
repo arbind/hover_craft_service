@@ -58,16 +58,16 @@ private
   end
 
   def self.create_hover_crafts_for_twitter_profiles(twitter_profiles, streamer)
-    hover_craft = []
+    hover_crafts = []
     twitter_profiles.map do |profile|
       hc = profile.to_hover_craft
       hc[:tweet_streamer] = streamer
-      HoverCraft.where(twitter_id: hc[:twitter_id]).first_or_create
+      hover_craft = HoverCraft.where(twitter_id: hc[:twitter_id]).first_or_create
       hover_craft.update_attributes hc
-      hover_craft.push hover_craft
+      hover_crafts.push hover_craft
     end
     # log
-    hover_craft
+    hover_crafts
   end
 
   def self.batch_size
