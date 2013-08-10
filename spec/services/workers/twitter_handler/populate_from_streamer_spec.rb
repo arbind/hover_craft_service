@@ -1,27 +1,27 @@
 require 'spec_helper'
 require 'sidekiq/testing'
 
-describe :streamer_friends_new do
+describe :populate_from_streamer do
 
-  shared_examples_for 'a worker to detect new streamer friends' do
+  shared_examples_for 'a worker to populate_from_streamer' do
     it 'calls the Twitter.friends API' do
       Twitter.should_receive(:friend_ids).with(streamer.tid, {cursor: next_cursor_page})
-      TwitterHandler.streamer_friends_new streamer, next_cursor_page
+      TwitterHandler.populate_from_streamer streamer, next_cursor_page
     end
 
     describe 'batch the friend ids' do # to match the limit(100) when calling Twitter.users
       let (:batches_of_ids) { new_friend_ids.each_slice(TWITTER_FETCH_USERS_BATCH_SIZE).to_a }
-      it 'schedules StreamerFriendsCreate in batches of friend ids' do
+      it 'schedules PopulateFromStreamerFriends in batches of friend ids' do
         batches_of_ids.each do |ids|
-          new_job_data = StreamerFriendsCreate.work_data streamer, ids
-          StreamerFriendsCreate.should_receive(:schedule).with new_job_data
+          new_job_data = PopulateFromStreamerFriends.work_data streamer, ids
+          PopulateFromStreamerFriends.should_receive(:schedule).with new_job_data
         end
-        TwitterHandler.streamer_friends_new streamer, next_cursor_page
+        TwitterHandler.populate_from_streamer streamer, next_cursor_page
       end
-      it 'schedules StreamerFriendsCreate for each batch' do
+      it 'schedules PopulateFromStreamerFriends for each batch' do
         expect {
-          TwitterHandler.streamer_friends_new streamer, next_cursor_page
-        }.to change(StreamerFriendsCreate.jobs, :size).by(batches_of_ids.size)
+          TwitterHandler.populate_from_streamer streamer, next_cursor_page
+        }.to change(PopulateFromStreamerFriends.jobs, :size).by(batches_of_ids.size)
       end
     end
   end
@@ -42,21 +42,21 @@ describe :streamer_friends_new do
   end
 
   context 'Process friends for the 1st time' do
-    it_behaves_like 'a worker to detect new streamer friends'
+    it_behaves_like 'a worker to populate_from_streamer'
   end
 
   context 'Process a page with a large number of friends in batches' do
     let (:friend_tids)      { (1000..1310).to_a }
-    it_behaves_like 'a worker to detect new streamer friends'
+    it_behaves_like 'a worker to populate_from_streamer'
   end
 
   context 'Processes multiple pages of friends' do
     let (:next_cursor_page)        { 1 }
-    it_behaves_like 'a worker to detect new streamer friends'
+    it_behaves_like 'a worker to populate_from_streamer'
     it 'schedules another job to process the next page' do
-      next_job_data = StreamerFriendsNew.work_data streamer, next_cursor_page
-      StreamerFriendsNew.should_receive(:schedule).with next_job_data
-      TwitterHandler.streamer_friends_new streamer, next_cursor_page
+      next_job_data = PopulateFromStreamer.work_data streamer, next_cursor_page
+      PopulateFromStreamer.should_receive(:schedule).with next_job_data
+      TwitterHandler.populate_from_streamer streamer, next_cursor_page
     end
   end
 
@@ -69,11 +69,11 @@ describe :streamer_friends_new do
       end
     end
 
-    it_behaves_like 'a worker to detect new streamer friends'
+    it_behaves_like 'a worker to populate_from_streamer'
     it 'schedules only the new friends to be turned into hovercrafts' do
-      new_job_data = StreamerFriendsCreate.work_data streamer, new_friend_ids
-      StreamerFriendsCreate.should_receive(:schedule).with new_job_data
-      TwitterHandler.streamer_friends_new streamer
+      new_job_data = PopulateFromStreamerFriends.work_data streamer, new_friend_ids
+      PopulateFromStreamerFriends.should_receive(:schedule).with new_job_data
+      TwitterHandler.populate_from_streamer streamer
     end
   end
 end

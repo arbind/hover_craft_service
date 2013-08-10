@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'sidekiq/testing'
 
-describe :streamer_friends_create do
+describe :populate_from_streamer_friends do
 
   shared_examples_for 'a worker that create HoverCrafts for new streamer friends' do
     let!(:streamer)             { create :tweet_streamer }
@@ -20,25 +20,25 @@ describe :streamer_friends_create do
       it 'reschedules all but the 1st batch' do
         remaining_batches_of_ids = batches_of_ids[1..-1]
         remaining_batches_of_ids.each do |ids|
-          new_job_data = StreamerFriendsCreate.work_data streamer, ids
-          StreamerFriendsCreate.should_receive(:schedule).with new_job_data
+          new_job_data = PopulateFromStreamerFriends.work_data streamer, ids
+          PopulateFromStreamerFriends.should_receive(:schedule).with new_job_data
         end
-        TwitterHandler.streamer_friends_create streamer, new_friend_ids
+        TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
       end
 
       context 'for the first batch of ids' do
         it 'retrieves twitter profiles' do
           options = {}
           Twitter.should_receive(:users).with(first_batch_of_tids, twitter_options)
-          TwitterHandler.streamer_friends_create streamer, new_friend_ids
+          TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
         end
         it 'creates a new HoverCraft for each twitter profile' do
           expect {
-            TwitterHandler.streamer_friends_create streamer, new_friend_ids
+            TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
           }.to change(HoverCraft, :count).by(first_batch_of_ids.size)
         end
         it 'sets the tweet_streamer for the new HoverCraft' do
-          TwitterHandler.streamer_friends_create streamer, new_friend_ids
+          TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
           HoverCraft.each do |hc|
             expect(first_batch_of_ids).to include hc.twitter_id
             expect(hc.tweet_streamer.id).to eq streamer.id
@@ -46,8 +46,8 @@ describe :streamer_friends_create do
         end
         it 'schedules ResolveUrl jobs for each new HoverCraft (to resolve t.co)' do
           expect {
-            TwitterHandler.streamer_friends_create streamer, new_friend_ids
-          }.to change(ResolveUrl.jobs, :size).by(first_batch_of_ids.size)
+            TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
+          }.to change(HoverCraftResolveUrl.jobs, :size).by(first_batch_of_ids.size)
         end
       end
     end

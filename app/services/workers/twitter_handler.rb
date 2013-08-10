@@ -4,7 +4,7 @@ class TwitterHandler
   end
 
   def self.populate_from_streamers
-    TweetStreamer.each {|streamer| WorkLauncher.launch :streamer_friends_new, streamer}
+    TweetStreamer.each {|streamer| WorkLauncher.launch :populate_from_streamer, streamer}
   end
 
   # detect new friends that have been added to a streamer
