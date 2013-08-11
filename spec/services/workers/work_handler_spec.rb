@@ -109,4 +109,12 @@ describe WorkHandler do
     it_behaves_like 'a work handler'
   end
 
+  describe :yelp_scan_for_link do
+    let (:worker)         { YelpScanForLink }
+    let (:handler_class)  { YelpHandler }
+    let (:args)           { [hover_craft] }
+    let (:data)           { worker.work_data *args }
+    it_behaves_like 'a work handler'
+  end
+
 end
