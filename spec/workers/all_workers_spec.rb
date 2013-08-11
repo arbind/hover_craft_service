@@ -118,4 +118,12 @@ describe :scheduled_workers do
     it_behaves_like 'a scheduled worker'
   end
 
+  describe YelpScanForLink do
+    let (:args)      { hover_craft_args }
+    let (:work_data) { hover_craft_work_data }
+    subject          { YelpScanForLink }
+    it_behaves_like 'a scheduled worker'
+  end
+
+
 end
