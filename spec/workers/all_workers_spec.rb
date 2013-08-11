@@ -125,5 +125,4 @@ describe :scheduled_workers do
     it_behaves_like 'a scheduled worker'
   end
 
-
 end

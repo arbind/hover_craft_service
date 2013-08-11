@@ -1,5 +1,4 @@
 class FacebookHandler
-
-  def populate_facebook_craft(hover_craft)
+  def self.populate_facebook_craft(hover_craft)
   end
 end

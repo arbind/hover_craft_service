@@ -1,6 +1,6 @@
 class WebsiteHandler
 
-  def populate_website_craft(hover_craft)
+  def self.populate_website_craft(hover_craft)
   end
 
   # Find any webcrafts that are missing

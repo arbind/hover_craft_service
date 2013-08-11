@@ -1,6 +1,6 @@
 class TwitterHandler
 
-  def populate_twitter_craft(hover_craft)
+  def self.populate_twitter_craft(hover_craft)
   end
 
   def self.populate_from_streamers
