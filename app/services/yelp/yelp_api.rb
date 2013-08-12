@@ -21,6 +21,16 @@ class YelpApi
     YelpBiz.new businesses.first if businesses and businesses.any?
   end
 
+  def self.website_for_id(yelp_id)
+    yelp_href = "http://www.yelp.com/biz/#{URI::encode yelp_id}"
+    p yelp_href
+    link = Web.site(yelp_href).select_first('#bizUrl a')
+    p link
+    biz_url = link.content.strip if link
+    biz_url.to_href if biz_url
+    biz_url.to_href
+  end
+
   def self.biz_for_yelp_href (href)
     yelp_id = yelp_id_from_href href
     biz_for_id yelp_id
@@ -165,21 +175,9 @@ private
         yelp_id:          id,
         yelp_name:        name,
         yelp_href:        url,
-        # yelp_website_url: find_website_url,
         yelp_address:     construct_address,
         yelp_categories:  categories,
       }
-    end
-
-    def find_website_url
-      return @website_url if @website_url
-      biz_url = Web.site(url).select_first('#bizUrl a')
-      return "" unless biz_url
-      @website_url = biz_url.content if biz_url
-      doc_links = []
-      doc = Nokogiri::HTML(open url,  'User-Agent' => 'ruby')
-      doc.css('#bizUrl a').each { |link| doc_links << link.content }
-      @website_url = doc_links.first
     end
 
     def construct_address
