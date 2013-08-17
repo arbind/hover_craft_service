@@ -1,14 +1,21 @@
 FactoryGirl.define do
-  sequence(:name)         { |n| "Prince the #{n}th" }
-  sequence(:address)      { |n| "Santa Monica, Ca" }
-  sequence(:twitter_id)   { |n| "100#{n}" }
-  sequence(:screen_name)  { |n| "tweeter_#{n}" }
+  sequence(:href)                 { |n| "http://my-site-#{n}.com" }
 
-  sequence(:yelp_id)      { |n| "my-biz-{n}" }
-  sequence(:yelp_href)    { |n| "http://yelp.com/my-biz-#{n}" }
+  sequence(:name)                 { |n| "Prince the #{n}th" }
+  sequence(:address)              { |n| "Santa Monica, Ca" }
 
-  sequence(:streamer_name)         { |n| "Yumi the #{n}th" }
-  sequence(:streamer_address)      { |n| "Los Angeles, Ca" }
-  sequence(:streamer_twitter_id)   { |n| "8888#{n}" }
-  sequence(:streamer_screen_name)  { |n| "streamer_#{n}" }
+  sequence(:streamer_twitter_id)  { |n| "8888#{n}" }
+  sequence(:streamer_name)        { |n| "Streamer #{n}" }
+  sequence(:streamer_address)     { |n| "Los Angeles, Ca" }
+
+  sequence(:twitter_id)           { |n| "100#{n}" }
+  sequence(:twitter_name)         { |n| "Tweeter #{n}" }
+
+  sequence(:yelp_name)            { |n| "My Biz #{n}" }
+
+  sequence(:facebook_id)          { |n| "200#{n}" }
+  sequence(:facebook_name)        { |n| "Face Booker #{n}" }
+
+  sequence(:website_name)         { |n| "My Sweet Website #{n}" }
+
 end

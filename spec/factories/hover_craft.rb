@@ -1,88 +1,63 @@
 FactoryGirl.define do
   factory :hover_craft do
-    factory :twitter_hover_craft do
-      twitter_id            { FactoryGirl.generate :twitter_id }
-      twitter_name          { FactoryGirl.generate :name }
-      twitter_screen_name   { FactoryGirl.generate :screen_name }
-    end
 
-    factory :yelp_hover_craft do
-      yelp_id               { FactoryGirl.generate :yelp_id }
-      yelp_name             { FactoryGirl.generate :name }
-      yelp_href             { FactoryGirl.generate :yelp_href }
-    end
-
-    factory :complete_hover_craft do
-      tweet_streamer
-
-      craft_id  'craft_id'
-
-      twitter_id            { FactoryGirl.generate :twitter_id }
-      twitter_name          { FactoryGirl.generate :name }
-      twitter_screen_name   { FactoryGirl.generate :screen_name }
-      twitter_website_url   'twitter_website_url'
-      twitter_address       'twitter_address'
+    trait :twitter do
+      twitter_id            { generate :twitter_id }
+      twitter_name          { generate :name }
+      twitter_screen_name   { twitter_name.underscore }
+      twitter_website_url   { "http://twitter.com/#{twitter_screen_name}"}
+      twitter_address       { generate :address }
       twitter_craft         true
+    end
 
-      yelp_id               'yelp_id'
-      yelp_name             'yelp_name'
-      yelp_href             'yelp_href'
-      yelp_website_url      'yelp_website_url'
-      yelp_address          'yelp_address'
-      yelp_categories       'yelp_categories'
+    trait :yelp do
+      yelp_name             { generate :yelp_name }
+      yelp_id               { yelp_name.underscore }
+      yelp_href             { "http://yelp.com/#{yelp_id}" }
+      yelp_website_url      { generate :href }
+      yelp_address          { generate :address }
+      yelp_categories       'food'
       yelp_craft            true
+    end
 
+    trait :facebook do
       facebook_id           'facebook_id'
       facebook_name         'facebook_name'
       facebook_href         'facebook_href'
       facebook_website_url  'facebook_website_url'
       facebook_address      'facebook_address'
       facebook_craft        true
+    end
 
+    trait :website do
       website_url           'website_url'
       website_name          'website_name'
       website_craft         true
+    end
 
+    trait :streamer do
+      tweet_streamer
+    end
+
+    trait :score do
       fit_score             5
       fit_score_name        5
       fit_score_website     5
       fit_score_username    5
-
-      factory :missing_twitter do
-        tweet_streamer      nil
-        twitter_id          nil
-        twitter_name        nil
-        twitter_screen_name nil
-        twitter_website_url nil
-        twitter_address     nil
-        twitter_profile     nil
-        twitter_craft       nil
-      end
-      factory :missing_yelp do
-        yelp_id             nil
-        yelp_name           nil
-        yelp_href           nil
-        yelp_website_url    nil
-        yelp_address        nil
-        yelp_categories     nil
-        yelp_profile        nil
-        yelp_craft          nil
-      end
-      factory :missing_facebook do
-        facebook_id         nil
-        facebook_name       nil
-        facebook_href       nil
-        facebook_website_url nil
-        facebook_address    nil
-        facebook_profile    nil
-        facebook_craft      nil
-      end
-      factory :missing_website do
-        website_url         nil
-        website_name        nil
-        website_profile     nil
-        website_craft       nil
-      end
     end
+
+    trait :crafted do
+      craft_id  'craft_id'
+    end
+
+    factory :complete_hover_craft, traits: [:crafted, :streamer, :twitter, :yelp, :facebook, :website, :score]
+
+    factory :twitter_hover_craft , traits: [:twitter]
+    factory :yelp_hover_craft    , traits: [:yelp]
+
+    factory :missing_twitter     , traits: [:crafted, :yelp, :facebook, :website, :score]
+    factory :missing_yelp        , traits: [:crafted, :streamer, :twitter, :facebook, :website, :score]
+    factory :missing_facebook    , traits: [:crafted, :streamer, :twitter, :yelp, :website, :score]
+    factory :missing_website     , traits: [:crafted, :streamer, :twitter, :yelp, :facebook, :score]
   end
 end

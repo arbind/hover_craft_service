@@ -1,3 +1,12 @@
+module LOCAL::TWITTER
+  KEY     = '6QOEygXZwne9IXahN0STtQ'
+end
+
+module SECRET::TWITTER
+  KEY     = ENV["TWITTER_KEY"]
+  SECRET  = ENV["TWITTER_SECRET"]
+end
+
 Twitter.configure do |config|
   config.consumer_key = SECRET::TWITTER::KEY
   config.consumer_secret = SECRET::TWITTER::SECRET

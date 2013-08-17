@@ -13,6 +13,10 @@ module Sidekiq
         @mutex ||= Mutex.new
       end
 
+      def perform_after
+        @perform_after
+      end
+
       def last_run_at
         return @last_run_at unless @last_run_at.nil?
         scheduledSet = Sidekiq::ScheduledSet.new
