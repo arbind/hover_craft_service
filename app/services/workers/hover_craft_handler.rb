@@ -7,6 +7,10 @@ class HoverCraftHandler
   end
 
   def self.populate_hover_craft(hover_craft)
+    WorkLauncher.launch :populate_twitter_craft, hover_craft unless hover_craft.twitter_id and hover_craft.twitter_name
+    WorkLauncher.launch :populate_facebook_craft, hover_craft unless hover_craft.facebook_id and hover_craft.facebook_name
+    WorkLauncher.launch :populate_yelp_craft, hover_craft unless hover_craft.yelp_id and hover_craft.yelp_name
+    WorkLauncher.launch :populate_website_craft, hover_craft unless hover_craft.website_url
   end
 
   def self.hover_craft_resolve_url(hover_craft, url_attribute)
