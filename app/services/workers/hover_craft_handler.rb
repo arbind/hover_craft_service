@@ -6,14 +6,10 @@ class HoverCraftHandler
     end
   end
 
-  def populate_hover_craft(hover_craft)
+  def self.populate_hover_craft(hover_craft)
   end
 
-  def self.hover_craft_resolve_url(data)
-    url_attribute = data.fetch 'url_attribute'
-    hover_craft_id = data.fetch 'hover_craft_id'
-    hover_craft = HoverCraft.find hover_craft_id
-
+  def self.hover_craft_resolve_url(hover_craft, url_attribute)
     first_url = hover_craft[url_attribute]
     final_url = Web.final_location_of_url first_url
 

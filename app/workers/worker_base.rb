@@ -6,7 +6,7 @@ class WorkerBase
     {}
   end
 
-  def perform(data)
+  def perform(data={})
     handler = self.class.name.underscore.to_sym
     WorkHandler.send handler, data
   end

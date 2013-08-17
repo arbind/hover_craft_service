@@ -1,5 +1,5 @@
 class PopulateHoverCraft < WorkerBase
-  @perform_after = 5.minutes
+  @perform_after = 1.second
 
   def self.work_data(hover_craft)
     {
