@@ -1,0 +1,58 @@
+social interaction:
+1 user doing something that exposes the product to another recipient outside and brings him forward to the product.
+
+5 ingredients:
+why will users spread the world about your product, why will sender take action
+what mechanism will they use: what seed will be sent that can be seen externally?
+where will they spread the word. external network.
+why will the recipient respond?: why will recipient take action?
+
+how: will you manage the whole process?
+
+Product
+  sender:     Food Truck Lover
+  why:        let people know what food is good and where to get it.
+  what:       map, picture, icon review: yuk, mmmm, meh, nom
+Network
+  recipient:  Food Truck Lovers
+  where:      push notifications, twitter, facebook, email, colleges, offices,
+  why:        to get some good food
+
+
+FTL goes to a food truck
+FTL sends seed via push or twitter (icon review, photo, map) with retweet request
+recipient receives notice
+recipient puts food truck on wish list or favs
+recipient visits food truck (eventually)
+
+Food truck festival
+Food truck
+
+Product
+  sender: Food Truck Owners
+  why:    To let people know where they are
+  what:
+Network
+  recipient: Food Truck Owner
+  where:
+  why:
+
+Product
+  sender:    Food Truck Owners
+  why:
+  what:
+
+Network
+  recipient: Food Truck Lovers
+  where:
+  why:
+
+Product
+  sender: Food Truck Lover
+  why:
+  what:
+
+Network
+  recipient: Food Truck Owner
+  where:
+  why:
