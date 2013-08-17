@@ -31,6 +31,6 @@ module SidekiqProcess
   end
 end
 
-if ENV["LAUNCH_BACKGROUND_THREADS"]
+if ENV["LAUNCH_BACKGROUND_JOBS"]
   SidekiqProcess.launch launch_delay: 3
 end

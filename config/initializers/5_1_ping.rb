@@ -14,4 +14,4 @@ module BackgroundPing
   end
 end
 
-BackgroundPing.start if ENV["LAUNCH_BACKGROUND_THREADS"]
+BackgroundPing.start if ENV["LAUNCH_BACKGROUND_JOBS"]
