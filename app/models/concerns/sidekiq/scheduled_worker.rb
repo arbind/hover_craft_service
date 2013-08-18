@@ -23,7 +23,7 @@ module Sidekiq
         scheduledSet.select.reverse_each do |entry|
           return @last_run_at=entry.score if @queue.eql? entry.queue and name.eql entry.item['class']
         end
-        @last_run_at ||= Time.now.to_f
+        @last_run_at ||= (Time.now - interval_between_runs).to_f
       end
 
       def interval_between_runs
