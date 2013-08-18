@@ -8,10 +8,6 @@ describe :populate_yelp_craft do
 
   let (:yelp_client)  { double search: yelp_results }
 
-  let (:address)      { 'Santa Monica, CA'}
-  let (:streamer)     { create :tweet_streamer, address: address, name: 'streamer'}
-  let (:hover_craft)  { create :hover_craft, tweet_streamer: streamer, twitter_name: biz_name, twitter_id: 123 }
-
   before :each do
     Yelp::Client.stub(:new).and_return yelp_client
   end
@@ -72,20 +68,18 @@ describe :populate_yelp_craft do
   end
 
   context 'given a yelp craft already exists' do
-    let (:hover_craft)  { create :hover_craft, tweet_streamer: streamer, twitter_name: biz_name, twitter_id: 123, yelp_name: biz_name }
+    let (:hover_craft)  { create :hover_craft, :streamer, :twitter, :yelp }
     it_behaves_like 'it skips processing'
   end
 
   context 'given a yelp craft was already crafted' do
-    let (:hover_craft)  { create :hover_craft, tweet_streamer: streamer, twitter_name: biz_name, twitter_id: 123, yelp_craft: true}
+    let (:hover_craft)  { create :hover_craft, :streamer, :twitter, yelp_craft: true }
     it_behaves_like 'it skips processing'
   end
 
   context 'given a twitter_craft and a streamer address' do
     # search for yelp biz by name and address limit to 1 (take the first one)
-    let (:address)      { 'Santa Monica, CA'}
-    let (:streamer)     { create :tweet_streamer, address: address, name: 'streamer'}
-    let (:hover_craft)  { create :hover_craft, tweet_streamer: streamer, twitter_name: biz_name, twitter_id: 123 }
+    let (:hover_craft)  { create :hover_craft, :streamer, :twitter  }
     context 'when a yelp biz is found' do
       it_behaves_like 'it found a yelp craft'
     end
@@ -106,14 +100,6 @@ describe :populate_yelp_craft do
     # let (:hover_craft)  { create :hover_craft, website_links: [yelp_link],  website_url: 'http://my-home-page.com' }
     # it_behaves_like 'it found a yelp craft'
     # it 'calls the YelpApi.biz'
-  end
-
-  context 'given a yelp craft is already populated' do
-    # do not do anything if (yelp_id and yelp_name) (does not call yelp api)
-    # let (:hover_craft)  { create :hover_craft, yelp_id: '123', yelp_name: biz_name }
-    # it 'does not modify the hover craft' do
-    #   # YelpHandler.populate_yelp_craft(hover_craft)
-    # end
   end
 
 end

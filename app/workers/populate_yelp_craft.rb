@@ -1,5 +1,5 @@
 class PopulateYelpCraft < WorkerBase
-  @perform_after = 1000000
+  @perform_after = INTERVAL_FOR_YELP_RATE_LIMIT
 
   def self.work_data(hover_craft)
     {

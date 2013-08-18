@@ -1,5 +1,5 @@
 class YelpScanForLink < WorkerBase
-  @perform_after = 1
+  @perform_after = 1.second
 
   def self.work_data(hover_craft)
     {

@@ -1,5 +1,5 @@
 class PopulateFacebookCraft < WorkerBase
-  @perform_after = 1000000
+  @perform_after = 1.second
 
   def self.work_data(hover_craft)
     {

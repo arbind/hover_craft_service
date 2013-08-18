@@ -9,6 +9,7 @@ why will the recipient respond?: why will recipient take action?
 
 how: will you manage the whole process?
 
+---------
 Product
   sender:     Food Truck Lover
   why:        let people know what food is good and where to get it.
@@ -26,33 +27,73 @@ recipient puts food truck on wish list or favs
 recipient visits food truck (eventually)
 
 Food truck festival
-Food truck
+---------
 
+
+
+---------
 Product
-  sender: Food Truck Owners
-  why:    To let people know where they are
-  what:
+  sender: Food Truck Lover
+  why: provide feedback, fan love
+  what: icon review
+
+Network
+  recipient: Food Truck Owner
+  where: tweet or push notification
+  why: to acknowledge the review, public icon response, private response
+---------
+
+
+
+---------
+Product
+  sender: Food Truck Lover
+  why: wants to confirm location
+  what: request to verify location
+
+Network
+  recipient: Food Truck Owner
+  where: twitter, push notifications
+  why: FTO wants to let people know where they are
+---------
+
+
+
+---------
+Product
+  sender: Food Truck Lover
+  why: Ask for recomendation, best seller, seasonal specials (see tweets for popular food trucks)
+  what: question
+
 Network
   recipient: Food Truck Owner
   where:
   why:
+---------
 
+
+
+---------
 Product
-  sender:    Food Truck Owners
-  why:
-  what:
+  sender: Food Truck Owners
+  why: let people(especially not on twitter) know where they are parked
+  what: map
 
 Network
   recipient: Food Truck Lovers
-  where:
-  why:
+  where: twitter, push notifications
+  why: to see schedule and location of the truck
+---------
 
+
+
+---------
 Product
-  sender: Food Truck Lover
-  why:
+  sender: Food Truck Owners
+  why: promote another food truck friend
   what:
-
 Network
   recipient: Food Truck Owner
   where:
   why:
+---------

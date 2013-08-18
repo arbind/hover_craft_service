@@ -1,5 +1,5 @@
 class HoverCraftResolveUrl < WorkerBase
-  @perform_after = 1
+  @perform_after = 1.second
 
   def self.work_data(hover_craft, url_attribute='twitter_website_url')
     {
