@@ -96,4 +96,7 @@ class HoverCraft
                                      {website_url: nil}
                                    ).desc(:yelp_name)
 
+  def web_craft_missing?
+    twitter_id.nil? or yelp_id.nil? or facebook_id.nil? or website_url.nil?
+  end
 end

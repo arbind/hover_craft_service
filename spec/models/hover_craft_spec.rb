@@ -182,4 +182,6 @@ describe HoverCraft do
      expect(HoverCraft.absolute_fit).to include *absolute_fit_hc
     end
   end
+
+  it '.web_craft_missing?'
 end
