@@ -1,6 +1,10 @@
 class TwitterHandler
 
   def self.populate_twitter_craft(hover_craft)
+    #elsif any [provider]_website_url points to a twitter_href
+    #  twitter_href = [provider]_website_url
+    #  populate from twitter_href
+    # if twitter_craft was populated, and there are still missing webcrafts, schedule a populate_hover_craft
   end
 
   def self.populate_from_streamers
