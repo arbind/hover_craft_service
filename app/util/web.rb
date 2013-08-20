@@ -9,6 +9,25 @@ class Web
 
   def select_first(css) select_all(css).first end
 
+  def title
+    select_first('title').content
+  end
+
+  def links(match=nil)
+    if match.nil?
+      elements = select_all("a[href]")
+    else
+      elements = select_all("a[href*=#{match}]")
+    end
+    elements.map{|e| e[:href]}
+  end
+
+  def self.provider_href?(url)
+    return false if url.nil?
+    href = url.to_href
+    return false if href.nil?
+    href.match /^http(s)?\:\/\/(www.)?(yelp)?(facebook)?(twitter)?\.com/i
+  end
   def self.final_location_of_url(url)
     return "" if url.nil? or url.strip.empty?
     final_location = nil
