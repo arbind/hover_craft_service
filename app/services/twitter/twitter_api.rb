@@ -48,13 +48,7 @@ class TwitterApi # via http://sferik.github.io/twitter/
       }
     end
 
-  private
-
-    def to_profile
-      to_hash.select {|k,v| twitter_profile_attributes include? k.to_sym}
-    end
-
-    def self.twitter_profile_attributes
+    def self.profile_attributes
       [
         :id_str,
         :screen_name,
@@ -83,6 +77,11 @@ class TwitterApi # via http://sferik.github.io/twitter/
         :profile_sidebar_border_color,
         :profile_sidebar_fill_color,
       ]
+    end
+  private
+
+    def to_profile
+      to_hash.select {|k,v| TwitterProfile.profile_attributes.include? k.to_sym}
     end
   end
 
