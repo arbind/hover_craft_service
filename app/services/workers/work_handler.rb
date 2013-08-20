@@ -65,12 +65,6 @@ class WorkHandler
     HoverCraftHandler.hover_craft_resolve_url hover_craft, url_attribute
   end
 
-  def self.website_scan_for_links(data)
-    hover_craft_id = data.fetch 'hover_craft_id'
-    hover_craft = HoverCraft.find hover_craft_id
-    WebsiteHandler.website_scan_for_links hover_craft
-  end
-
   def self.yelp_scan_for_link(data)
     hover_craft_id = data.fetch 'hover_craft_id'
     hover_craft = HoverCraft.find hover_craft_id
