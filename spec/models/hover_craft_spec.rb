@@ -93,10 +93,10 @@ describe HoverCraft do
 
   context :missing_web_crafts do
     let!(:complete_hc)         { create_list :complete_hover_craft, 3 }
-    let!(:missing_yelp_hc)     { create_list :missing_yelp, 3 }
-    let!(:missing_twitter_hc)  { create_list :missing_twitter, 3 }
-    let!(:missing_facebook_hc) { create_list :missing_facebook, 3 }
-    let!(:missing_website_hc)  { create_list :missing_website, 3 }
+    let!(:missing_yelp_hc)     { create_list :no_yelp_hover_craft, 3 }
+    let!(:missing_twitter_hc)  { create_list :no_twitter_hover_craft, 3 }
+    let!(:missing_facebook_hc) { create_list :no_facebook_hover_craft, 3 }
+    let!(:missing_website_hc)  { create_list :no_website_hover_craft, 3 }
     let (:something_missing)   { missing_yelp_hc + missing_twitter_hc + missing_facebook_hc + missing_website_hc }
     it '.with_missing_web_craft returns HoverCraft with any web craft missing' do
       expect(HoverCraft.with_missing_web_craft.count).to eq something_missing.count

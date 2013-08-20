@@ -3,10 +3,10 @@ require 'sidekiq/testing'
 
 describe :populate_hover_crafts do
   let!(:completes)         { create_list :complete_hover_craft, 3 }
-  let!(:missing_twitter)   { create_list :missing_twitter, 3 }
-  let!(:missing_yelp)      { create_list :missing_yelp, 3 }
-  let!(:missing_website)   { create_list :missing_website, 3 }
-  let!(:missing_facebook)  { create_list :missing_facebook, 3 }
+  let!(:missing_twitter)   { create_list :no_twitter_hover_craft, 3 }
+  let!(:missing_yelp)      { create_list :no_yelp_hover_craft, 3 }
+  let!(:missing_website)   { create_list :no_website_hover_craft, 3 }
+  let!(:missing_facebook)  { create_list :no_facebook_hover_craft, 3 }
   let (:incompletes)       { missing_yelp + missing_website +  missing_twitter + missing_facebook }
   it 'schedules MissingWeCraftsNew for each hovercraft' do
     incompletes.each do |hover_craft|

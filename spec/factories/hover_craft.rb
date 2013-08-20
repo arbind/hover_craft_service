@@ -50,16 +50,16 @@ FactoryGirl.define do
       craft_id  'craft_id'
     end
 
-    factory :complete_hover_craft , traits: [:crafted, :streamer, :twitter, :yelp, :facebook, :website, :score]
+    factory :complete_hover_craft    , traits: [:crafted, :streamer, :twitter, :yelp, :facebook, :website, :score]
 
-    factory :yelp_hover_craft     , traits: [:yelp]
-    factory :twitter_hover_craft  , traits: [:twitter]
-    factory :website_hover_craft  , traits: [:yelp]
-    factory :facebook_hover_craft , traits: [:yelp]
+    factory :yelp_hover_craft        , traits: [:yelp]
+    factory :twitter_hover_craft     , traits: [:twitter]
+    factory :website_hover_craft     , traits: [:yelp]
+    factory :facebook_hover_craft    , traits: [:yelp]
 
-    factory :missing_yelp         , traits: [:crafted, :streamer, :twitter, :facebook, :website, :score]
-    factory :missing_twitter      , traits: [:crafted, :yelp, :facebook, :website, :score]
-    factory :missing_website      , traits: [:crafted, :streamer, :twitter, :yelp, :facebook, :score]
-    factory :missing_facebook     , traits: [:crafted, :streamer, :twitter, :yelp, :website, :score]
+    factory :no_yelp_hover_craft     , traits: [:crafted, :streamer, :twitter, :facebook, :website, :score]
+    factory :no_twitter_hover_craft  , traits: [:crafted, :yelp, :facebook, :website, :score]
+    factory :no_website_hover_craft  , traits: [:crafted, :streamer, :twitter, :yelp, :facebook, :score]
+    factory :no_facebook_hover_craft , traits: [:crafted, :streamer, :twitter, :yelp, :website, :score]
   end
 end
