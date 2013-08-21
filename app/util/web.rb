@@ -2,10 +2,14 @@ class Web
   def self.site(url_string) Web.new(url_string) end
 
   def initialize(url_string)
-    @site = Nokogiri::HTML(open url_string, 'User-Agent' => 'ruby')
+    @url = url_string.to_href
   end
 
-  def select_all(css) @site.css(css) end
+  def document
+    @document||= Nokogiri::HTML(open @url, 'User-Agent' => 'ruby')
+  end
+
+  def select_all(css) document.css(css) end
 
   def select_first(css) select_all(css).first end
 
@@ -20,6 +24,17 @@ class Web
       elements = select_all("a[href*=#{match}]")
     end
     elements.map{|e| e[:href]}
+  end
+
+  def provider_links
+    links = {}
+    yelp_links              = links 'yelp'
+    twitter_links           = links 'twitter'
+    facebook_links          = links 'facebook'
+    links[:yelp_links]      = yelp_links if yelp_links.any?
+    links[:twitter_links]   = twitter_links if twitter_links.any?
+    links[:facebook_links]  = facebook_links if facebook_links.any?
+    links
   end
 
   def self.provider_href?(url)

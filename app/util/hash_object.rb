@@ -1,7 +1,7 @@
 class HashObject < Hash
   def initialize(hash)
     super
-    merge! hash
+    merge! hash if hash
   end
 
   def method_missing(m, *args, &block)
