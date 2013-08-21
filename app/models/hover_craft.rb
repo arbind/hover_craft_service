@@ -96,6 +96,9 @@ class HoverCraft
                                      {website_url: nil}
                                    ).desc(:yelp_name).desc(:twitter_name)
 
+  def twitter_href
+    "https://twitter.com/#{twitter_screen_name}"
+  end
   def populated?
     twitter_id and yelp_id and facebook_id and website_url
   end

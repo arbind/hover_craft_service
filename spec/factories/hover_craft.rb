@@ -5,7 +5,7 @@ FactoryGirl.define do
       twitter_id            { generate :twitter_id }
       twitter_name          { generate :twitter_name }
       twitter_screen_name   { twitter_name.squish.gsub(/\s+/, "_") }
-      twitter_website_url   { "http://twitter.com/#{twitter_screen_name}"}
+      twitter_website_url   { generate :href }
       twitter_address       { generate :address }
       twitter_craft         true
     end
@@ -13,7 +13,7 @@ FactoryGirl.define do
     trait :yelp do
       yelp_name             { generate :yelp_name }
       yelp_id               { yelp_name.underscore }
-      yelp_href             { "http://yelp.com/#{yelp_id}" }
+      yelp_href             { "http://yelp.com/biz/#{yelp_id}" }
       yelp_website_url      { generate :href }
       yelp_address          { generate :address }
       yelp_categories       'food'
@@ -21,17 +21,17 @@ FactoryGirl.define do
     end
 
     trait :facebook do
-      facebook_id           'facebook_id'
-      facebook_name         'facebook_name'
-      facebook_href         'facebook_href'
-      facebook_website_url  'facebook_website_url'
-      facebook_address      'facebook_address'
+      facebook_id           { generate :facebook_id }
+      facebook_name         { generate :facebook_name }
+      facebook_href         { "http://facebook.com/#{facebook_name.squish.gsub(/\s+/, '_')}" }
+      facebook_website_url  { generate :href }
+      facebook_address      { generate :address }
       facebook_craft        true
     end
 
     trait :website do
-      website_url           'website_url'
-      website_name          'website_name'
+      website_url           { generate :href }
+      website_name          { generate :website_name }
       website_craft         true
     end
 

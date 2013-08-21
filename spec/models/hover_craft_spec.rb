@@ -182,6 +182,13 @@ describe HoverCraft do
     end
   end
 
+  context '#twitter_href' do
+    let (:screen_name) { '_my_twitter_name' }
+    let (:hover_craft) { build :complete_hover_craft, twitter_screen_name: screen_name  }
+    it 'calculates twitter_href' do
+      expect(hover_craft.twitter_href).to eq "https://twitter.com/#{screen_name}"
+    end
+  end
   context '#populated?' do
     context 'for complete hover craft' do
       let (:hover_craft) { create :complete_hover_craft }
