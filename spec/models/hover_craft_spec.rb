@@ -40,7 +40,6 @@ describe HoverCraft do
         expect(HoverCraft.twelps).to include *complete
       end
     end
-
     describe 'yelp scopes' do
       let!(:existant)     { create_list :hover_craft, 3, yelp_id: '123' }
       let!(:non_existant) { create_list :hover_craft, 4, yelp_id: nil }
@@ -183,5 +182,26 @@ describe HoverCraft do
     end
   end
 
-  it '.web_craft_missing?'
+  context '#populated?' do
+    context 'for complete hover craft' do
+      let (:hover_craft) { create :complete_hover_craft }
+      it 'returns true' do
+        expect(hover_craft.populated?).to be_true
+      end
+    end
+
+    context 'for incomplete hover craft' do
+      [
+        :no_yelp_hover_craft,
+        :no_twitter_hover_craft,
+        :no_website_hover_craft,
+        :no_facebook_hover_craft
+      ].each do |missing_craft|
+        it "returns false when there is #{missing_craft}" do
+          hover_craft = build missing_craft
+          expect(hover_craft.populated?).to be_false
+        end
+      end
+    end
+  end
 end

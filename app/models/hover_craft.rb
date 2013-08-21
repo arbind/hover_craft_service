@@ -94,9 +94,9 @@ class HoverCraft
                                      {twitter_id: nil},
                                      {facebook_id: nil},
                                      {website_url: nil}
-                                   ).desc(:yelp_name)
+                                   ).desc(:yelp_name).desc(:twitter_name)
 
-  def web_craft_missing?
-    twitter_id.nil? or yelp_id.nil? or facebook_id.nil? or website_url.nil?
+  def populated?
+    twitter_id and yelp_id and facebook_id and website_url
   end
 end

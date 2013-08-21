@@ -3,8 +3,8 @@ FactoryGirl.define do
 
     trait :twitter do
       twitter_id            { generate :twitter_id }
-      twitter_name          { generate :name }
-      twitter_screen_name   { twitter_name.underscore }
+      twitter_name          { generate :twitter_name }
+      twitter_screen_name   { twitter_name.squish.gsub(/\s+/, "_") }
       twitter_website_url   { "http://twitter.com/#{twitter_screen_name}"}
       twitter_address       { generate :address }
       twitter_craft         true
@@ -50,12 +50,12 @@ FactoryGirl.define do
       craft_id  'craft_id'
     end
 
-    factory :complete_hover_craft    , traits: [:crafted, :streamer, :twitter, :yelp, :facebook, :website, :score]
+    factory :complete_hover_craft    , traits: [:crafted,  :streamer, :twitter, :yelp, :website, :facebook, :score]
 
     factory :yelp_hover_craft        , traits: [:yelp]
     factory :twitter_hover_craft     , traits: [:twitter]
-    factory :website_hover_craft     , traits: [:yelp]
-    factory :facebook_hover_craft    , traits: [:yelp]
+    factory :website_hover_craft     , traits: [:website]
+    factory :facebook_hover_craft    , traits: [:facebook]
 
     factory :no_yelp_hover_craft     , traits: [:crafted, :streamer, :twitter, :facebook, :website, :score]
     factory :no_twitter_hover_craft  , traits: [:crafted, :yelp, :facebook, :website, :score]
