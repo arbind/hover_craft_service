@@ -38,6 +38,10 @@ class TwitterApi # via http://sferik.github.io/twitter/
   # TwitterProfile
   # HashObject that makes it easy to work with responses from the Twitter gem
   class TwitterProfile < HashObject
+    def initialize(hash)
+      super
+      self.url = self.url.strip.to_href if self.url
+    end
     def to_hover_craft
       {
         twitter_id:           id_str,

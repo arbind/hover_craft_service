@@ -23,12 +23,8 @@ class YelpApi
 
   def self.website_for_id(yelp_id)
     yelp_href = "http://www.yelp.com/biz/#{URI::encode yelp_id}"
-    p yelp_href
     link = Web.site(yelp_href).select_first('#bizUrl a')
-    p link
-    biz_url = link.content.strip if link
-    biz_url.to_href if biz_url
-    biz_url.to_href
+    biz_url = link.content.strip.to_href if link and link.content
   end
 
   def self.biz_for_yelp_href (href)
