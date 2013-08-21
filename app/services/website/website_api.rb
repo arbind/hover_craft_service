@@ -4,16 +4,11 @@ class WebsiteApi
 
   def self.website_info(url)
     site = Web.new url
-    yelp_links = site.links 'yelp'
-    twitter_links = site.links 'twitter'
-    facebook_links = site.links 'facebook'
     info =  {
       url: url,
       title: site.title
     }
-    info[:yelp_link] = yelp_links.first if yelp_links.any?
-    info[:twitter_link] = twitter_links.first if twitter_links.any?
-    info[:facebook_link] = facebook_links.first if facebook_links.any?
+    info.merge! site.provider_links
 
     WebsiteProfile.new info
   end
@@ -31,9 +26,9 @@ class WebsiteApi
 
     def self.profile_attributes
       [
-        :yelp_link,
-        :twitter_link,
-        :facebook_link
+        :yelp_links,
+        :twitter_links,
+        :facebook_links
       ]
     end
 
