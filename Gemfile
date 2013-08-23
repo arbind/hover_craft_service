@@ -17,6 +17,7 @@ gem 'craftoid'          , github: 'arbind/craftoid', ref: '11f3ff4bd7'
 
 gem 'omniauth-twitter'  , '~>1.0.0'
 
+gem 'koala'             , '~> 1.6.0'
 gem 'twitter'           , '~>4.8.1'
 gem 'yelpster'          , '~>1.1.4'
 
