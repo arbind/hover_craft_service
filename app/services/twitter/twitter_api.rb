@@ -40,8 +40,9 @@ class TwitterApi # via http://sferik.github.io/twitter/
   class TwitterProfile < HashObject
     def initialize(hash)
       super
-      self.url = self.url.strip.to_href if self.url
+      self['url'] = self.url.strip.to_href if self.url
     end
+
     def to_hover_craft
       {
         twitter_id:           id_str,
@@ -52,40 +53,39 @@ class TwitterApi # via http://sferik.github.io/twitter/
       }
     end
 
-    def self.profile_attributes
-      [
-        :id_str,
-        :screen_name,
-        :name,
-        :description,
-        :url,
-        :followers_count,
-        :friends_count,
-        :statuses_count,
-        :location,
-        :lang,
-        :created_at,
-        :listed_count,
-        :geo_enabled,
-        :profile_image_url,
-        :profile_image_url_https,
-        :profile_background_image_url,
-        :profile_background_image_url_https,
-        :profile_background_tile,
-        :profile_background_color,
-        :profile_use_background_image,
-        :default_profile,
-        :default_profile_image,
-        :profile_link_color,
-        :profile_text_color,
-        :profile_sidebar_border_color,
-        :profile_sidebar_fill_color,
-      ]
-    end
   private
-
     def to_profile
       to_hash.select {|k,v| TwitterProfile.profile_attributes.include? k.to_sym}
+    end
+    def self.profile_attributes
+      [
+          :id_str,
+          :screen_name,
+          :name,
+          :description,
+          :url,
+          :followers_count,
+          :friends_count,
+          :statuses_count,
+          :location,
+          :lang,
+          :created_at,
+          :listed_count,
+          :geo_enabled,
+          :profile_image_url,
+          :profile_image_url_https,
+          :profile_background_image_url,
+          :profile_background_image_url_https,
+          :profile_background_tile,
+          :profile_background_color,
+          :profile_use_background_image,
+          :default_profile,
+          :default_profile_image,
+          :profile_link_color,
+          :profile_text_color,
+          :profile_sidebar_border_color,
+          :profile_sidebar_fill_color,
+      ]
     end
   end
 
