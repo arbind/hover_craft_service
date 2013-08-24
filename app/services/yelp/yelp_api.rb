@@ -62,8 +62,7 @@ class YelpApi
     return nil if href.nil?
     listing_id = nil
     begin
-      url = href.downcase.split('?')[0] # strip off query params
-      url = url.split('#')[0] # strip off hash tag params
+      url = Web.strip_href href.downcase
       u = URI.parse(url)
       u = URI.parse("http://#{url}") if u.host.nil?
       return nil unless ['www.yelp.com', 'yelp.com'].include?(u.host)

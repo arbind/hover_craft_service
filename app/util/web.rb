@@ -17,13 +17,17 @@ class Web
     select_first('title').content
   end
 
-  def links(match=nil)
+  def links(match=nil, trim=true)
     if match.nil?
       elements = select_all("a[href]")
     else
       elements = select_all("a[href*=#{match}]")
     end
-    elements.map{|e| e[:href]}
+    elements.map do |e|
+      href = e[:href]
+      href= Web.strip_href href if trim
+      href
+    end
   end
 
   def provider_links
@@ -35,6 +39,19 @@ class Web
     links[:twitter_links]   = twitter_links if twitter_links.any?
     links[:facebook_links]  = facebook_links if facebook_links.any?
     links
+  end
+
+  def self.hosts_match?(href1, href2)
+    url1 = strip_href href1.to_href.downcase
+    url2 = strip_href href2.to_href.downcase
+    u1 = URI.parse(url1)
+    u2 = URI.parse(url2)
+    u1.host.eql? u2.host
+  end
+
+  def self.strip_href(href)
+    url = href.split('?')[0] # strip off query params
+    url.split('#')[0] # strip off anchors
   end
 
   def self.provider_href?(url)
