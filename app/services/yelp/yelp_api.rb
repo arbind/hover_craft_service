@@ -176,6 +176,7 @@ private
       }
     end
 
+  private
     def construct_address
       return nil unless location
       display_address_tokens = location["display_address"]
@@ -183,5 +184,4 @@ private
       display_address_tokens.join(", ")
     end
   end
-
 end

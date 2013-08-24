@@ -88,5 +88,4 @@ class TwitterApi # via http://sferik.github.io/twitter/
       ]
     end
   end
-
 end

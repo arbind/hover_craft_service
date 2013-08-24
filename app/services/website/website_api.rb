@@ -23,7 +23,10 @@ class WebsiteApi
       }
     end
 
-
+  private
+    def to_profile
+      to_hash.select {|k,v| WebsiteProfile.profile_attributes.include? k.to_sym}
+    end
     def self.profile_attributes
       [
         :yelp_links,
@@ -32,10 +35,6 @@ class WebsiteApi
       ]
     end
 
-  private
-    def to_profile
-      to_hash.select {|k,v| WebsiteProfile.profile_attributes.include? k.to_sym}
-    end
   end
 
 end
