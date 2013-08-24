@@ -44,6 +44,12 @@ describe :populate_from_streamer_friends do
             expect(hc.tweet_streamer.id).to eq streamer.id
           end
         end
+        it 'automatically promotes the HoverCraft to be craftable' do
+          TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
+          HoverCraft.each do |hc|
+            expect(hc.craftable).to be_true
+          end
+        end
         it 'schedules ResolveUrl jobs for each new HoverCraft (to resolve t.co)' do
           expect {
             TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids

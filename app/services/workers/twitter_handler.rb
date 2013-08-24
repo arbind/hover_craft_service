@@ -63,6 +63,7 @@ private
     twitter_profiles.map do |profile|
       hc = profile.to_hover_craft
       hc[:tweet_streamer] = streamer
+      hc[:craftable] = true # streamer friends are automatically promoted to be craftable
       hover_craft = HoverCraft.where(twitter_id: hc[:twitter_id]).first_or_create
       hover_craft.update_attributes hc
       hover_crafts.push hover_craft
