@@ -1,5 +1,6 @@
 class FacebookApi
   include Singleton
+  attr_accessor :facebook_client
 
   def self.service() self end
 
@@ -8,7 +9,9 @@ class FacebookApi
 
   def self.user(id)
     user = facebook_client.get_object(id)
-    FacebookProfile.new user
+    FacebookProfile.new user if user
+  rescue
+    nil
   end
 
   def self.user_for_facebook_href(href)
