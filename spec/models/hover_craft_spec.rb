@@ -3,13 +3,33 @@ require 'spec_helper'
 describe HoverCraft do
 
   context :relations do
-
     describe '#tweet_streamer' do
       let (:screen_name) { 'govinda' }
       let!(:streamer)    { create :tweet_streamer, screen_name: screen_name}
       let!(:subject)     { create :hover_craft, tweet_streamer: streamer }
       it '.crafted returns HoverCraft with a craft_id' do
         expect(subject.tweet_streamer.screen_name).to eq screen_name
+      end
+    end
+  end
+
+  context :average_craft_fit_score_before_save do
+    context 'given only twitter and facebook' do
+      let!(:hover_craft)       { create :hover_craft, :twitter, :facebook, twitter_fit_score: 7, facebook_fit_score: 9  }
+      it 'it averages only for provider_fit_scores that are present' do
+        expect(hover_craft.craft_fit_score).to eq 8
+      end
+    end
+    context 'given only twitter, yelp and website' do
+      let!(:hover_craft)       { create :hover_craft, :twitter, :yelp, :website, twitter_fit_score: 7, yelp_fit_score: 1, website_fit_score:1 }
+      it 'it averages only for provider_fit_scores that are present' do
+        expect(hover_craft.craft_fit_score).to eq 3
+      end
+    end
+    context 'given a complete hovercraft' do
+      let!(:hover_craft)       { create :hover_craft, :twitter, :facebook, :yelp, :website, twitter_fit_score: 7,  facebook_fit_score: 7, yelp_fit_score: 9, website_fit_score:9 }
+      it 'it averages all provider_fit_scores' do
+        expect(hover_craft.craft_fit_score).to eq 8
       end
     end
   end
@@ -149,36 +169,36 @@ describe HoverCraft do
   end
 
   context 'fit scores' do
-    let!(:need_to_explore_hc) { create_list :hover_craft, 3, fit_score: HoverCraft::FIT_need_to_explore }
-    let!(:check_manually_hc)  { create_list :hover_craft, 3, fit_score: HoverCraft::FIT_check_manually }
-    let!(:missing_craft_hc)   { create_list :hover_craft, 3, fit_score: HoverCraft::FIT_missing_craft }
-    let!(:zero_fit_hc)        { create_list :hover_craft, 3, fit_score: HoverCraft::FIT_zero }
-    let!(:neutral_fit_hc)     { create_list :hover_craft, 3, fit_score: HoverCraft::FIT_neutral }
-    let!(:absolute_fit_hc)    { create_list :hover_craft, 3, fit_score: HoverCraft::FIT_absolute }
+    let!(:need_to_explore_hc) { create_list :hover_craft, 3, twitter_fit_score: HoverCraft::FIT_need_to_explore }
+    let!(:check_manually_hc)  { create_list :hover_craft, 3, twitter_fit_score: HoverCraft::FIT_check_manually }
+    let!(:missing_craft_hc)   { create_list :hover_craft, 3, twitter_fit_score: HoverCraft::FIT_missing_craft }
+    let!(:zero_fit_hc)        { create_list :hover_craft, 3, twitter_fit_score: HoverCraft::FIT_zero }
+    let!(:neutral_fit_hc)     { create_list :hover_craft, 3, twitter_fit_score: HoverCraft::FIT_neutral }
+    let!(:absolute_fit_hc)    { create_list :hover_craft, 3, twitter_fit_score: HoverCraft::FIT_absolute }
 
     it '.need_to_explore_hc' do
-     expect(HoverCraft.need_to_explore.count).to eq need_to_explore_hc.count
-     expect(HoverCraft.need_to_explore).to include *need_to_explore_hc
+     expect(HoverCraft.need_to_explore(:twitter).count).to eq need_to_explore_hc.count
+     expect(HoverCraft.need_to_explore(:twitter)).to include *need_to_explore_hc
     end
     it '.check_manually_hc' do
-     expect(HoverCraft.check_manually.count).to eq check_manually_hc.count
-     expect(HoverCraft.check_manually).to include *check_manually_hc
+     expect(HoverCraft.check_manually(:twitter).count).to eq check_manually_hc.count
+     expect(HoverCraft.check_manually(:twitter)).to include *check_manually_hc
     end
     it '.missing_craft_hc' do
-     expect(HoverCraft.missing_craft.count).to eq missing_craft_hc.count
-     expect(HoverCraft.missing_craft).to include *missing_craft_hc
+     expect(HoverCraft.missing_craft(:twitter).count).to eq missing_craft_hc.count
+     expect(HoverCraft.missing_craft(:twitter)).to include *missing_craft_hc
     end
     it '.zero_fit_hc' do
-     expect(HoverCraft.zero_fit.count).to eq zero_fit_hc.count
-     expect(HoverCraft.zero_fit).to include *zero_fit_hc
+     expect(HoverCraft.zero_fit(:twitter).count).to eq zero_fit_hc.count
+     expect(HoverCraft.zero_fit(:twitter)).to include *zero_fit_hc
     end
     it '.neutral_fit_hc' do
-     expect(HoverCraft.neutral_fit.count).to eq neutral_fit_hc.count
-     expect(HoverCraft.neutral_fit).to include *neutral_fit_hc
+     expect(HoverCraft.neutral_fit(:twitter).count).to eq neutral_fit_hc.count
+     expect(HoverCraft.neutral_fit(:twitter)).to include *neutral_fit_hc
     end
     it '.absolute_fit_hc' do
-     expect(HoverCraft.absolute_fit.count).to eq absolute_fit_hc.count
-     expect(HoverCraft.absolute_fit).to include *absolute_fit_hc
+     expect(HoverCraft.absolute_fit(:twitter).count).to eq absolute_fit_hc.count
+     expect(HoverCraft.absolute_fit(:twitter)).to include *absolute_fit_hc
     end
   end
 

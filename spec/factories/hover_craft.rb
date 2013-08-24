@@ -40,10 +40,10 @@ FactoryGirl.define do
     end
 
     trait :score do
-      fit_score             5
-      fit_score_name        5
-      fit_score_website     5
-      fit_score_username    5
+      #fit_score             5
+      #fit_score_name        5
+      #fit_score_website     5
+      #fit_score_username    5
     end
 
     trait :crafted do
