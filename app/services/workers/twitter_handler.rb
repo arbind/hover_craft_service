@@ -63,7 +63,8 @@ private
     twitter_profiles.map do |profile|
       hc = profile.to_hover_craft
       hc[:tweet_streamer] = streamer
-      hc[:craftable] = true # streamer friends are automatically promoted to be craftable
+      hc[:craftable] = true # automatically promoted streamer friends to be craftable with a FIT_absolute twitter score
+      hc[:twitter_fit_score] = HoverCraft::FIT_absolute
       hover_craft = HoverCraft.where(twitter_id: hc[:twitter_id]).first_or_create
       hover_craft.update_attributes hc
       hover_crafts.push hover_craft
