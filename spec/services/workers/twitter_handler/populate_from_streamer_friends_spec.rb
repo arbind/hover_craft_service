@@ -47,7 +47,7 @@ describe :populate_from_streamer_friends do
         it 'sets the twitter_fit_score to FIT_absolute' do
           TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
           HoverCraft.each do |hc|
-            expect(hc.twitter_fit_score).to eq HoverCraft::FIT_absolute
+            expect(hc.twitter_fit_score).to eq HoverCraft::FIT_auto_approved
           end
         end
         it 'automatically promotes the HoverCraft to be craftable' do

@@ -34,6 +34,22 @@ describe HoverCraft do
     end
   end
 
+  context :provider_fit_scores do
+    describe :twitter_fit_score do
+      context 'given a streamer and a twitter_craft' do
+        it 'is FIT_auto_approved'
+      end
+      context 'given a yelp_craft' do
+        context 'given matching names' do
+          it 'is FIT_absolute'
+        end
+        context 'given matching website_urls' do
+          it 'is FIT_absolute'
+        end
+      end
+    end
+  end
+
   context :crafted do
     describe 'crafted scopes' do
       let!(:existant)     { create_list :hover_craft, 3, craft_id: '123' }
@@ -124,20 +140,6 @@ describe HoverCraft do
   end
 
   context :flagged do
-    describe 'approved scope' do
-      let!(:nil_hover_craft)    { create_list :hover_craft, 4, approve_this: nil }
-      let!(:true_hover_craft)   { create_list :hover_craft, 3, approve_this: true }
-      let!(:false_hover_craft)  { create_list :hover_craft, 4, approve_this: false }
-      let (:un_hover_craft)     { nil_hover_craft + false_hover_craft }
-      it '.approved returns approved HoverCraft' do
-        expect(HoverCraft.approved.count).to eq true_hover_craft.count
-        expect(HoverCraft.approved).to include *true_hover_craft
-      end
-      it '.unapproved returns approved HoverCraft' do
-        expect(HoverCraft.unapproved.count).to eq un_hover_craft.count
-        expect(HoverCraft.unapproved).to include *un_hover_craft
-      end
-    end
     describe 'flagged scope' do
       let!(:nil_hover_craft)    { create_list :hover_craft, 4, flag_this: nil }
       let!(:true_hover_craft)   { create_list :hover_craft, 3, flag_this: true }
@@ -168,7 +170,7 @@ describe HoverCraft do
     end
   end
 
-  context 'fit scores' do
+  context 'fit score scopes' do
     let!(:need_to_explore_hc) { create_list :hover_craft, 3, twitter_fit_score: HoverCraft::FIT_need_to_explore }
     let!(:check_manually_hc)  { create_list :hover_craft, 3, twitter_fit_score: HoverCraft::FIT_check_manually }
     let!(:missing_craft_hc)   { create_list :hover_craft, 3, twitter_fit_score: HoverCraft::FIT_missing_craft }

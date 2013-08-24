@@ -8,7 +8,7 @@ class FacebookHandler
       facebook_href = hover_craft.twitter_website_url
     elsif facebook_url? hover_craft.yelp_website_url
       facebook_href = hover_craft.yelp_website_url
-    elsif hover_craft.website_profile[:facebook_links].present?
+    elsif hover_craft.website_profile and hover_craft.website_profile[:facebook_links].present?
       facebook_href = hover_craft.website_profile[:facebook_links].first
     end
     facebook_user = user_for_facebook_href facebook_href if facebook_href

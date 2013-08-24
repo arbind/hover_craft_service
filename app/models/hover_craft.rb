@@ -3,13 +3,16 @@ class HoverCraft
   include Mongoid::Timestamps
 
   # score constants
+  FIT_unknown =  -100
   FIT_duplicate_crafts = -2
   FIT_need_to_explore = -1
   FIT_zero = 0                # its not a fit
   FIT_missing_craft = 1
   FIT_check_manually = 3
   FIT_neutral = 5             # at least its not a bad fit
-  FIT_absolute = 8            # known to be a good fit
+  FIT_absolute = 8            # analyzed to be a good fit
+  FIT_auto_approved = 10      # automatically approved
+  FIT_sudo_approved = 20      # manually approved by super user
 
   belongs_to :tweet_streamer  , inverse_of: nil
   field :craftable            , type: Boolean
@@ -63,10 +66,8 @@ class HoverCraft
   scope :can_craft            , where(craftable: true)
   scope :can_not_craft        , excludes(craftable: true)
 
-  scope :approved             , where(approve_this: true)
   scope :flagged              , where(flag_this: true)
   scope :skipped              , where(skip_this: true)
-  scope :unapproved           , excludes(approve_this: true)
   scope :unflagged            , excludes(flag_this: true)
   scope :unskipped            , excludes(skip_this: true)
 
@@ -90,7 +91,11 @@ class HoverCraft
                                      {website_url: nil}
                                    ).desc(:yelp_name).desc(:twitter_name)
 
-  before_save :average_craft_fit_score
+  before_save :score
+
+  def self.service
+    ::HoverCraftSvc
+  end
 
   def twitter_href
     "https://twitter.com/#{twitter_screen_name}"
@@ -120,16 +125,9 @@ class HoverCraft
   end
 
 private
-  def average_craft_fit_score
-    sum = 0.0
-    total = 0
-    [:twitter, :yelp, :facebook, :website].each do |provider|
-      if send(:"#{provider}_id")
-        sum += self[:"#{provider}_fit_score"].to_i
-        total += 1
-      end
-    end
-    total = -100 if 0.eql? total
-    self.craft_fit_score = (sum/total).round
+
+  def score
+    HoverCraft.service.score self
   end
+
 end

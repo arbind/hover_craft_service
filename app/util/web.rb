@@ -42,6 +42,7 @@ class Web
   end
 
   def self.hosts_match?(href1, href2)
+    return false unless href1.present? and href2.present?
     url1 = strip_href href1.to_href.downcase
     url2 = strip_href href2.to_href.downcase
     u1 = URI.parse(url1)
