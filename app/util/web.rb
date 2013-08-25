@@ -65,7 +65,10 @@ class Web
     return false if href.nil?
     match = href.match /^http(s)?\:\/\/(www.)?(yelp)?(facebook)?(twitter)?\.com/i
     return nil if match.nil?
-    match[3].to_sym
+    return :yelp if match[3]
+    return :facebook if match[4]
+    return :twitter if match[5]
+    nil
   end
 
   def self.final_location_of_url(url)
