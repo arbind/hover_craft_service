@@ -8,6 +8,19 @@ class HoverCraftSvc
     calculate_craft_fit_score     hover_craft
   end
 
+  def self.resolve_url(hover_craft, url_attribute)
+    first_url = hover_craft[url_attribute]
+    return unless first_url
+    first_url = first_url.to_href
+    return unless first_url
+    final_url = Web.final_location_of_url first_url
+
+    if final_url.present? and !first_url.eql? final_url
+      hover_craft[url_attribute] = final_url
+      hover_craft.save # run before_save only if needed
+    end
+  end
+
   private
 
   def self.calculate_twitter_fit_score(hover_craft)

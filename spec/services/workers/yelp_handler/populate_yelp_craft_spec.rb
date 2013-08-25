@@ -27,7 +27,7 @@ describe :populate_yelp_craft do
         YelpHandler.populate_yelp_craft(hover_craft)
       }.to change(hover_craft, :yelp_name).to(biz_name)
     end
-    it 'schedules :scan_for_links job to get the yelp_website_url' do
+    it 'schedules :yelp_scan_for_link job to get the yelp_website_url' do
       expect {
         YelpHandler.populate_yelp_craft(hover_craft)
       }.to change(YelpScanForLink.jobs, :size).by(1)

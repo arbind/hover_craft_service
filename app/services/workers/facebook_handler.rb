@@ -14,6 +14,7 @@ class FacebookHandler
     facebook_user = FacebookApi.user_for_facebook_href facebook_href if facebook_href
     if facebook_user
       hover_craft.update_attributes(facebook_user.to_hover_craft)
+      HoverCraft.service.resolve_url hover_craft, :facebook_website_url
       WorkLauncher.launch :populate_hover_craft, hover_craft
     end
   end

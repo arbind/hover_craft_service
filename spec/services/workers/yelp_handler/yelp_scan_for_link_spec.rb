@@ -17,9 +17,11 @@ describe :yelp_scan_for_link do
     }.to change(hover_craft.reload, :yelp_website_url).to(yelp_website_url)
   end
 
-  it 'schedules a PopulateHoverCraft job' do
-    expect {
-      YelpHandler.yelp_scan_for_link hover_craft
-    }.to change(PopulateHoverCraft.jobs, :size).by(1)
+  it 'resolves yelp_website_url'
+
+  it 'schedules a PopulateHoverCraft' do
+    new_job_data = PopulateHoverCraft.work_data hover_craft
+    PopulateHoverCraft.should_receive(:schedule).with new_job_data
+    YelpHandler.yelp_scan_for_link hover_craft
   end
 end

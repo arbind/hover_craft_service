@@ -27,9 +27,9 @@ class YelpHandler
     return if hover_craft.yelp_website_url or !hover_craft.yelp_href
     yelp_id = YelpApi.yelp_id_from_href hover_craft.yelp_href
     yelp_website_url = YelpApi.website_for_id yelp_id
-    if hover_craft.update_attributes yelp_website_url: yelp_website_url
-      WorkLauncher.launch :populate_hover_craft, hover_craft
-    end
+    hover_craft.update_attributes yelp_website_url: yelp_website_url
+    HoverCraft.service.resolve_url hover_craft, :yelp_website_url
+    WorkLauncher.launch :populate_hover_craft, hover_craft
   end
 
 private

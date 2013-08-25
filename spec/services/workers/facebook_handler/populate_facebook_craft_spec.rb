@@ -25,10 +25,11 @@ describe :populate_facebook_craft do
         FacebookHandler.populate_facebook_craft(hover_craft)
       }.to change(hover_craft, :facebook_name).to(facebook_profile['name'])
     end
-    it 'schedules :populate_hover_craft to analyze the new info' do
-      expect {
-        FacebookHandler.populate_facebook_craft(hover_craft)
-      }.to change(PopulateHoverCraft.jobs, :size).by(1)
+    it 'resolves facebook_website_url'
+    it 'schedules PopulateHoverCraft job' do
+      new_job_data = PopulateHoverCraft .work_data hover_craft
+      PopulateHoverCraft.should_receive(:schedule).with new_job_data
+      FacebookHandler.populate_facebook_craft(hover_craft)
     end
   end
 

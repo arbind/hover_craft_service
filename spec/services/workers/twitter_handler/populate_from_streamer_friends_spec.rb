@@ -44,7 +44,7 @@ describe :populate_from_streamer_friends do
             expect(hc.tweet_streamer.id).to eq streamer.id
           end
         end
-        it 'sets the twitter_fit_score to FIT_absolute' do
+        it 'sets the twitter_fit_score to FIT_auto_approved' do
           TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
           HoverCraft.each do |hc|
             expect(hc.twitter_fit_score).to eq HoverCraft::FIT_auto_approved
