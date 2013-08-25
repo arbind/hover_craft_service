@@ -91,6 +91,7 @@ class HoverCraft
                                      {website_url: nil}
                                    ).desc(:yelp_name).desc(:twitter_name)
 
+  before_save :format_hrefs
   before_save :score
 
   def self.service
@@ -125,6 +126,16 @@ class HoverCraft
   end
 
 private
+
+  def format_hrefs
+    self.yelp_href = self.yelp_href.to_href if self.yelp_href
+    self.facebook_href = self.facebook_href.to_href if self.facebook_href
+    self.website_url = self.website_url.to_href if self.website_url
+    self.yelp_website_url = self.yelp_website_url.to_href if self.yelp_website_url
+    self.twitter_website_url = self.twitter_website_url.to_href if self.twitter_website_url
+    self.facebook_website_url = self.facebook_website_url.to_href if self.facebook_website_url
+    true
+  end
 
   def score
     HoverCraft.service.score self
