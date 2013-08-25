@@ -25,7 +25,11 @@ describe :hover_craft_resolve_url do
         }.to change{hover_craft.reload[url_attribute]}.from(url).to(final_url)
       end
     end
-
+    it 'schedules PopulateHoverCraft for the hover_craft' do
+      new_job_data = PopulateHoverCraft.work_data hover_craft
+      PopulateHoverCraft.should_receive(:schedule).with new_job_data
+      HoverCraftHandler.hover_craft_resolve_url hover_craft, url_attribute
+    end
   end
 
   context 'given a bad url' do
@@ -41,11 +45,5 @@ describe :hover_craft_resolve_url do
   context 'given a url that redirects' do
     let (:final_url) { 'http://the-real-deal.com'}
     it_behaves_like 'a final_url handler'
-
-    it 'schedules WorkerFindWebCrafts for the hover_craft' do
-      new_job_data = PopulateHoverCraft.work_data hover_craft
-      PopulateHoverCraft.should_receive(:schedule).with new_job_data
-          HoverCraftHandler.hover_craft_resolve_url hover_craft, url_attribute
-    end
   end
 end
