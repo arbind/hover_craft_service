@@ -96,10 +96,9 @@ describe :populate_yelp_craft do
   end
 
   context 'given a website_craft that has a link to a yelp biz' do
-    # parse out yelp id and find biz by id
-    # let (:hover_craft)  { create :hover_craft, website_links: [yelp_link],  website_url: 'http://my-home-page.com' }
-    # it_behaves_like 'it found a yelp craft'
-    # it 'calls the YelpApi.biz'
+    let (:yelp_link)    { yelp_results['businesses'].first[:url] }
+    let (:hover_craft)  { create :hover_craft, website_profile: {yelp_links: [yelp_link]},  website_url: 'http://my-home-page.com' }
+    it_behaves_like 'it found a yelp craft'
   end
 
 end
