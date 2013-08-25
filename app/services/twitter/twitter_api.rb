@@ -28,11 +28,31 @@ class TwitterApi # via http://sferik.github.io/twitter/
   def self.user(screen_name, options={})
     return nil unless screen_name
     user = Twitter.user(screen_name, options)
-    TwitterProfile.new u.to_hash
+    TwitterProfile.new user.to_hash
   end
 
   def self.friends(screen_name, options={})
     cursor = Twitter.friends(screen_name, options)
+  end
+
+  def self.twitter_href_for_screen_name screen_name
+    "https://twitter.com/#{screen_name}"
+  end
+
+  def self.twitter_screen_name_from_href(href)
+    return nil if href.nil?
+    screen_name = nil
+    begin
+      url = Web.strip_href href.downcase
+      u = URI.parse(url)
+      u = URI.parse("http://#{url}") if u.host.nil?
+      return nil unless ['www.twitter.com', 'twitter.com'].include?(u.host)
+      flat = url.gsub(/\/\//, '')
+      screen_name = url.split('/').last
+    rescue Exception => e
+      Rails.logger.error "Faild to get screen_name from #{href}: #{e.message}"
+    end
+    screen_name
   end
 
   # TwitterProfile

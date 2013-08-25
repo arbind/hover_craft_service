@@ -10,6 +10,7 @@ FactoryGirl.define do
 
   sequence(:twitter_id)           { |n| "100#{n}" }
   sequence(:twitter_name)         { |n| "Tweeter #{n}" }
+  sequence(:twitter_screen_name)  { |n| "screen_name_#{n}" }
 
   sequence(:yelp_name)            { |n| "My Biz #{n}" }
 

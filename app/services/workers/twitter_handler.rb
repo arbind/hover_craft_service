@@ -1,10 +1,23 @@
 class TwitterHandler
 
   def self.populate_twitter_craft(hover_craft)
-    #elsif any [provider]_website_url points to a twitter_href
-    #  twitter_href = [provider]_website_url
-    #  populate from twitter_href
-    # if twitter_craft was populated, and there are still missing webcrafts, schedule a populate_hover_craft
+    return if hover_craft.twitter_craft or hover_craft.twitter_name
+    if hover_craft.twitter_screen_name and !hover_craft.twitter_id
+      screen_name = hover_craft.twitter_screen_name
+    elsif :twitter.eql? Web.provider_for_href hover_craft.facebook_website_url
+      screen_name = TwitterApi.twitter_screen_name_from_href hover_craft.facebook_website_url
+    elsif :twitter.eql? Web.provider_for_href hover_craft.yelp_website_url
+      screen_name = TwitterApi.twitter_screen_name_from_href hover_craft.yelp_website_url
+    elsif hover_craft.website_profile and hover_craft.website_profile[:twitter_links].present?
+      screen_name = TwitterApi.twitter_screen_name_from_href hover_craft.website_profile[:twitter_links].first
+    end
+    twitter_user = TwitterApi.service.user screen_name if screen_name
+    if twitter_user
+      hover_craft.update_attributes(twitter_user.to_hover_craft)
+      HoverCraft.service.resolve_url hover_craft, :twitter_website_url
+      WorkLauncher.launch :populate_hover_craft, hover_craft
+    end
+
   end
 
   def self.populate_from_streamers
@@ -38,6 +51,7 @@ class TwitterHandler
     hover_crafts = create_hover_crafts_for_twitter_profiles twitter_profiles, streamer
 
     hover_crafts.each do |hover_craft|
+      # don't resolve 100 urls in line!, queue them up instead
       WorkLauncher.launch :hover_craft_resolve_url, hover_craft, :twitter_website_url
     end
 
@@ -64,7 +78,6 @@ private
       hc = profile.to_hover_craft
       hc[:tweet_streamer] = streamer
       hc[:craftable] = true # automatically promoted streamer friends to be craftable with a FIT_absolute twitter score
-      hc[:twitter_fit_score] = HoverCraft::FIT_absolute
       hover_craft = HoverCraft.where(twitter_id: hc[:twitter_id]).first_or_create
       hover_craft.update_attributes hc
       hover_crafts.push hover_craft

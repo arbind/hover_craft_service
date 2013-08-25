@@ -13,6 +13,9 @@ describe HoverCraft do
     end
   end
 
+  it '#twitter_href constructs a url from twitter_screen_name'
+  it '#twitter_href= sets the twitter_screen_name'
+
   context :average_craft_fit_score_before_save do
     context 'given only twitter and facebook' do
       let!(:hover_craft)       { create :hover_craft, :twitter, :facebook, twitter_fit_score: 7, facebook_fit_score: 9  }

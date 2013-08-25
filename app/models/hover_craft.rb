@@ -33,6 +33,7 @@ class HoverCraft
   field :website_fit_score    , type: Integer
   field :website_url
   alias_method :website_id    , :website_url
+  alias_method :website_href  , :website_url
   field :website_name
   field :website_profile      , type: Hash
   field :website_craft        , type: Boolean
@@ -99,8 +100,13 @@ class HoverCraft
   end
 
   def twitter_href
-    "https://twitter.com/#{twitter_screen_name}"
+    TwitterApi.twitter_href_for_screen_name twitter_screen_name
   end
+
+  def twitter_href=(href)
+    self.twitter_screen_name = TwitterApi.twitter_screen_name_from_href href
+  end
+
   def populated?
     twitter_id and yelp_id and facebook_id and website_url
   end
