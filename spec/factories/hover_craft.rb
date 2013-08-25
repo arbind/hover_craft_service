@@ -12,7 +12,7 @@ FactoryGirl.define do
 
     trait :yelp do
       yelp_name             { generate :yelp_name }
-      yelp_id               { yelp_name.underscore }
+      yelp_id               { yelp_name.downcase.squish.gsub(/\s+/, "_") }
       yelp_href             { "http://yelp.com/biz/#{yelp_id}" }
       yelp_website_url      { generate :href }
       yelp_address          { generate :address }

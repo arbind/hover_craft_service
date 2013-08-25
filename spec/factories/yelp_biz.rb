@@ -1,8 +1,9 @@
 def create_yelp_biz(biz_name)
+  yelp_id = biz_name.downcase.squish.gsub(/\s+/, "_")
   {
-    id:   "#{biz_name.underscore}",
+    id:   "#{yelp_id}",
     name: biz_name,
-    url:  "http://yelp.com/#{biz_name.underscore}"
+    url:  "http://yelp.com/#{yelp_id}"
   }
 end
 

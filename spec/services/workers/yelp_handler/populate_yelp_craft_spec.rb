@@ -5,6 +5,7 @@ describe :populate_yelp_craft do
   let (:yelp_results) { create_yelp_results *biz_list }
   let (:biz_list)     { [ biz_name ]}
   let (:biz_name)     { 'My Craft'}
+  let (:yelp_link)    { yelp_results['businesses'].first[:url] }
 
   let (:yelp_client)  { double search: yelp_results }
 
@@ -90,13 +91,11 @@ describe :populate_yelp_craft do
   end
 
   context 'given a yelp_href but no yelp_id' do
-    let (:yelp_link)    { "http://yelp.com/#{biz_name.underscore}" }
     let (:hover_craft)  { create :hover_craft, yelp_href: yelp_link }
     it_behaves_like 'it found a yelp craft'
   end
 
   context 'given a website_craft that has a link to a yelp biz' do
-    let (:yelp_link)    { yelp_results['businesses'].first[:url] }
     let (:hover_craft)  { create :hover_craft, website_profile: {yelp_links: [yelp_link]},  website_url: 'http://my-home-page.com' }
     it_behaves_like 'it found a yelp craft'
   end
