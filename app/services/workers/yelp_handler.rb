@@ -10,6 +10,12 @@ class YelpHandler
       biz = biz_for_yelp_href yelp_href
     elsif hover_craft.twitter_name and hover_craft.tweet_streamer.present?
       biz = biz_for_twitter_craft hover_craft
+    elsif :yelp.eql? Web.provider_for_href hover_craft.twitter_website_url
+      yep_href = hover_craft.twitter_website_url
+      biz = biz_for_yelp_href yelp_href
+    elsif :yelp.eql? Web.provider_for_href hover_craft.facebook_website_url
+      yep_href = hover_craft.facebook_website_url
+      biz = biz_for_yelp_href yelp_href
     end
     if biz
       hover_craft.update_attributes(biz.to_hover_craft)

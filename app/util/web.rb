@@ -56,11 +56,18 @@ class Web
   end
 
   def self.provider_href?(url)
-    return false if url.nil?
-    href = url.to_href
-    return false if href.nil?
-    href.match /^http(s)?\:\/\/(www.)?(yelp)?(facebook)?(twitter)?\.com/i
+    provider_for_href url
   end
+
+  def self.provider_for_href(url)
+    return false if url.nil?
+    href = url.downcase.squish.to_href
+    return false if href.nil?
+    match = href.match /^http(s)?\:\/\/(www.)?(yelp)?(facebook)?(twitter)?\.com/i
+    return nil if match.nil?
+    match[3].to_sym
+  end
+
   def self.final_location_of_url(url)
     return "" if url.nil? or url.strip.empty?
     final_location = nil

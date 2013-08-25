@@ -78,8 +78,7 @@ describe :populate_yelp_craft do
     it_behaves_like 'it skips processing'
   end
 
-  context 'given a twitter_craft and a streamer address' do
-    # search for yelp biz by name and address limit to 1 (take the first one)
+  context 'given a twitter_craft and a streamer address' do    # search for yelp biz by name and address limit to 1 (take the first one)
     let (:hover_craft)  { create :hover_craft, :streamer, :twitter  }
     context 'when a yelp biz is found' do
       it_behaves_like 'it found a yelp craft'
@@ -97,6 +96,16 @@ describe :populate_yelp_craft do
 
   context 'given a website_craft that has a link to a yelp biz' do
     let (:hover_craft)  { create :hover_craft, website_profile: {yelp_links: [yelp_link]},  website_url: 'http://my-home-page.com' }
+    it_behaves_like 'it found a yelp craft'
+  end
+
+  context 'given a twitter_website_url that points to a yelp_href' do
+    let (:hover_craft)  { create :hover_craft, :twitter, twitter_website_url: yelp_link  }
+    it_behaves_like 'it found a yelp craft'
+  end
+
+  context 'given a facebook_website_url that points to a yelp_href' do
+    let (:hover_craft)  { create :hover_craft, :facebook, facebook_website_url: yelp_link  }
     it_behaves_like 'it found a yelp craft'
   end
 
