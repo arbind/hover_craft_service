@@ -2,12 +2,15 @@ require 'spec_helper'
 require 'sidekiq/testing'
 
 describe :populate_yelp_craft do
-  let (:yelp_results) { create_yelp_results *biz_list }
-  let (:biz_list)     { [ biz_name ]}
-  let (:biz_name)     { 'My Craft'}
-  let (:yelp_link)    { yelp_results['businesses'].first[:url] }
+  let (:biz_list)       { [ biz_name ] }
+  let (:biz_name)       { 'My Craft' }
+  let (:yelp_link)      { search_results['businesses'].first[:url] }
 
-  let (:yelp_client)  { double search: yelp_results }
+  let (:yelp_client)    { biz_client }
+  let (:biz_client)     { double search: biz_result }
+  let (:biz_result)     { create_yelp_biz biz_name }
+  let (:search_client)  { double search: search_results }
+  let (:search_results) { create_yelp_results *biz_list }
 
   before :each do
     Yelp::Client.stub(:new).and_return yelp_client
@@ -79,6 +82,7 @@ describe :populate_yelp_craft do
   end
 
   context 'given a twitter_craft and a streamer address' do    # search for yelp biz by name and address limit to 1 (take the first one)
+    let (:yelp_client)    { search_client }
     let (:hover_craft)  { create :hover_craft, :streamer, :twitter  }
     context 'when a yelp biz is found' do
       it_behaves_like 'it found a yelp craft'
@@ -90,21 +94,25 @@ describe :populate_yelp_craft do
   end
 
   context 'given a yelp_href but no yelp_id' do
+    let (:yelp_client)    { biz_client }
     let (:hover_craft)  { create :hover_craft, yelp_href: yelp_link }
     it_behaves_like 'it found a yelp craft'
   end
 
   context 'given a website_craft that has a link to a yelp biz' do
-    let (:hover_craft)  { create :hover_craft, website_profile: {yelp_links: [yelp_link]},  website_url: 'http://my-home-page.com' }
+    let (:yelp_client)    { biz_client }
+    let (:hover_craft)  { create :hover_craft, website_profile: {'yelp_links' => [yelp_link]},  website_url: 'http://my-home-page.com' }
     it_behaves_like 'it found a yelp craft'
   end
 
   context 'given a twitter_website_url that points to a yelp_href' do
+    let (:yelp_client)    { biz_client }
     let (:hover_craft)  { create :hover_craft, :twitter, twitter_website_url: yelp_link  }
     it_behaves_like 'it found a yelp craft'
   end
 
   context 'given a facebook_website_url that points to a yelp_href' do
+    let (:yelp_client)    { biz_client }
     let (:hover_craft)  { create :hover_craft, :facebook, facebook_website_url: yelp_link  }
     it_behaves_like 'it found a yelp craft'
   end

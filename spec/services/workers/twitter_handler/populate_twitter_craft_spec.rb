@@ -88,7 +88,7 @@ describe :populate_twitter_craft do
   end
 
   context 'given a website_craft that has a link to a twitter' do
-    let (:hover_craft)  { create :hover_craft, website_profile: {twitter_links: [twitter_link]},  website_url: 'http://my-home-page.com' }
+    let (:hover_craft)  { create :hover_craft, website_profile: {'twitter_links' => [twitter_link]},  website_url: 'http://my-home-page.com' }
     it_behaves_like 'it found a twitter craft'
   end
 

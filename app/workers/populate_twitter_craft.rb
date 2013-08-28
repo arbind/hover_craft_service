@@ -1,5 +1,5 @@
 class PopulateTwitterCraft < WorkerBase
-  @perform_after = 1000000
+  @perform_after = INTERVAL_FOR_TWITTER_RATE_LIMITS[:user]
 
   def self.work_data(hover_craft)
     {

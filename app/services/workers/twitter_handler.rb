@@ -8,8 +8,8 @@ class TwitterHandler
       screen_name = TwitterApi.twitter_screen_name_from_href hover_craft.facebook_website_url
     elsif :twitter.eql? Web.provider_for_href hover_craft.yelp_website_url
       screen_name = TwitterApi.twitter_screen_name_from_href hover_craft.yelp_website_url
-    elsif hover_craft.website_profile and hover_craft.website_profile[:twitter_links].present?
-      screen_name = TwitterApi.twitter_screen_name_from_href hover_craft.website_profile[:twitter_links].first
+    elsif hover_craft.website_profile and hover_craft.website_profile['twitter_links'].present?
+      screen_name = TwitterApi.twitter_screen_name_from_href hover_craft.website_profile['twitter_links'].first
     end
     twitter_user = TwitterApi.service.user screen_name if screen_name
     if twitter_user

@@ -5,8 +5,8 @@ class YelpHandler
     biz = nil
     if hover_craft.yelp_href and !hover_craft.yelp_id
       biz = biz_for_yelp_href hover_craft.yelp_href
-    elsif hover_craft.website_profile and hover_craft.website_profile[:yelp_links].present?
-      yelp_href = hover_craft.website_profile[:yelp_links].first
+    elsif hover_craft.website_profile and hover_craft.website_profile['yelp_links'].present?
+      yelp_href = hover_craft.website_profile['yelp_links'].first
       biz = biz_for_yelp_href yelp_href
     elsif hover_craft.twitter_name and hover_craft.tweet_streamer.present?
       biz = biz_for_twitter_craft hover_craft

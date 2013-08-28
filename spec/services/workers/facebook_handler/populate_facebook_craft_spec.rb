@@ -93,7 +93,7 @@ describe :populate_facebook_craft do
   end
 
   context 'given a website_craft that has a link to a facebook' do
-    let (:hover_craft)  { create :hover_craft, website_profile: {facebook_links: [facebook_link]},  website_url: 'http://my-home-page.com' }
+    let (:hover_craft)  { create :hover_craft, website_profile: {'facebook_links' => [facebook_link]},  website_url: 'http://my-home-page.com' }
     it_behaves_like 'it found a facebook craft'
   end
 

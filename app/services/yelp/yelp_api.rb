@@ -16,9 +16,10 @@ class YelpApi
   def self.biz_for_id(yelp_id)
     query = v2({yelp_business_id: yelp_id})
     request = Yelp::V2::Business::Request::Id.new(query)
-    response = yelp.search(request)
-    businesses = response["businesses"] if response
-    YelpBiz.new businesses.first if businesses and businesses.any?
+    biz = yelp.search(request)
+    YelpBiz.new biz if biz
+  rescue
+    nil
   end
 
   def self.website_for_id(yelp_id)
