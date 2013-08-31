@@ -13,9 +13,6 @@ describe HoverCraft do
     end
   end
 
-  it '#twitter_href constructs a url from twitter_screen_name'
-  it '#twitter_href= sets the twitter_screen_name'
-
   context :average_craft_fit_score_before_save do
     context 'given only twitter and facebook' do
       let!(:hover_craft)       { create :hover_craft, :twitter, :facebook, twitter_fit_score: 7, facebook_fit_score: 9  }
@@ -53,7 +50,25 @@ describe HoverCraft do
     end
   end
 
-  context :crafted do
+  context '#twitter_href' do
+    let (:screen_name)  { generate :twitter_screen_name }
+    let!(:hover_craft)  { build :hover_craft, twitter_screen_name: screen_name }
+    it 'constructs a url from twitter_screen_name' do
+      expect(hover_craft.twitter_href).to include screen_name
+      expect(hover_craft.twitter_href).to include 'https://twitter.com'
+    end
+    context '#twitter_href=' do
+      let (:new_screen_name)   { 't123' }
+      let (:new_twitter_href)  { "https://twitter.com/#{new_screen_name}" }
+      it 'extracts screen_name from the twitter url' do
+        expect {
+          hover_craft.twitter_href = new_twitter_href
+        }.to change(hover_craft, :twitter_screen_name).to new_screen_name
+      end
+    end
+  end
+
+    context :crafted do
     describe 'crafted scopes' do
       let!(:existant)     { create_list :hover_craft, 3, craft_id: '123' }
       let!(:non_existant) { create_list :hover_craft, 4, craft_id: nil }

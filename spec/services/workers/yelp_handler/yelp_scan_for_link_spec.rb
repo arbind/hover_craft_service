@@ -11,13 +11,18 @@ describe :yelp_scan_for_link do
   let!(:mock_web)         { Web.stub_chain(:site, :select_first).and_return(mock_element) }
   let (:mock_element)     { double :nokogiri_element, content: biz_website }
 
+  before { Web.stub(:final_location_of_url) }
+
   it 'updates yelp_website_url' do
     expect {
       YelpHandler.yelp_scan_for_link hover_craft
     }.to change(hover_craft.reload, :yelp_website_url).to(yelp_website_url)
   end
 
-  it 'resolves yelp_website_url'
+  it 'resolves yelp_website_url' do
+    Web.should_receive(:final_location_of_url).once
+    YelpHandler.yelp_scan_for_link hover_craft
+  end
 
   it 'schedules a PopulateHoverCraft' do
     new_job_data = PopulateHoverCraft.work_data hover_craft

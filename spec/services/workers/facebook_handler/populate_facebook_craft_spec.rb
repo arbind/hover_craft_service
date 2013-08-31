@@ -16,6 +16,8 @@ describe :populate_facebook_craft do
   end
 
   shared_examples_for 'it found a facebook craft' do
+    before { Web.stub(:final_location_of_url) }
+
     it 'makes an api call' do
       expect(facebook_client).to receive(:get_object).once
       FacebookHandler.populate_facebook_craft(hover_craft)
@@ -25,7 +27,10 @@ describe :populate_facebook_craft do
         FacebookHandler.populate_facebook_craft(hover_craft)
       }.to change(hover_craft, :facebook_name).to(facebook_profile['name'])
     end
-    it 'resolves facebook_website_url'
+    it 'resolves facebook_website_url' do
+      Web.should_receive(:final_location_of_url).once
+      FacebookHandler.populate_facebook_craft(hover_craft)
+    end
     it 'schedules PopulateHoverCraft job' do
       new_job_data = PopulateHoverCraft .work_data hover_craft
       PopulateHoverCraft.should_receive(:schedule).with new_job_data
