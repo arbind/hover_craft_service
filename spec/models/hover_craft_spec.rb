@@ -13,6 +13,22 @@ describe HoverCraft do
     end
   end
 
+  context :after_save do
+    context 'given no craft_id but craftable=true' do
+      context 'given any fit_core is higher than FIT_absolute' do
+        it 'schedules :create_craft'
+      end
+    end
+    context 'hover_craft is crafted' do
+      context 'given [provider]_craft? = false with a fit score >= FIT_absolute' do
+        it 'schedules :update_craft'
+      end
+      context 'given [provider]_craft? = false with a fit score < FIT_absolute ' do
+        it 'does not schedule :update_craft'
+      end
+    end
+  end
+
   context :average_craft_fit_score_before_save do
     context 'given only twitter and facebook' do
       let!(:hover_craft)       { create :hover_craft, :twitter, :facebook, twitter_fit_score: 7, facebook_fit_score: 9  }
