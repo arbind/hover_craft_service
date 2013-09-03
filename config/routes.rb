@@ -23,6 +23,7 @@ require 'sidekiq/web'
 
   resources :background_threads, only: [:index]
   resources :tweet_streamers, except: [:update]
+  resources :hover_crafts
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

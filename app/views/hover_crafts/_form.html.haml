@@ -1,0 +1,10 @@
+= form_for @hover_craft do |f|
+  - if @hover_craft.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@hover_craft.errors.count, "error")} prohibited this hover_craft from being saved:"
+      %ul
+        - @hover_craft.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

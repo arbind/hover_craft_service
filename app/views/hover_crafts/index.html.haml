@@ -1,0 +1,33 @@
+%h1 Listing hover_crafts
+
+%table
+  %tr
+    %th= "twitter(#{HoverCraft.with_twitter.count})"
+    %th= "yelp(#{HoverCraft.with_yelp.count})"
+    %th= "facebook(#{HoverCraft.with_facebook.count})"
+    %th= "website(#{HoverCraft.with_website.count})"
+    %th
+    %th
+    %th
+
+  - @hover_crafts.each do |hover_craft|
+    %tr
+      %td
+        %a{href: hover_craft.twitter_href, target: :twitter_window}
+          = "#{hover_craft.twitter_name}(#{hover_craft.twitter_fit_score})"
+      %td
+        %a{href: hover_craft.yelp_href, target: :yelp_window}
+          = "#{hover_craft.yelp_name}(#{hover_craft.yelp_fit_score})"
+      %td
+        %a{href: hover_craft.facebook_href, target: :facebook_window}
+          = "#{hover_craft.facebook_name}(#{hover_craft.facebook_fit_score})"
+      %td
+        %a{href: hover_craft.website_href, target: :website_window}
+          = "#{hover_craft.website_url}(#{hover_craft.website_fit_score})"
+      %td= link_to 'Show', hover_craft
+      %td= link_to 'Edit', edit_hover_craft_path(hover_craft)
+      %td= link_to 'Destroy', hover_craft, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Hover craft', new_hover_craft_path
