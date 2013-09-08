@@ -94,6 +94,14 @@ class HoverCraft
 
   before_save :format_hrefs
   before_save :score
+  after_save  :schedule_to_be_crafted, if: :ready_to_craft?
+
+  def crafted?
+    craft_path.present?
+  end
+  def uncrafted?
+    !crafted?
+  end
 
   def self.service
     ::HoverCraftSvc
@@ -145,6 +153,58 @@ private
 
   def score
     HoverCraft.service.score self
+  end
+
+  def schedule_to_be_crafted
+  #  +++ TODO
+  # WorkLauncher.launch :hover_craft_beam_up self
+
+  # schedule this hover craft to be crafted:
+  # The worker for :hover_craft_beam_up will need to make sure
+  # no other jobs are scheduled to operate on this hover craft
+  # 1 if clear, then call hover_craft.make_into_craft
+  # 2 otherwise, if another job operating on this hover_craft is still scheduled
+  #   then the worker should reschedule itself to run some time after
+  #   the last job that will operate on this hover_craft
+  #
+  #   see sidekiq api: https://github.com/mperham/sidekiq/wiki/API
+  #   r = Sidekiq::ScheduledSet.new
+  #   existing_jobs = r.select do |job| ... where args[0] is hover_craft.id end
+  #   last_job = existing_jobs.last (scheduled set is ordered chronologically)
+  #   reschedule this job to be run at last_job.time + 1.minute
+
+  end
+  def make_into_craft
+    HoverCraft.service.beam_up_craft self
+  end
+
+  def ready_to_craft?
+    return false if skip_this?
+    if approve_this?
+      return true if uncrafted?
+      return true if ready_to_craft_any_provider?
+      return false
+    end
+    if crafted?
+      return true if ready_to_craft_any_provider?
+      return false
+    end
+    return true if ready_to_craft_provider? :yelp
+    return true if ready_to_craft_provider? :twitter
+    false
+  end
+
+  def ready_to_craft_any_provider?
+    providers_ready = [:twitter, :yelp, :facebook, :website].map{|provider| ready_to_craft_provider? provider}
+    providers_ready.reject!{|ready| !ready }
+    providers_ready.any?
+  end
+
+  def ready_to_craft_provider?(provider)
+    return false if self["#{provider}_crafted"]
+    fit_score = self["#{provider}_fit_score"].to_i
+    return true if FIT_absolute < fit_score
+    false
   end
 
 end
