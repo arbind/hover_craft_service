@@ -1,7 +1,7 @@
 class TwitterHandler
 
   def self.populate_twitter_craft(hover_craft)
-    return if hover_craft.twitter_craft or hover_craft.twitter_name
+    return if hover_craft.twitter_crafted or hover_craft.twitter_name
     if hover_craft.twitter_screen_name and !hover_craft.twitter_id
       screen_name = hover_craft.twitter_screen_name
     elsif :twitter.eql? Web.provider_for_href hover_craft.facebook_website_url

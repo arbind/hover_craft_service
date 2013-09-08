@@ -86,8 +86,8 @@ describe HoverCraft do
 
     context :crafted do
     describe 'crafted scopes' do
-      let!(:existant)     { create_list :hover_craft, 3, craft_id: '123' }
-      let!(:non_existant) { create_list :hover_craft, 4, craft_id: nil }
+      let!(:existant)     { create_list :hover_craft, 3, :crafted }
+      let!(:non_existant) { create_list :hover_craft, 4, :uncrafted}
       it '.crafted returns HoverCraft with a craft_id' do
         expect(HoverCraft.crafted.count).to eq existant.count
         expect(HoverCraft.crafted).to include *existant

@@ -1,6 +1,6 @@
 class FacebookHandler
   def self.populate_facebook_craft(hover_craft)
-    return if hover_craft.facebook_craft or hover_craft.facebook_name
+    return if hover_craft.facebook_crafted or hover_craft.facebook_name
     facebook_href = facebook_user = nil
     if hover_craft.facebook_href and !hover_craft.facebook_id
       facebook_href = hover_craft.facebook_href

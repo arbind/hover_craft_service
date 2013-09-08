@@ -61,7 +61,7 @@ describe :populate_website_craft do
   end
 
   context 'given a website craft was already crafted' do
-    let (:hover_craft)  { build :no_website_hover_craft, website_craft: true }
+    let (:hover_craft)  { build :no_website_hover_craft, website_crafted: true }
     it_behaves_like "it doesn't change anything"
   end
 

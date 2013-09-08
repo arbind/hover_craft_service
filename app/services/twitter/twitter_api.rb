@@ -35,7 +35,7 @@ class TwitterApi # via http://sferik.github.io/twitter/
     cursor = Twitter.friends(screen_name, options)
   end
 
-  def self.twitter_href_for_screen_name screen_name
+  def self.twitter_href_for_screen_name(screen_name)
     "https://twitter.com/#{screen_name}"
   end
 

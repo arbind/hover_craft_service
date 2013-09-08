@@ -68,7 +68,7 @@ describe :populate_twitter_craft do
   end
 
   context 'given a twitter craft was already crafted' do
-    let (:hover_craft)  { create :hover_craft, twitter_craft: true }
+    let (:hover_craft)  { create :hover_craft, twitter_crafted: true }
     it_behaves_like 'it skips processing'
   end
 

@@ -77,7 +77,7 @@ describe :populate_yelp_craft do
   end
 
   context 'given a yelp craft was already crafted' do
-    let (:hover_craft)  { create :hover_craft, :streamer, :twitter, yelp_craft: true }
+    let (:hover_craft)  { create :hover_craft, :streamer, :twitter, yelp_crafted: true }
     it_behaves_like 'it skips processing'
   end
 

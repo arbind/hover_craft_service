@@ -17,7 +17,7 @@ class HoverCraft
   belongs_to :tweet_streamer  , inverse_of: nil
   field :craftable            , type: Boolean
 
-  field :craft_id
+  field :craft_path
   field :craft_fit_score      , type: Integer, default: -100
 
   field :yelp_fit_score       , type: Integer
@@ -28,7 +28,7 @@ class HoverCraft
   field :yelp_address
   field :yelp_categories
   field :yelp_profile         , type: Hash
-  field :yelp_craft           , type: Boolean
+  field :yelp_crafted         , type: Boolean
 
   field :website_fit_score    , type: Integer
   field :website_url
@@ -36,7 +36,7 @@ class HoverCraft
   alias_method :website_href  , :website_url
   field :website_name
   field :website_profile      , type: Hash
-  field :website_craft        , type: Boolean
+  field :website_crafted      , type: Boolean
 
   field :twitter_fit_score    , type: Integer
   field :twitter_id
@@ -45,7 +45,7 @@ class HoverCraft
   field :twitter_website_url
   field :twitter_address
   field :twitter_profile      , type: Hash
-  field :twitter_craft        , type: Boolean
+  field :twitter_crafted      , type: Boolean
 
   field :facebook_fit_score   , type: Integer
   field :facebook_id
@@ -54,15 +54,15 @@ class HoverCraft
   field :facebook_website_url
   field :facebook_address
   field :facebook_profile     , type: Hash
-  field :facebook_craft       , type: Boolean
+  field :facebook_crafted     , type: Boolean
 
   # override flags
   field :approve_this         , type: Boolean
   field :flag_this            , type: Boolean # Needs follow up for corrections
   field :skip_this            , type: Boolean
 
-  scope :crafted              , excludes(craft_id: nil).desc(:craft_fit_score)
-  scope :uncrafted            , where(craft_id: nil).desc(:craft_fit_score)
+  scope :crafted              , excludes(craft_path: nil).desc(:craft_fit_score)
+  scope :uncrafted            , where(craft_path: nil).desc(:craft_fit_score)
 
   scope :can_craft            , where(craftable: true)
   scope :can_not_craft        , excludes(craftable: true)

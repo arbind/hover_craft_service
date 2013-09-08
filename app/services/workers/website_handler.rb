@@ -1,7 +1,7 @@
 class WebsiteHandler
 
   def self.populate_website_craft(hover_craft)
-    return if hover_craft.website_craft or hover_craft.website_url
+    return if hover_craft.website_crafted or hover_craft.website_url
     website_url = identify_website_url hover_craft
     return if website_url.to_s.empty?
     website_craft = WebsiteApi.website_info website_url

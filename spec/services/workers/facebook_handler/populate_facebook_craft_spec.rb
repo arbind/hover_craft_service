@@ -78,7 +78,7 @@ describe :populate_facebook_craft do
   end
 
   context 'given a facebook craft was already crafted' do
-    let (:hover_craft)  { create :hover_craft, facebook_craft: true }
+    let (:hover_craft)  { create :hover_craft, facebook_crafted: true }
     it_behaves_like 'it skips processing'
   end
 

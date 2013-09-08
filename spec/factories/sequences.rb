@@ -1,4 +1,5 @@
 FactoryGirl.define do
+  sequence(:craft_path)           { |n| "http://craftservice.com/crafts/0000#{n}" }
   sequence(:href)                 { |n| "http://my-site-#{n}.com" }
 
   sequence(:name)                 { |n| "Prince the #{n}th" }
