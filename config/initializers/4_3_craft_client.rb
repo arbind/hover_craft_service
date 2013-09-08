@@ -1,0 +1,1 @@
+CRAFT_SERVICE_ENDPOINT = ENV['CRAFT_SERVICE_ENDPOINT'] || 'http://localhost:3000/api/v1'

@@ -22,6 +22,7 @@ gem 'twitter'           , '~>4.8.1'
 gem 'yelpster'          , '~>1.1.4'
 
 gem 'nokogiri'
+gem 'rest-client'       , '~> 1.6.7'
 
 gem 'sass-rails'        , '~>4.0.0'
 gem 'haml-rails'        , '~>0.4'
