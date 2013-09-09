@@ -61,6 +61,11 @@ describe :populate_from_streamer_friends do
             TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
           }.to change(HoverCraftResolveUrl.jobs, :size).by(first_batch_of_ids.size)
         end
+        it 'schedules CreateCraft jobs for each new HoverCraft (to create a craft)' do
+          expect {
+            TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
+          }.to change(BeamUpCraft.jobs, :size).by(first_batch_of_ids.size)
+        end
       end
     end
   end
@@ -70,6 +75,7 @@ describe :populate_from_streamer_friends do
   context 'Process all streamer friends' do
     it_behaves_like 'a worker that create HoverCrafts for new streamer friends'
   end
+
   context 'Given a large number of new friends' do
     let (:new_friend_tids)  { (1000..1250).to_a }
     it_behaves_like 'a worker that create HoverCrafts for new streamer friends'
