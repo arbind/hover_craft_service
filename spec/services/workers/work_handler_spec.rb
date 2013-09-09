@@ -20,11 +20,11 @@ describe WorkHandler do
     end
   end
 
-  describe :populate_hover_crafts do
-    let (:worker)         { PopulateHoverCrafts }
+  describe :beam_up_craft do
+    let (:worker)         { BeamUpCraft }
     let (:handler_class)  { HoverCraftHandler }
-    let (:args)           { nil }
-    let (:data)           { worker.work_data }
+    let (:args)           { [ hover_craft ] }
+    let (:data)           { worker.work_data *args }
     it_behaves_like 'a work handler'
   end
 

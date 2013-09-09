@@ -1,5 +1,11 @@
 class WorkHandler
 
+  def self.beam_up_craft(data)
+    hover_craft_id = data.fetch 'hover_craft_id'
+    hover_craft = HoverCraft.find hover_craft_id
+    HoverCraftHandler.beam_up_craft hover_craft
+  end
+
   def self.populate_from_streamers(nada={})
     TwitterHandler.populate_from_streamers
   end
