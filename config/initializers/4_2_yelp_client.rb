@@ -18,4 +18,9 @@ YELP_REQUEST_LIMIT = ENV["YELP_DAILY_REQUEST_LIMIT"].to_i
 ENV["YELP_RATE_LIMIT_WINDOW"]   ||= "#{24*60}" # in minutes
 YELP_WINDOW = 60 * ENV["YELP_RATE_LIMIT_WINDOW"].to_i # in seconds
 
-INTERVAL_FOR_YELP_RATE_LIMIT = wait_time_for_request_limit_of(YELP_REQUEST_LIMIT, YELP_WINDOW)
+if Rails.env.development?
+  puts "!! Accelerating Yelp rate limit for development- don't go overboard! "
+  INTERVAL_FOR_YELP_RATE_LIMIT = wait_time_for_request_limit_of(10, 15)
+else
+  INTERVAL_FOR_YELP_RATE_LIMIT = wait_time_for_request_limit_of(YELP_REQUEST_LIMIT, YELP_WINDOW)
+end
