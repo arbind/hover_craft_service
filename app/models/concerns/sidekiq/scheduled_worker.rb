@@ -55,7 +55,15 @@ module Sidekiq
 
       def schedule(*args)
         config_scheduled_worker
+        before_schedule(*args) if respond_to? :before_schedule
         client_push('class' => self, 'args' => args, 'at' => next_run_at)
+        after_schedule(*args) if respond_to? :after_schedule
+      end
+      def delay_schedule_until(duration_to_wait, *args)
+        config_scheduled_worker
+        before_schedule(*args) if respond_to? :before_schedule
+        client_push('class' => self, 'args' => args, 'at' => next_run_at + duration_to_wait)
+        after_schedule(*args) if respond_to? :after_schedule
       end
     end
   end
