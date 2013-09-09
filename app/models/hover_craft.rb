@@ -96,6 +96,10 @@ class HoverCraft
   before_save :score
   after_save  :schedule_to_be_crafted, if: :ready_to_craft?
 
+  def self.service
+    ::HoverCraftSvc
+  end
+
   def crafted?
     craft_path.present?
   end
@@ -103,8 +107,14 @@ class HoverCraft
     !crafted?
   end
 
-  def self.service
-    ::HoverCraftSvc
+  def primary_address
+    return nil if yelp_address.nil? and twitter_address.nil?
+    return twitter_address if yelp_address.nil?
+    return yelp_address if twitter_address.nil?
+    if yelp_fit_score >= FIT_absolute and twitter_fit_score >= FIT_absolute
+      return yelp_address if yelp_address.length > twitter_address.length
+    end
+    twitter_address
   end
 
   def twitter_href
@@ -156,26 +166,7 @@ private
   end
 
   def schedule_to_be_crafted
-  #  +++ TODO
-  # WorkLauncher.launch :hover_craft_beam_up self
-
-  # schedule this hover craft to be crafted:
-  # The worker for :hover_craft_beam_up will need to make sure
-  # no other jobs are scheduled to operate on this hover craft
-  # 1 if clear, then call hover_craft.make_into_craft
-  # 2 otherwise, if another job operating on this hover_craft is still scheduled
-  #   then the worker should reschedule itself to run some time after
-  #   the last job that will operate on this hover_craft
-  #
-  #   see sidekiq api: https://github.com/mperham/sidekiq/wiki/API
-  #   r = Sidekiq::ScheduledSet.new
-  #   existing_jobs = r.select do |job| ... where args[0] is hover_craft.id end
-  #   last_job = existing_jobs.last (scheduled set is ordered chronologically)
-  #   reschedule this job to be run at last_job.time + 1.minute
-
-  end
-  def make_into_craft
-    HoverCraft.service.beam_up_craft self
+    WorkLauncher.launch_after_waiting 2.minutes, :beam_up_craft, self # allow time for any pending jobs
   end
 
   def ready_to_craft?
