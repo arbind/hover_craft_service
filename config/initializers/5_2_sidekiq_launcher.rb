@@ -31,6 +31,19 @@ module SidekiqProcess
   end
 end
 
+sidekiq_redis_conn = proc {
+  uri = URI.parse( REDIS_URI )
+  Redis.new(:host => uri.host, :port => uri.port, :password => uri.password) rescue nil
+}
+
+Sidekiq.configure_client do |config|
+  config.redis = ConnectionPool.new(size: 55, &sidekiq_redis_conn)
+end
+
+Sidekiq.configure_server do |config|
+  config.redis = ConnectionPool.new(size: 55, &sidekiq_redis_conn)
+end
+
 if ENV["LAUNCH_BACKGROUND_JOBS"]
   SidekiqProcess.launch launch_delay: 3
 end
