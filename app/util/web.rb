@@ -6,10 +6,23 @@ class Web
   end
 
   def document
-    @document||= Nokogiri::HTML(open @url, 'User-Agent' => 'ruby')
+    @document ||= Nokogiri::HTML(open @url, 'User-Agent' => 'ruby')
+  rescue StandardError
+    if e.message.match /redirection forbidden/ # follow the redirect
+      @original_url = @url
+      @url = e.message.split('->').last.strip
+      document # try again
+      # redirection forbidden: http://abc.com/tacs -> https://abc.com/taco
+    else
+      @document = nil
+      # Something else happened that is not usable
+    end
   end
 
-  def select_all(css) document.css(css) end
+  def select_all(css)
+    doc = document
+    doc.css(css) unless doc.nil?
+  end
 
   def select_first(css) select_all(css).first end
 
@@ -77,15 +90,17 @@ class Web
     begin
       open(url.strip,'User-Agent' => 'ruby') {|resp| final_location=resp.base_uri}
     rescue OpenURI::HTTPError => e
-      # 403 forbidden, 404 not found, etc
+      # 403 forbidden, 404 not found, page moved, etc.
     rescue SocketError => e
       # No DNS
     rescue Errno::ETIMEDOUT
-        # site is no more
-    rescue => e
-      if e.message.match /redirection forbidden/i
+      # site is no more
+    rescue StandardError
+      if e.message.match /redirection forbidden/ # follow the redirect
         final_location = e.message.split('->').last.strip
         # redirection forbidden: http://abc.com/tacs -> https://abc.com/taco
+      else
+        # Something else happened that is not usable
       end
     end
     final_location.to_s
