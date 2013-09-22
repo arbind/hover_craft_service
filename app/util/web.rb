@@ -21,10 +21,13 @@ class Web
 
   def select_all(css)
     doc = document
-    doc.css(css) unless doc.nil?
+    return [] if doc.nil?
+    doc.css(css)
   end
 
-  def select_first(css) select_all(css).first end
+  def select_first(css)
+    select_all(css).first
+  end
 
   def title
     select_first('title').content
