@@ -7,7 +7,7 @@ class Web
 
   def document
     @document ||= Nokogiri::HTML(open @url, 'User-Agent' => 'ruby')
-  rescue StandardError
+  rescue StandardError => e
     if e.message.match /redirection forbidden/ # follow the redirect
       @original_url = @url
       @url = e.message.split('->').last.strip
@@ -21,10 +21,13 @@ class Web
 
   def select_all(css)
     doc = document
-    doc.css(css) unless doc.nil?
+    return [] if doc.nil?
+    doc.css(css)
   end
 
-  def select_first(css) select_all(css).first end
+  def select_first(css)
+    select_all(css).first
+  end
 
   def title
     select_first('title').content
@@ -95,7 +98,7 @@ class Web
       # No DNS
     rescue Errno::ETIMEDOUT
       # site is no more
-    rescue StandardError
+    rescue StandardError => e
       if e.message.match /redirection forbidden/ # follow the redirect
         final_location = e.message.split('->').last.strip
         # redirection forbidden: http://abc.com/tacs -> https://abc.com/taco
