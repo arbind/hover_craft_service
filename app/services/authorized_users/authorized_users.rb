@@ -5,10 +5,10 @@ class AuthorizedUsers
   field :authorizations, type: Hash, default: {}
 
   private_class_method :new
-  @@instance = AuthorizedUsers.first_or_create
+  @@instance = nil
 
   def self.service
-    return @@instance
+    return @@instance ||= AuthorizedUsers.first_or_create
   end
 
   def authorized?(twitter_id)
