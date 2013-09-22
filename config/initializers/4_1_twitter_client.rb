@@ -7,9 +7,13 @@ module SECRET::TWITTER
   SECRET  = ENV["TWITTER_SECRET"]
 end
 
-Twitter.configure do |config|
-  config.consumer_key = SECRET::TWITTER::KEY
-  config.consumer_secret = SECRET::TWITTER::SECRET
+if SECRET::TWITTER::KEY
+  Twitter.configure do |config|
+    config.consumer_key = SECRET::TWITTER::KEY
+    config.consumer_secret = SECRET::TWITTER::SECRET
+  end
+else
+  puts "!! Twitter Client not configured: missing keys"
 end
 
 # Eventually usr a pool of TwitterClients instead:

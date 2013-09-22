@@ -9,4 +9,4 @@ if ENV["LAUNCH_BACKGROUND_JOBS"]
   ENV["STARTUP_DELAY_OF_BACKGROUND_THREADS"] ||= "4" # in seconds
 end
 
-PopulateFromStreamers.schedule {}
+PopulateFromStreamers.schedule {} if ENV["LAUNCH_BACKGROUND_JOBS"]

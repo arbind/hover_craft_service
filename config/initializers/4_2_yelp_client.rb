@@ -12,6 +12,10 @@ module SECRET::YELP::V2 # Yelp API v2.0 uses OAUTH:
   TOKEN_SECRET     = ENV["YELP_TOKEN_SECRET"]
 end
 
+if SECRET::YELP::V2::TOKEN
+else
+  puts "!! Yelp Client not configured: missing keys"
+end
 ENV["YELP_DAILY_REQUEST_LIMIT"] ||= "1000"
 YELP_REQUEST_LIMIT = ENV["YELP_DAILY_REQUEST_LIMIT"].to_i
 
