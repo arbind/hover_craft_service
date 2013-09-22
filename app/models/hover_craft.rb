@@ -108,9 +108,10 @@ class HoverCraft
   end
 
   def primary_address
-    return nil if yelp_address.nil? and twitter_address.nil?
-    return twitter_address if yelp_address.nil?
-    return yelp_address if twitter_address.nil?
+    return nil if tweet_streamer.nil? and yelp_address.nil? and twitter_address.nil?
+    return tweet_streamer.address if tweet_streamer and yelp_address.nil? and twitter_address.nil?
+    return twitter_address if twitter_address and yelp_address.nil?
+    return yelp_address if yelp_address and twitter_address.nil?
     if yelp_fit_score >= FIT_absolute and twitter_fit_score >= FIT_absolute
       return yelp_address if yelp_address.length > twitter_address.length
     end
