@@ -19,9 +19,11 @@ module Sidekiq
 
       def last_run_at
         return @last_run_at unless @last_run_at.nil?
-        scheduledSet = Sidekiq::ScheduledSet.new
-        scheduledSet.select.reverse_each do |entry|
-          return @last_run_at=entry.score if @queue.eql? entry.queue and name.eql entry.item['class']
+        Thread.exclusive do # 1 Sidekiq client connection at a time
+          scheduledSet = Sidekiq::ScheduledSet.new
+          scheduledSet.select.reverse_each do |entry|
+            return @last_run_at=entry.score if @queue.eql? entry.queue and name.eql entry.item['class']
+          end
         end
         @last_run_at ||= (Time.now - interval_between_runs).to_f
       end
@@ -56,14 +58,20 @@ module Sidekiq
       def schedule(*args)
         config_scheduled_worker
         before_schedule(*args) if respond_to? :before_schedule
-        client_push('class' => self, 'args' => args, 'at' => next_run_at)
+        push_schedule('class' => self, 'args' => args, 'at' => next_run_at)
         after_schedule(*args) if respond_to? :after_schedule
       end
       def delay_schedule_until(duration_to_wait, *args)
         config_scheduled_worker
         before_schedule(*args) if respond_to? :before_schedule
-        client_push('class' => self, 'args' => args, 'at' => next_run_at + duration_to_wait)
+        push_schedule('class' => self, 'args' => args, 'at' => next_run_at + duration_to_wait)
         after_schedule(*args) if respond_to? :after_schedule
+      end
+
+      def push_schedule(payload)
+        Thread.exclusive do # 1 Sidekiq client connection at a time
+          client_push payload
+        end
       end
     end
   end
