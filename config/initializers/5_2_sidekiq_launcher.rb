@@ -1,5 +1,10 @@
 WORKER_THREADS ||= {}
 
+# Keep an eye on connection pools when cranking this up!
+# see complete control of redis connection pool:
+# https://github.com/mperham/sidekiq/wiki/Advanced-Options
+SIDEKIQ_CONCURRENCY_COUNT = (ENV["SIDEKIQ_CONCURRENCY_COUNT"] || 25).to_i
+
 def sidekiq_workers
   Dir.glob(File.join('app/workers', "*")).map{|fn| fn.split('/').last.split('.').first}.map(&:camelcase)
 end
