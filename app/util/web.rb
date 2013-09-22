@@ -30,7 +30,8 @@ class Web
   end
 
   def title
-    select_first('title').content
+    element = select_first('title')
+    element.content if element
   end
 
   def links(match=nil, trim=true)
