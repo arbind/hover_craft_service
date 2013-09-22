@@ -31,8 +31,11 @@ class HoverCraftHandler
 private
   def self.last_scheduled_job_for_hover_craft(hover_craft)
     hover_craft_id = hover_craft.id.to_s
-    scheduled_jobs  = Sidekiq::ScheduledSet.new
-    pending_hover_craft_jobs = scheduled_jobs.select{|job| data = job.args.first;  data and data.has_value? hover_craft_id }
+    pending_hover_craft_jobs = nil
+    Thread.exclusive do
+      scheduled_jobs  = Sidekiq::ScheduledSet.new
+      pending_hover_craft_jobs = scheduled_jobs.select{|job| data = job.args.first;  data and data.has_value? hover_craft_id }
+    end
     if pending_hover_craft_jobs.any?
       pending_hover_craft_jobs[-1]
     else
