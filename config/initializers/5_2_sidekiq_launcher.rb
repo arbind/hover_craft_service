@@ -1,26 +1,5 @@
 WORKER_THREADS ||= {}
 
-# Crank these UP!
-# Free heroku RedisToGo only allows 10 connections tho!
-# Also, REDIS and REDIS4GEOCODER are already 2 connections to redis!
-# Keep in mind that some serverside workers use sidekiq client (i.e. BeamUpCraft)
-SIDEKIQ_CONCURRENCY_COUNT = (ENV["SIDEKIQ_CONCURRENCY_COUNT"] || 10).to_i
-SIDEKIQ_CLIENT_REDIS_POOL_SIZE = (ENV["SIDEKIQ_CLIENT_REDIS_POOL_SIZE"] || 3).to_i
-SIDEKIQ_SERVER_REDIS_POOL_SIZE = (ENV["SIDEKIQ_SERVER_REDIS_POOL_SIZE"] || 4).to_i
-
-sidekiq_redis_conn = proc {
-  uri = URI.parse(REDIS_URI)
-  Redis.new(:host => uri.host, :port => uri.port, :password => uri.password) rescue nil
-}
-
-Sidekiq.configure_client do |config|
-  config.redis = ConnectionPool.new(size: 3, &sidekiq_redis_conn)
-end
-
-Sidekiq.configure_server do |config|
-  config.redis = ConnectionPool.new(size: 14, &sidekiq_redis_conn)
-end
-
 def sidekiq_workers
   Dir.glob(File.join('app/workers', "*")).map{|fn| fn.split('/').last.split('.').first}.map(&:camelcase)
 end
