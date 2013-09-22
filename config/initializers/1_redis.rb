@@ -1,3 +1,5 @@
+REDIS_URI = ENV["REDISTOGO_URL"] || ENV["REDIS_URL"] || "redis://localhost:6379/"
+
 unless $PROGRAM_NAME.end_with?('rake')
   # Skip this initialization durring rake tasks
   # Heroku runs rake asset:precompile in sandbox mode with no ENV or DBs
@@ -17,7 +19,6 @@ unless $PROGRAM_NAME.end_with?('rake')
     redis.select db_num
   end
 
-  REDIS_URI = ENV["REDISTOGO_URL"] || ENV["REDIS_URL"] || "redis://localhost:6379/"
   uri = URI.parse( REDIS_URI )
 
   REDIS_DB = REDIS_DB_ENVIRONMENTS[ (ENV["RAILS_ENV"] || :development) ]

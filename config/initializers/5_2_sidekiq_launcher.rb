@@ -32,7 +32,7 @@ module SidekiqProcess
 end
 
 sidekiq_redis_conn = proc {
-  uri = URI.parse( REDIS_URI )
+  uri = URI.parse(REDIS_URI)
   Redis.new(:host => uri.host, :port => uri.port, :password => uri.password) rescue nil
 }
 
