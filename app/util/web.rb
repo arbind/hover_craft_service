@@ -76,15 +76,17 @@ class Web
     final_location = nil
     begin
       open(url.strip,'User-Agent' => 'ruby') {|resp| final_location=resp.base_uri}
-    rescue RuntimeError => e
-      if e.message.match /redirection forbidden/
-        final_location = e.message.split('->').last.strip
-        # redirection forbidden: http://abc.com/tacs -> https://abc.com/taco
-      end
     rescue OpenURI::HTTPError => e
       # 403 forbidden, 404 not found, etc
     rescue SocketError => e
       # No DNS
+    rescue Errno::ETIMEDOUT
+        # site is no more
+    rescue => e
+      if e.message.match /redirection forbidden/i
+        final_location = e.message.split('->').last.strip
+        # redirection forbidden: http://abc.com/tacs -> https://abc.com/taco
+      end
     end
     final_location.to_s
   end
