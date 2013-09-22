@@ -35,9 +35,10 @@ class FacebookApi
           username = tokens[1] if id_is_valid?(tokens[1])
         when 4 # facebook.com/pages/PageName/page_id  <- use real page id as username
           pages = tokens[1].downcase
-          page_id = tokens[2] # sometimes page_id works,
-          page_id = tokens[3] if  web_fetch(page_id).nil? # sometimes PageName works
-          username = page_id if ( "pages" == pages and id_is_valid?(page_id) )
+          page_id = tokens[2] # see if  PageName works,
+          page_id = nil if user(page_id).nil?
+          page_id ||= tokens[3]  # sometimes PageName works
+          username = page_id if ( "pages".eql? pages and id_is_valid?(page_id) )
         when 5 # facebook.com/pages/city-ST/PageName/some_id  <- use real PageName as username
           pages = tokens[1].downcase
           username = tokens[3] if ( 'pages' == pages and id_is_valid?(tokens[3]) )
