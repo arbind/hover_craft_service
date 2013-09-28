@@ -28,7 +28,7 @@ class HoverCraftSvc
     craft[:twitter] = twitter_craft_for hover_craft if twitter_fit_score >= HoverCraft::FIT_absolute
     craft[:website] = website_craft_for hover_craft if website_fit_score >= HoverCraft::FIT_absolute
     craft[:facebook] = facebook_craft_for hover_craft if facebook_fit_score >= HoverCraft::FIT_absolute
-    return nil unless craft.present? and (craft[:twitter_craft] or craft[:yelp_craft])
+    return nil unless craft.present? and (craft[:twitter] or craft[:yelp])
     craft
   end
 
