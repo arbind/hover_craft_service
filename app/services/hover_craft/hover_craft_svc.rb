@@ -24,10 +24,10 @@ class HoverCraftSvc
     facebook_fit_score = hover_craft.facebook_fit_score || 0
     craft[:craft_path] = hover_craft.craft_path if hover_craft.craft_path
     craft[:address] = hover_craft.primary_address if hover_craft.primary_address
-    craft[:yelp_craft] = yelp_craft_for hover_craft if yelp_fit_score >= HoverCraft::FIT_absolute
-    craft[:twitter_craft] = twitter_craft_for hover_craft if twitter_fit_score >= HoverCraft::FIT_absolute
-    craft[:website_craft] = website_craft_for hover_craft if website_fit_score >= HoverCraft::FIT_absolute
-    craft[:facebook_craft] = facebook_craft_for hover_craft if facebook_fit_score >= HoverCraft::FIT_absolute
+    craft[:yelp] = yelp_craft_for hover_craft if yelp_fit_score >= HoverCraft::FIT_absolute
+    craft[:twitter] = twitter_craft_for hover_craft if twitter_fit_score >= HoverCraft::FIT_absolute
+    craft[:website] = website_craft_for hover_craft if website_fit_score >= HoverCraft::FIT_absolute
+    craft[:facebook] = facebook_craft_for hover_craft if facebook_fit_score >= HoverCraft::FIT_absolute
     return nil unless craft.present? and (craft[:twitter_craft] or craft[:yelp_craft])
     craft
   end
