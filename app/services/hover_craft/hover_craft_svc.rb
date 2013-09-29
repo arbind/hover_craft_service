@@ -172,15 +172,15 @@ class HoverCraftSvc
       address: hover_craft.twitter_address,
       description: hover_craft.twitter_profile['description'],
       is_protected: hover_craft.twitter_profile['is_protected'],
-      followers_count: hover_craft.twitter_profile['followers_count'],
-      statuses_count: hover_craft.twitter_profile['statuses_count'],
-      lang: hover_craft.twitter_profile['lang'],
       profile_background_color: hover_craft.twitter_profile['profile_background_color'],
       profile_background_image_url_https: hover_craft.twitter_profile['profile_background_image_url_https'],
       profile_background_tile: hover_craft.twitter_profile['profile_background_tile'],
       profile_image_url_https: hover_craft.twitter_profile['profile_image_url_https'],
       profile_use_background_image: hover_craft.twitter_profile['profile_use_background_image'],
 
+      # followers_count: hover_craft.twitter_profile['followers_count'],
+      # statuses_count: hover_craft.twitter_profile['statuses_count'],
+      # lang: hover_craft.twitter_profile['lang'],
       #twitter_account_created_at: hover_craft.twitter_profile['twitter_account_created_at'],
       #friends_count: hover_craft.twitter_profile['friends_count'],
       #listed_count: hover_craft.twitter_profile['listed_count'],
@@ -196,8 +196,8 @@ class HoverCraftSvc
     {
       web_craft_id: hover_craft.yelp_id,
       name: hover_craft.yelp_name,
-      href: hover_craft.yelp_href,
-      #address: hover_craft.yelp_address,
+      address: hover_craft.yelp_address,
+      # href: hover_craft.yelp_href,
       # description: hover_craft.yelp_profile['description'],
       # phone: hover_craft.yelp_profile['phone'],
       # image_url: hover_craft.yelp_profile['image_url'],
@@ -211,10 +211,10 @@ class HoverCraftSvc
       name: hover_craft.facebook_name,
       username: hover_craft.facebook_profile['username'],
       href: hover_craft.facebook_href,
-      likes: hover_craft.facebook_profile['likes'],
-      first_name: hover_craft.facebook_profile['first_name'],
-      last_name: hover_craft.facebook_profile['last_name'],
-      about: hover_craft.facebook_profile['about'], # description
+      # likes: hover_craft.facebook_profile['likes'],
+      # first_name: hover_craft.facebook_profile['first_name'],
+      # last_name: hover_craft.facebook_profile['last_name'],
+      # about: hover_craft.facebook_profile['about'], # description
     }
   end
 
