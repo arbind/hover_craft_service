@@ -3,7 +3,7 @@ class HoverCraftHandler
   def self.beam_up_craft(hover_craft)
     last_scheduled_job = last_scheduled_job_for_hover_craft hover_craft
     if last_scheduled_job.present?
-      duration_to_wait = 2.minutes + (last_scheduled_job.score - Time.now.to_i)
+      duration_to_wait = 2.minutes + [0, (last_scheduled_job.score - Time.now.to_i)].max
       WorkLauncher.launch_after_waiting duration_to_wait, :beam_up_craft, hover_craft # requeue this job
     else
       HoverCraft.service.beam_up_craft hover_craft
