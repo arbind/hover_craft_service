@@ -4,6 +4,7 @@ class CraftSvc
     response = RestClient.post materialize_craft_url, craft: craft
     craft_from_response response
   rescue => ex
+    puts "!!Fail: Can not materialize craft to #{materialize_craft_url}"
     raise ex
   end
 
