@@ -167,7 +167,13 @@ private
   end
 
   def schedule_to_be_crafted
-    WorkLauncher.launch_after_waiting 2.minutes, :beam_up_craft, self # allow time for any pending jobs
+    BeamUpCraft.remove_existing_jobs self.id
+    duration = 2.minutes
+    last_scheduled_job = HoverCraftHandler.last_scheduled_job_for_hover_craft self
+    if last_scheduled_job  # allow time for any pending jobs
+      duration = duration + [0, (last_scheduled_job.score - Time.now.to_i)].max
+    end
+    WorkLauncher.launch_after_waiting duration, :beam_up_craft, self
   end
 
   def ready_to_craft?

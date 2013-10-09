@@ -4,13 +4,13 @@ class HoverCraftSvc
     craft_info = craft_for hover_craft
     return nil unless craft_info
     updated_craft = CraftSvc.materialize craft_info
-    if updated_craft
+    if updated_craft # update hover_craft without invoking callbacks
       hover_craft.craft_path = updated_craft.craft_path
       hover_craft.yelp_crafted = true if updated_craft.yelp_craft and updated_craft.yelp_craft['web_craft_id']
       hover_craft.twitter_crafted = true if updated_craft.twitter_craft and updated_craft.twitter_craft['web_craft_id']
       hover_craft.website_crafted = true if updated_craft.website_craft and updated_craft.website_craft['web_craft_id']
       hover_craft.facebook_crafted = true if updated_craft.facebook_craft and updated_craft.facebook_craft['web_craft_id']
-      hover_craft.save!
+      hover_craft.touch if hover_craft.changes.any?
     end
     updated_craft
   end

@@ -21,4 +21,15 @@ class HoverCraftHandler
     HoverCraft.service.resolve_url hover_craft, url_attribute
     WorkLauncher.launch :populate_hover_craft, hover_craft
   end
+
+  def self.last_scheduled_job_for_hover_craft(hover_craft)
+    hover_craft_id = hover_craft.id.to_s
+    pending_hover_craft_jobs = nil
+    Thread.exclusive do # 1 Sidekiq client connection at a time
+      scheduled_jobs  = Sidekiq::ScheduledSet.new
+      pending_hover_craft_jobs = scheduled_jobs.select{|job| data = job.args.first;  data and data.has_value? hover_craft_id }
+    end
+    pending_hover_craft_jobs[-1] if pending_hover_craft_jobs.any?
+  end
+
 end
