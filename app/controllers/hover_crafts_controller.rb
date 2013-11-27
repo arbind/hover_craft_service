@@ -1,4 +1,4 @@
-class HoverCraftsController < ApplicationController
+class HoverCraftsController < ApplicationProtectedController
   before_action :set_hover_craft, only: [:show, :edit, :update, :destroy]
 
   # GET /hover_crafts

@@ -1,4 +1,13 @@
-%h1 Tweet Streamers [#{@tweet_streamers.count}]
+- @page_title = 'Tweet Streamers'
+
+form.authorize-tweet-streamer(method=:POST action=tweet_streamers_path)
+  = token_tag
+  .input-group
+    span.input-group-addon @
+    input.form-control(type=:text name=:screen_name placeholder='twitter screen name')
+    span.input-group-btn
+      button.btn.btn-danger type=:submit +
+
 - @tweet_streamers.each do |tweet_streamer|
   .screen_name= tweet_streamer.screen_name
   .name=        tweet_streamer.name
@@ -6,7 +15,3 @@
   .coordinates= tweet_streamer.coordinates
   = button_to('remove', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: :delete, confirm: "Delete #{tweet_streamer.screen_name}?")
 
-%form.authorize-tweet-streamer{method: :POST, action: tweet_streamers_path}
-  = token_tag
-  %input{type: :text, name: :screen_name}
-  %button{type: :submit} +

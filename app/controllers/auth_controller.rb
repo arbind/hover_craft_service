@@ -5,6 +5,7 @@ class AuthController < ApplicationController
 
   def new
     ensure_logout
+    render 'login'
   end
 
   def logout
@@ -18,9 +19,14 @@ class AuthController < ApplicationController
       tweet_streamer = authorize_streamer
       notice = "#{tweet_streamer.screen_name} is authorized as a Tweet Streamer"
       redirect_to tweet_streamers_path, notice: notice
-    else
+    elsif authorized_user?
       sign_in
       redirect_to dashboard_path
+    else 
+      u = user_hash
+      notice = "@#{u[:screen_name]} you have not been authorized for your twitter id: #{u[:twitter_id]}"
+      ensure_logout
+      redirect_to login_path, flash: {error: notice}
     end
   end
 
@@ -33,7 +39,6 @@ class AuthController < ApplicationController
 
   def sign_in
     ensure_logout
-    ensure_authorized_user
     params = user_hash
     tid = params[:twitter_id]
     u = TwitterUser.where(twitter_id: tid).first_or_create
@@ -53,11 +58,8 @@ class AuthController < ApplicationController
   def ensure_tweet_streamer
   end
 
-  def ensure_authorized_user
-    unless AuthorizedUsers.service.authorized? oauth_hash.uid
-      u = user_hash
-      raise Denied.new "#{u[:name]}[#{u[:twitter_id]}] is not in Authorized list!"
-    end
+  def authorized_user?
+    AuthorizedUsers.service.authorized? oauth_hash.uid
   end
 
   def user_hash

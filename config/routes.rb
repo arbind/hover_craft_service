@@ -21,7 +21,6 @@ require 'sidekiq/web'
   get 'auth/:provider/callback' => 'auth#oauth_sign_in'
   get 'auth/:provider/failure' => 'auth#oauth_failure'
 
-  resources :background_threads, only: [:index]
   resources :tweet_streamers, except: [:update]
   resources :hover_crafts
 
