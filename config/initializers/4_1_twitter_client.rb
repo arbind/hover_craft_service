@@ -13,7 +13,7 @@ if SECRET::TWITTER::KEY
     config.consumer_secret = SECRET::TWITTER::SECRET
   end
 else
-  puts "!! Twitter Client not configured: missing keys"
+  abort "!! Twitter Client not configured: missing OAuth keys"
 end
 
 # Eventually usr a pool of TwitterClients instead:
