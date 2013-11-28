@@ -45,6 +45,11 @@ class HoverCraftsController < ApplicationProtectedController
     redirect_to hover_crafts_url, notice: 'Hover craft was successfully destroyed.'
   end
 
+  def populate_from_streamers
+    PopulateFromStreamers.schedule {}
+    redirect_to hover_crafts_path, flash: {info: 'Sidekiq job scheduled to populate HoverCrafts from TweetStreamers'}
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_hover_craft

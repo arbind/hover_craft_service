@@ -22,7 +22,9 @@ require 'sidekiq/web'
   get 'auth/:provider/failure' => 'auth#oauth_failure'
 
   resources :tweet_streamers, except: [:update]
-  resources :hover_crafts
+  resources :hover_crafts do
+    get 'populate_from_streamers', on: :collection
+  end
   resources :sidekiq_admin, only: [:index] do
     get 'clear_scheduled_jobs', on: :collection
     get 'clear_stats', on: :collection

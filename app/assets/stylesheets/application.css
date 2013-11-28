@@ -13,3 +13,9 @@
  *= require_self
  *= require_tree .
  */
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

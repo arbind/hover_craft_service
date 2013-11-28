@@ -6,4 +6,13 @@ class String
   rescue
     nil
   end
+
+  def url_path
+    self.gsub(/^http(s)?\:\/\/(www.)?.*\.com/i, '')
+  end
+
+  def url_domain
+    self.gsub(/^http(s)?\:\/\/(www.)?/i, '')
+  end
+
 end

@@ -9,7 +9,7 @@
       span.input-group-btn
         button.btn.btn-primary type=:submit + add
 
-table.table
+table.table.table-hover
   tr
     th Screen Name
     th Name
@@ -28,4 +28,8 @@ table.table
           i.fa.fa-map-marker.fa-lg &nbsp;
         = tweet_streamer.address
       td.menu 
-        = link_to(' ', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: 'btn btn-default delete glyphicon glyphicon-remove', confirm: "Delete #{tweet_streamer.screen_name}?")
+        .btn-group
+          a.btn href=populate_from_streamers_hover_crafts_path title='Populate HoverCrafts from TweetStreamers'
+            .glyphicon.glyphicon-fire  
+        | &nbsp; &nbsp; &nbsp; &nbsp; 
+        = link_to(' ', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: 'btn delete glyphicon glyphicon-remove', confirm: "Delete @#{tweet_streamer.screen_name}?")

@@ -21,17 +21,22 @@ html
             i.fa.fa-bars.fa-lg
           ul.dropdown-menu role="menu"
             li
-              a href=dashboard_path Dashboard
+              a href=dashboard_path title='Settings'
+                .glyphicon.glyphicon-cog
+                | &nbsp; Settings
             li.divider
             li
               a href=logout_path title='logout'
-                | Logout @#{current_user.screen_name}
+                .glyphicon.glyphicon-remove
+                | &nbsp; Logout @#{current_user.screen_name}
         a.btn.navbar-btn.navbar-right href=sidekiq_admin_index_path title='Sidekiq'
           =image_tag('sidekiq-logo.png')
         a.btn.navbar-btn.navbar-right href=tweet_streamers_path title='Tweet Streamers'
           i.fa.fa-twitter.fa-lg
         a.btn.navbar-btn.navbar-right href=hover_crafts_path title='Hover Crafts'
           i.fa.fa-truck.fa-lg
+        a.btn.navbar-btn.navbar-right href=dashboard_path title='Dashboard'
+          i.fa.fa-dashboard.fa-lg
     .container
       - flash.each do |name, msg|
         div class=name #{msg}

@@ -1,41 +1,105 @@
 - @page_title = 'Hover Crafts'
 
-table.table.table-hover.table-striped
+- content_for :navbar_menu
+  .btn-toolbar.navbar-btn
+    .btn-group
+      a.btn href=populate_from_streamers_hover_crafts_path title='Populate HoverCrafts from TweetStreamers'
+        .glyphicon.glyphicon-fire
+
+
+
+.counts.panel.panel-default.center-block
+  .panel-heading HoverCraft Count
+  ul.list-group
+    li.list-group-item
+      | Total
+      span.badge= HoverCraft.count
+
+.counts.panel.panel-default.center-block
+  .panel-heading WebCraft Count
+  ul.list-group
+    li.list-group-item
+      | Twitter 
+      span.badge= "#{(100 * HoverCraft.with_twitter.count.to_f / HoverCraft.count).to_i} %"
+      span.badge= HoverCraft.with_twitter.count
+    li.list-group-item
+      | Yelp
+      span.badge= "#{(100 * HoverCraft.with_yelp.count.to_f / HoverCraft.count).to_i} %"
+      span.badge= HoverCraft.with_yelp.count
+    li.list-group-item
+      | Facebook
+      span.badge= "#{(100 * HoverCraft.with_facebook.count.to_f / HoverCraft.count).to_i} %"
+      span.badge= HoverCraft.with_facebook.count
+    li.list-group-item
+      | Website
+      span.badge= "#{(100 * HoverCraft.with_website.count.to_f / HoverCraft.count).to_i} %"
+      span.badge= HoverCraft.with_website.count
+    
+table.hover-crafts.table.table-hover
   tr
     th
-      | twitter 
-      span.badge= HoverCraft.with_twitter.count
-    th
-      |yelp 
-      span.badge= HoverCraft.with_yelp.count
-    th
-      | facebook 
-      span.badge= HoverCraft.with_facebook.count
-    th
-      | website 
-      span.badge= HoverCraft.with_website.count
-    th
-    th
+      .score
+      .href id
+      .name name
+      .website website
     th
 
   - @hover_crafts.each do |hover_craft|
     tr
       td
-        a(href=hover_craft.twitter_href target=:twitter_window)
-          = "#{hover_craft.twitter_name}(#{hover_craft.twitter_fit_score})"
+        - if hover_craft.twitter_id
+          .twitter
+            .score= hover_craft.twitter_fit_score
+            .href
+              a(href=hover_craft.twitter_href title=hover_craft.twitter_href target=:_twitter)
+                .icon.fa.fa-twitter.fa-lg
+                | @#{hover_craft.twitter_screen_name}
+            .name= hover_craft.twitter_name
+            .website
+              - if hover_craft.twitter_website_url
+                a(href=hover_craft.twitter_website_url target=:_website)
+                  = hover_craft.twitter_website_url.url_domain
+        - if hover_craft.yelp_id
+          .yelp
+            .score= hover_craft.yelp_fit_score
+            .href
+              a(href=hover_craft.yelp_href title=hover_craft.yelp_href target=:_yelp)
+                .icon.fa.fa-search.fa-lg
+                = hover_craft.yelp_id
+            .name= hover_craft.yelp_name
+            .website
+              - if hover_craft.yelp_website_url
+                a(href=hover_craft.yelp_website_url target=:_website)
+                  = hover_craft.yelp_website_url.url_domain
+        - if hover_craft.facebook_id
+          .facebook
+            .score= hover_craft.facebook_fit_score || '-'
+            .href
+              a(href=hover_craft.facebook_href title=hover_craft.facebook_href target=:facebook_window)
+                .icon.fa.fa-facebook.fa-lg
+                - if hover_craft.facebook_href
+                  = hover_craft.facebook_href.url_path.gsub(/^\/pages/i, '')
+                - else
+                  | ??? missing href !!!
+            .name= hover_craft.facebook_name
+            .website
+              - if hover_craft.facebook_website_url
+                a(href=hover_craft.facebook_website_url target=:_website)
+                  = hover_craft.facebook_website_url.url_domain
+        - if hover_craft.website_id
+          .website
+            .score= hover_craft.website_fit_score || '-'
+            .href
+              a(href=hover_craft.website_id title=hover_craft.website_id target=:_website)
+                .icon.fa.fa-tablet.fa-lg
+                = hover_craft.website_id.url_domain
+            .name &nbsp;
+            .website
+              a(href=hover_craft.website_id target=:_website)
+                = hover_craft.website_id.url_domain
       td
-        a(href=hover_craft.yelp_href target=:yelp_window)
-          = "#{hover_craft.yelp_name}(#{hover_craft.yelp_fit_score})"
-      td
-        a(href=hover_craft.facebook_href target=:facebook_window)
-          = "#{hover_craft.facebook_name}(#{hover_craft.facebook_fit_score})"
-      td
-        a(href=hover_craft.website_href target=:website_window)
-          = "#{hover_craft.website_url}(#{hover_craft.website_fit_score})"
-      td= link_to 'Show', hover_craft
-      td= link_to 'Edit', edit_hover_craft_path(hover_craft)
-      td= link_to 'Destroy', hover_craft, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-br
+        = link_to 'Show', hover_craft
+        = link_to 'Edit', edit_hover_craft_path(hover_craft)
+        = link_to 'Destroy', hover_craft, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 = link_to 'New Hover craft', new_hover_craft_path

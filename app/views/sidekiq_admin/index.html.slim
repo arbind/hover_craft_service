@@ -3,11 +3,12 @@
 - content_for :navbar_menu
   .btn-toolbar.navbar-btn
     .btn-group
-      a.btn.btn-default href=clear_scheduled_jobs_sidekiq_admin_index_path title='Delete Scheduled Sidekiq Jobs!'
-        i.fa.fa-unlink.fa-lg
+      a.btn href=sidekiq_web_path target='_sidekiq' title='Launch Sidekiq Dashboard'
+        i.fa.fa-bar-chart-o.fa-lg
 
-      a.btn.btn-default href=clear_stats_sidekiq_admin_index_path title='Clear Sidekiq Stats!'
+      a.btn href=clear_stats_sidekiq_admin_index_path title='Clear Sidekiq Stats!'
         i.fa.fa-strikethrough.fa-lg
 
-      a.btn.btn-default href=sidekiq_web_path target='_sidekiq' title='Launch Sidekiq Dashboard'
-        i.fa.fa-bar-chart-o.fa-lg
+      a.btn href=clear_scheduled_jobs_sidekiq_admin_index_path title='Delete Scheduled Sidekiq Jobs!'
+        .glyphicon.glyphicon-remove
+
