@@ -24,7 +24,7 @@ class AuthController < ApplicationController
       redirect_to dashboard_path
     else 
       u = user_hash
-      notice = "@#{u[:screen_name]} you have not been authorized for your twitter id: #{u[:twitter_id]}"
+      notice = "@#{u[:screen_name]} your twitter id #{u[:twitter_id]} has not been authorized!"
       ensure_logout
       redirect_to login_path, flash: {error: notice}
     end

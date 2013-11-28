@@ -12,22 +12,26 @@ html
   body
     .navbar.navbar-default.navbar-fixed-top role="navigation"
       .container
-        =image_tag(current_user.image, alt: current_user.name, class: 'img-rounded navbar-image navbar-left')
+        =image_tag(current_user.image, alt: current_user.name, class: 'user-avatar navbar-image img-rounded navbar-left')
         .navbar-brand= @page_title || "Hover Craft Service"
-        .user-avatar.btn-group.navbar-btn.navbar-right
+        .navbar-left
+          = yield :navbar_menu
+        .hamburger.btn-group.navbar-btn.navbar-right
           button.btn.navbar-btn.dropdown-toggle type="button" data-toggle="dropdown"
             i.fa.fa-bars.fa-lg
           ul.dropdown-menu role="menu"
             li
               a href=dashboard_path Dashboard
-            li
-              a href=hover_crafts_path Hovercrafts
-            li
-              a href=tweet_streamers_path Streamers
             li.divider
             li
               a href=logout_path title='logout'
                 | Logout @#{current_user.screen_name}
+        a.btn.navbar-btn.navbar-right href=sidekiq_admin_index_path title='Sidekiq'
+          =image_tag('sidekiq-logo.png')
+        a.btn.navbar-btn.navbar-right href=tweet_streamers_path title='Tweet Streamers'
+          i.fa.fa-twitter.fa-lg
+        a.btn.navbar-btn.navbar-right href=hover_crafts_path title='Hover Crafts'
+          i.fa.fa-truck.fa-lg
     .container
       - flash.each do |name, msg|
         div class=name #{msg}
