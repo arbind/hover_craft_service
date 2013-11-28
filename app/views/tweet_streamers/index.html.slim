@@ -1,17 +1,31 @@
 - @page_title = 'Tweet Streamers'
 
-form.authorize-tweet-streamer(method=:POST action=tweet_streamers_path)
-  = token_tag
-  .input-group
-    span.input-group-addon @
-    input.form-control(type=:text name=:screen_name placeholder='twitter screen name')
-    span.input-group-btn
-      button.btn.btn-danger type=:submit +
+- content_for :navbar_menu
+  form.navbar-form.authorize-tweet-streamer(method=:POST action=tweet_streamers_path role="New TweetStreamer")
+    = token_tag
+    .input-group
+      span.input-group-addon @
+      input.form-control(type=:text name=:screen_name placeholder='twitter screen name')
+      span.input-group-btn
+        button.btn.btn-primary type=:submit + add
 
-- @tweet_streamers.each do |tweet_streamer|
-  .screen_name= tweet_streamer.screen_name
-  .name=        tweet_streamer.name
-  .address=     tweet_streamer.address
-  .coordinates= tweet_streamer.coordinates
-  = button_to('remove', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: :delete, confirm: "Delete #{tweet_streamer.screen_name}?")
+table.table
+  tr
+    th Screen Name
+    th Name
+    th Address
+    th 
 
+  - @tweet_streamers.each do |tweet_streamer|
+    tr
+      td.screen_name
+        a href="https://twitter.com/#{tweet_streamer.screen_name}" title='View Twitter Profile' target='_twitter'
+          i.fa.fa-twitter.fa-lg &nbsp;
+          = tweet_streamer.screen_name
+      td.name=        tweet_streamer.name
+      td.address
+        a href="https://maps.google.com.au/maps?q=#{tweet_streamer.coordinates.reverse.join(',')}&spn=0.1,0.1" title='View Location' target='_map'
+          i.fa.fa-map-marker.fa-lg &nbsp;
+        = tweet_streamer.address
+      td.menu 
+        = link_to(' ', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: 'btn btn-default delete glyphicon glyphicon-remove', confirm: "Delete #{tweet_streamer.screen_name}?")
