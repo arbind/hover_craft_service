@@ -1,5 +1,5 @@
 class TweetStreamersController < ApplicationProtectedController
-  before_action :set_tweet_streamer, only: [:show, :destroy]
+  before_action :set_tweet_streamer, only: [:show, :destroy, :populate_from_streamer]
   before_action :set_tweet_streamers, only: [:index]
 
   def index
@@ -19,6 +19,16 @@ class TweetStreamersController < ApplicationProtectedController
     redirect_to tweet_streamers_path notice: notice
   end
 
+  def populate_from_streamers
+    WorkLauncher.launch :populate_from_streamers
+    redirect_to tweet_streamers_path, flash: {info: 'All TweetStreamers scheduled to populate HoverCrafts'}
+  end
+
+  def populate_from_streamer
+    WorkLauncher.launch :populate_from_streamer, @tweet_streamer
+    redirect_to tweet_streamers_path, flash: {info: "@#{@tweet_streamer.screen_name} scheduled to populate HoverCrafts"}
+  end
+
   private
 
   def set_tweet_streamers
@@ -26,7 +36,8 @@ class TweetStreamersController < ApplicationProtectedController
   end
 
   def set_tweet_streamer
-    @tweet_streamer = TweetStreamer.find(params[:id])
+    id = params[:id] || params[:tweet_streamer_id]
+    @tweet_streamer = TweetStreamer.find(id)
   end
 
   def authorize_tweet_stream_url

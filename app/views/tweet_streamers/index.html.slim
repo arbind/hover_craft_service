@@ -1,13 +1,17 @@
 - @page_title = 'Tweet Streamers'
 
 - content_for :navbar_menu
-  form.navbar-form.authorize-tweet-streamer(method=:POST action=tweet_streamers_path role="New TweetStreamer")
-    = token_tag
-    .input-group
-      span.input-group-addon @
-      input.form-control(type=:text name=:screen_name placeholder='twitter screen name')
-      span.input-group-btn
-        button.btn.btn-primary type=:submit + add
+  form.authorize-tweet-streamer.navbar-form.navbar-left(method=:POST action=tweet_streamers_path role="New TweetStreamer")
+      = token_tag
+      .input-group
+        span.input-group-addon @
+        input.form-control(type=:text name=:screen_name placeholder='twitter screen name')
+        span.input-group-btn
+          button.btn.btn-primary type=:submit + add
+  .btn-toolbar.navbar-btn.navbar-left
+    .btn-group
+      a.btn href=populate_from_streamers_tweet_streamers_path title='Populate HoverCrafts from all TweetStreamers'
+        .glyphicon.glyphicon-fire
 
 table.table.table-hover
   tr
@@ -29,7 +33,7 @@ table.table.table-hover
         = tweet_streamer.address
       td.menu 
         .btn-group
-          a.btn href=populate_from_streamers_hover_crafts_path title='Populate HoverCrafts from TweetStreamers'
+          a.btn href=tweet_streamer_populate_from_streamer_path(tweet_streamer) title="Populate HoverCrafts from @#{tweet_streamer.screen_name} TweetStreamer"
             .glyphicon.glyphicon-fire  
         | &nbsp; &nbsp; &nbsp; &nbsp; 
         = link_to(' ', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: 'btn delete glyphicon glyphicon-remove', confirm: "Delete @#{tweet_streamer.screen_name}?")
