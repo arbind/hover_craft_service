@@ -14,6 +14,7 @@ require 'sidekiq/web'
   get '/ping' => 'root#ping', as: :ping
 
   root 'dashboard#show', as: :dashboard
+  get '/settings' => 'dashboard#settings', as: :settings
 
   get 'auth/login' => 'auth#new', as: :login
   get 'auth/logout' => 'auth#logout', as: :logout
