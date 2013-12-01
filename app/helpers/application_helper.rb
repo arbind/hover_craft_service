@@ -1,5 +1,10 @@
 module ApplicationHelper
 
+  def url_domain(href)
+    return nil unless href
+    href.url_domain
+  end
+  
   def put_link_to (endpoint_path, options={})
     form_link_to endpoint_path, :post, options
   end

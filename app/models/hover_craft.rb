@@ -107,6 +107,11 @@ class HoverCraft
     !crafted?
   end
 
+  def nickname
+    return "@#{twitter_screen_name}" if twitter_screen_name
+    return yelp_name || yelp_id || id
+  end
+
   def primary_address
     return nil if tweet_streamer.nil? and yelp_address.nil? and twitter_address.nil?
     return tweet_streamer.address if tweet_streamer and yelp_address.nil? and twitter_address.nil?

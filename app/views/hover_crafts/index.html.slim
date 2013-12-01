@@ -10,71 +10,88 @@
             title: "Refresh and Populate All HoverCrafts",
             confirm: true
 
-table.hover-crafts.table.table-hover
-  tr
-    th
-      .score
-      .href WebCraft id
-      .name Name
-      .website Website
-    th
+- @hover_crafts.each do |hover_craft|
 
-  - @hover_crafts.each do |hover_craft|
-    tr
-      td
-        - if hover_craft.twitter_id
-          .twitter
-            .score= hover_craft.twitter_fit_score
-            .href
-              a(href=hover_craft.twitter_href title=hover_craft.twitter_href target=:_twitter)
-                .icon.fa.fa-twitter.fa-lg
-                | @#{hover_craft.twitter_screen_name}
-            .name= hover_craft.twitter_name
-            .website
-              - if hover_craft.twitter_website_url
-                a(href=hover_craft.twitter_website_url target=:_website)
-                  = hover_craft.twitter_website_url.url_domain
-        - if hover_craft.yelp_id
-          .yelp
-            .score= hover_craft.yelp_fit_score
-            .href
-              a(href=hover_craft.yelp_href title=hover_craft.yelp_href target=:_yelp)
-                .icon.fa.fa-search.fa-lg
-                = hover_craft.yelp_id
-            .name= hover_craft.yelp_name
-            .website
-              - if hover_craft.yelp_website_url
-                a(href=hover_craft.yelp_website_url target=:_website)
-                  = hover_craft.yelp_website_url.url_domain
-        - if hover_craft.facebook_id
-          .facebook
-            .score= hover_craft.facebook_fit_score || '-'
-            .href
-              a(href=hover_craft.facebook_href title=hover_craft.facebook_href target=:facebook_window)
-                .icon.fa.fa-facebook.fa-lg
+  .hover-craft.panel.panel-default
+    .panel-heading
+      .btn-group
+        a.btn.btn-default
+          .fa.fa-flash
+        a.btn.btn-default
+          .fa.fa-flash
+        a.btn.btn-default
+          .fa.fa-flash
+      .name = hover_craft.nickname
+      span.badge.pull-right= [hover_craft.craft_fit_score, 0].max
+    .list-group
+      - if hover_craft.twitter_id
+        .list-group-item
+          .btn-group
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+          a href=hover_craft.twitter_href target='_twitter'
+            i.fa.fa-twitter
+              .webcraft-id @#{hover_craft.twitter_screen_name}
+          .name= hover_craft.twitter_name
+          .website= url_domain hover_craft.twitter_website_url
+          .score.badge=hover_craft.twitter_fit_score
+      - if hover_craft.yelp_id
+        .list-group-item
+          .btn-group
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+          a href=hover_craft.yelp_href target='_yelp'
+            i.fa.fa-search
+              .webcraft-id= hover_craft.yelp_id
+          .name= hover_craft.yelp_name
+          .website= url_domain hover_craft.yelp_website_url
+          .score.badge=hover_craft.yelp_fit_score
+      - if hover_craft.facebook_id
+        .list-group-item
+          .btn-group
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+          a href=hover_craft.facebook_href target='_facebook'
+            i.fa.fa-facebook
+              .webcraft-id
                 - if hover_craft.facebook_href
                   = hover_craft.facebook_href.url_path.gsub(/^\/pages/i, '')
                 - else
-                  | ??? missing href !!!
-            .name= hover_craft.facebook_name
-            .website
-              - if hover_craft.facebook_website_url
-                a(href=hover_craft.facebook_website_url target=:_website)
-                  = hover_craft.facebook_website_url.url_domain
-        - if hover_craft.website_id
-          .website
-            .score= hover_craft.website_fit_score || '-'
-            .href
-              a(href=hover_craft.website_id title=hover_craft.website_id target=:_website)
-                .icon.fa.fa-tablet.fa-lg
-                = hover_craft.website_id.url_domain
-            .name &nbsp;
-            .website
-              a(href=hover_craft.website_id target=:_website)
-                = hover_craft.website_id.url_domain
-      td
-        = link_to 'Show', hover_craft
-        = link_to 'Edit', edit_hover_craft_path(hover_craft)
-        = link_to 'Destroy', hover_craft, :method => :delete, :data => { :confirm => 'Are you sure?' }
+                  | ? facebook href missing !
+          .name= hover_craft.facebook_name
+          .website= url_domain hover_craft.facebook_website_url
+          .score.badge=hover_craft.facebook_fit_score
 
-= link_to 'New Hover craft', new_hover_craft_path
+      - if hover_craft.website_id
+        .list-group-item
+          .btn-group
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+          a href=hover_craft.website_id target='_website'
+            i.fa.fa-tablet
+              .webcraft-id
+          .name
+          .website= url_domain hover_craft.website_id
+          .score.badge=hover_craft.website_fit_score
+
+/ = link_to 'Show', hover_craft
+/ = link_to 'Edit', edit_hover_craft_path(hover_craft)
+/ = link_to 'Destroy', hover_craft, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+/ = link_to 'New Hover craft', new_hover_craft_path

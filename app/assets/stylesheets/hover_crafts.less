@@ -2,76 +2,32 @@
   width: 200px;
 }
 
-table.hover-crafts{
-  td, th {
-    width: 1500px;
-  }
-  .twitter, .facebook, .yelp, .website {
-    margin: 4px 0;
-    padding: 4px 0;
-  }
-
-  .twitter {
-    &:hover {
-      color: black;
-      background-color: #B4EEFC;
-      a {
-        color: black;
-      }
-    }
-  }
-  .facebook {
-    &:hover {
-      color: blue;
-      background-color: #E1E4ED;
-      a {
-        color: black;
-      }
-    }
-  }
-  .yelp {
-    &:hover {
-      color: white;
-      background-color: #B94229;
-      a {
-        color: white;
-      }
-    }
-  }
-  .website {
-    &:hover {
-      color: black;
-      background-color: #B4EEFC;
-      a {
-        color: black;
-      }
-    }
-  }
-
-  .score{
-    display: inline-block;
-    min-width: 20px;
-    text-align: right;
-  }
-  .href{
-    display: inline-block;
-    width: 280px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    .icon{
-      display: inline-block;
-      min-width: 20px;
-      text-align: center;
-      margin: 0 8px;
-    }
-  }
+.hover-craft{
   .name{
     display: inline-block;
-    min-width: 280px;
+    margin-left: 8px;
   }
-  .website{
-    display: inline-block;
-    min-width: 400px;
+
+  .list-group-item{
+    &:hover {
+      background-color: #FAFAFA;
+    }
+    div {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .webcraft-id{
+      margin-left: 8px;
+      width: 280px;
+    }
+    .name{
+      width: 280px;
+      margin-left: 8px;
+    }
+    .website{
+      width: 280px;
+    }
   }
 }
