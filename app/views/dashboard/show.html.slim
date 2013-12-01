@@ -1,1 +1,29 @@
 - @page_title = 'Dashboard'
+
+.counts.panel.panel-default.center-block
+  .panel-heading HoverCraft Count
+  ul.list-group
+    li.list-group-item
+      | Total
+      span.badge= HoverCraft.count
+
+.counts.panel.panel-default.center-block
+  .panel-heading WebCraft Count
+  ul.list-group
+    li.list-group-item
+      | Twitter 
+      span.badge= "#{(100 * HoverCraft.with_twitter.count.to_f / HoverCraft.count).to_i} %"
+      span.badge= HoverCraft.with_twitter.count
+    li.list-group-item
+      | Yelp
+      span.badge= "#{(100 * HoverCraft.with_yelp.count.to_f / HoverCraft.count).to_i} %"
+      span.badge= HoverCraft.with_yelp.count
+    li.list-group-item
+      | Facebook
+      span.badge= "#{(100 * HoverCraft.with_facebook.count.to_f / HoverCraft.count).to_i} %"
+      span.badge= HoverCraft.with_facebook.count
+    li.list-group-item
+      | Website
+      span.badge= "#{(100 * HoverCraft.with_website.count.to_f / HoverCraft.count).to_i} %"
+      span.badge= HoverCraft.with_website.count
+    
