@@ -3,10 +3,13 @@
 - content_for :navbar_menu
   .btn-toolbar.navbar-btn
     .btn-group
-      a.btn href=populate_hover_crafts_hover_crafts_path title='Populate missing WebCrafts + populate any new HoverCrafts'
-        i.fa.fa-refresh
-          .glyphicon.glyphicon-fire
-  
+      .btn
+        .glyphicon.glyphicon-fire
+          = post_link_to populate_hover_crafts_hover_crafts_path, 
+            class: 'fa fa-refresh',
+            title: "Refresh and Populate All HoverCrafts",
+            confirm: true
+
 .counts.panel.panel-default.center-block
   .panel-heading HoverCraft Count
   ul.list-group

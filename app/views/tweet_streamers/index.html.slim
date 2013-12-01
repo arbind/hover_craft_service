@@ -10,8 +10,12 @@
           button.btn.btn-primary type=:submit + add
   .btn-toolbar.navbar-btn.navbar-left
     .btn-group
-      a.btn href=populate_from_streamers_tweet_streamers_path title='Populate HoverCrafts from all TweetStreamers'
-        .glyphicon.glyphicon-fire
+      .btn
+        = post_link_to populate_from_streamers_tweet_streamers_path, 
+          class: 'glyphicon glyphicon-fire',
+          title: "Schedule All TweetStreamers to populate HoverCrafts",  
+          confirm: true
+
 
 table.table.table-hover
   tr
@@ -24,8 +28,9 @@ table.table.table-hover
   - @tweet_streamers.each do |tweet_streamer|
     tr
       td.menu 
-        a href=tweet_streamer_populate_from_streamer_path(tweet_streamer) title="Populate HoverCrafts from @#{tweet_streamer.screen_name} TweetStreamer"
-          .glyphicon.glyphicon-fire  
+        = post_link_to tweet_streamer_populate_from_streamer_path(tweet_streamer), 
+          class: 'glyphicon glyphicon-fire',
+          title: "Populate HoverCrafts from @#{tweet_streamer.screen_name} TweetStreamer"
       td.screen_name
         a href="https://twitter.com/#{tweet_streamer.screen_name}" title='View Twitter Profile' target='_twitter'
           i.fa.fa-twitter.fa-lg &nbsp;

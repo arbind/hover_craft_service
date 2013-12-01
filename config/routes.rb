@@ -23,17 +23,17 @@ require 'sidekiq/web'
   get 'auth/:provider/failure' => 'auth#oauth_failure'
 
   resources :tweet_streamers, except: [:update] do
-    get 'populate_from_streamer'
-    get 'populate_from_streamers', on: :collection
+    post 'populate_from_streamer'
+    post 'populate_from_streamers', on: :collection
   end
 
   resources :hover_crafts do
-    get 'populate_hover_crafts', on: :collection
+    post 'populate_hover_crafts', on: :collection
   end
 
   resources :sidekiq_admin, only: [:index] do
-    get 'clear_scheduled_jobs', on: :collection
-    get 'clear_stats', on: :collection
+    delete 'clear_scheduled_jobs', on: :collection
+    delete 'clear_stats', on: :collection
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

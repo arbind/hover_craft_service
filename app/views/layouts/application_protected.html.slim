@@ -16,27 +16,33 @@ html
         .navbar-brand= @page_title || "Hover Craft Service"
         .navbar-left
           = yield :navbar_menu
-        .hamburger.btn-group.navbar-btn.navbar-right
-          button.btn.navbar-btn.dropdown-toggle type="button" data-toggle="dropdown"
-            i.fa.fa-bars.fa-lg
-          ul.dropdown-menu role="menu"
-            li
-              a href=settings_path title='Settings'
-                .glyphicon.glyphicon-cog
-                | &nbsp; Settings
-            li.divider
-            li
-              a href=logout_path title='logout'
-                .glyphicon.glyphicon-remove
-                | &nbsp; Logout @#{current_user.screen_name}
-        a.btn.navbar-btn.navbar-right href=sidekiq_admin_index_path title='Sidekiq'
-          =image_tag('sidekiq-logo.png')
-        a.btn.navbar-btn.navbar-right href=tweet_streamers_path title='Tweet Streamers'
-          i.fa.fa-twitter.fa-lg
-        a.btn.navbar-btn.navbar-right href=hover_crafts_path title='Hover Crafts'
-          i.fa.fa-truck.fa-lg
-        a.btn.navbar-btn.navbar-right href=dashboard_path title='Dashboard'
-          i.fa.fa-dashboard.fa-lg
+        .btn-group.navbar-btn.navbar-right
+          .btn
+            a href=dashboard_path title='Dashboard'
+              i.fa.fa-dashboard.fa-lg
+          .btn
+            a href=hover_crafts_path title='Hover Crafts'
+              i.fa.fa-truck.fa-lg
+          .btn
+            a href=tweet_streamers_path title='Tweet Streamers'
+              i.fa.fa-twitter.fa-lg
+          .btn
+            a href=sidekiq_admin_index_path title='Sidekiq'
+              =image_tag('sidekiq-logo.png')
+          .btn
+            button.hamburger.dropdown-toggle type="button" data-toggle="dropdown"
+              i.fa.fa-bars.fa-lg
+            ul.dropdown-menu role="menu"
+              li
+                a href=settings_path title='Settings'
+                  .glyphicon.glyphicon-cog
+                  | &nbsp; Settings
+              li.divider
+              li
+                a href=logout_path title='logout'
+                  .glyphicon.glyphicon-remove
+                  | &nbsp; Logout @#{current_user.screen_name}
+            
     .container
       - flash.each do |name, msg|
         div class=name #{msg}
