@@ -13,7 +13,10 @@ require 'sidekiq/web'
 
   get '/ping' => 'root#ping', as: :ping
 
+  get '/styleguide' => 'application#styleguide'
+
   root 'dashboard#show', as: :dashboard
+  get '/settings' => 'dashboard#settings', as: :settings
 
   get 'auth/login' => 'auth#new', as: :login
   get 'auth/logout' => 'auth#logout', as: :logout
@@ -21,9 +24,19 @@ require 'sidekiq/web'
   get 'auth/:provider/callback' => 'auth#oauth_sign_in'
   get 'auth/:provider/failure' => 'auth#oauth_failure'
 
-  resources :background_threads, only: [:index]
-  resources :tweet_streamers, except: [:update]
-  resources :hover_crafts
+  resources :tweet_streamers, except: [:update] do
+    post 'populate_from_streamer'
+    post 'populate_from_streamers', on: :collection
+  end
+
+  resources :hover_crafts do
+    post 'populate_hover_crafts', on: :collection
+  end
+
+  resources :sidekiq_admin, only: [:index] do
+    delete 'clear_scheduled_jobs', on: :collection
+    delete 'clear_stats', on: :collection
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

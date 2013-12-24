@@ -8,6 +8,7 @@ class HoverCraftHandler
     HoverCraft.with_missing_web_craft.each do |hc|
       WorkLauncher.launch :populate_hover_craft, hc
     end
+    WorkLauncher.launch :populate_from_streamers
   end
 
   def self.populate_hover_craft(hover_craft)

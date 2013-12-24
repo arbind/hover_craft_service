@@ -1,9 +1,13 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :current_user
-  rescue_from Exception, :with => :bounce
+  # rescue_from Exception, :with => :bounce
 
   helper_method :current_user
+
+  def styleguide
+    redirect_to 'http://bootswatch.com/cyborg/'
+  end
 
   def current_user
     @current_user ||= TwitterUser.where(twitter_id: session[:current_user]).first

@@ -1,5 +1,9 @@
 class SidekiqService
 
+  def self.num_scheduled_jobs
+    Sidekiq::ScheduledSet.new.count
+  end
+
   def self.clear_scheduled_jobs
     Sidekiq::ScheduledSet.new.clear
   end

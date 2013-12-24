@@ -1,0 +1,98 @@
+- @page_title = 'Hover Crafts'
+
+- content_for :navbar_menu
+  .btn-toolbar.navbar-btn
+    .btn-group
+      .btn
+        .fa.fa-rocket
+          = post_link_to populate_hover_crafts_hover_crafts_path, 
+            class: 'fa fa-refresh',
+            title: "Refresh and Populate All HoverCrafts",
+            confirm: true
+
+- @hover_crafts.each do |hover_craft|
+
+  .hover-craft.panel(class=status_indicator(hover_craft))
+    .panel-heading
+      .btn-group
+        a.btn.btn-default
+          .fa.fa-flash
+        a.btn.btn-default
+          .fa.fa-flash
+        a.btn.btn-default
+          .fa.fa-flash
+      .name = hover_craft.nickname
+      span.badge.pull-right= [hover_craft.craft_fit_score, 0].max
+    .list-group
+      - if hover_craft.twitter_id
+        .list-group-item
+          .btn-group
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+          a href=hover_craft.twitter_href target='_twitter'
+            i.fa.fa-twitter
+              .webcraft-id @#{hover_craft.twitter_screen_name}
+          .name= hover_craft.twitter_name
+          .website= url_domain hover_craft.twitter_website_url
+          .score.badge=hover_craft.twitter_fit_score
+      - if hover_craft.yelp_id
+        .list-group-item
+          .btn-group
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+          a href=hover_craft.yelp_href target='_yelp'
+            i
+              .yelp-symbol
+              .webcraft-id= hover_craft.yelp_id
+          .name= hover_craft.yelp_name
+          .website= url_domain hover_craft.yelp_website_url
+          .score.badge=hover_craft.yelp_fit_score
+      - if hover_craft.facebook_id
+        .list-group-item
+          .btn-group
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+          a href=hover_craft.facebook_href target='_facebook'
+            i.fa.fa-facebook
+              .webcraft-id
+                - if hover_craft.facebook_href
+                  = hover_craft.facebook_href.url_path.gsub(/^\/pages/i, '')
+                - else
+                  | ? facebook href missing !
+          .name= hover_craft.facebook_name
+          .website= url_domain hover_craft.facebook_website_url
+          .score.badge=hover_craft.facebook_fit_score
+
+      - if hover_craft.website_id
+        .list-group-item
+          .btn-group
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+            a.btn
+              .fa.fa-flash
+          a href=hover_craft.website_id target='_website'
+            i.fa.fa-home
+              .webcraft-id= url_domain hover_craft.website_id
+          .name
+          .website= url_domain hover_craft.website_id
+          .score.badge=hover_craft.website_fit_score
+
+/ = link_to 'Show', hover_craft
+/ = link_to 'Edit', edit_hover_craft_path(hover_craft)
+/ = link_to 'Destroy', hover_craft, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+/ = link_to 'New Hover craft', new_hover_craft_path

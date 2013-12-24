@@ -1,0 +1,15 @@
+- @page_title = "Sidekiq: #{pluralize @scheduled_jobs_count, 'job'} scheduled"
+
+- content_for :navbar_menu
+  .btn-toolbar.navbar-btn
+    .btn-group
+      .btn
+        a.fa.fa-bar-chart-o.fa-lg href=sidekiq_web_path title='Launch Sidekiq Dashboard' target='_sidekiq'
+      .btn
+        = delete_link_to clear_stats_sidekiq_admin_index_path,
+          class: 'fa fa-strikethrough fa-lg',
+          title: "Clear Sidekiq Stats"
+      .btn
+        = delete_link_to clear_scheduled_jobs_sidekiq_admin_index_path,
+          class: 'glyphicon glyphicon-remove',
+          title: "Delete all scheduled Sidekiq Jobs"

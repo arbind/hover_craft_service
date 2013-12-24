@@ -24,12 +24,13 @@ gem 'yelpster'          , '~>1.1.4'
 gem 'nokogiri'
 gem 'rest-client'       , '~> 1.6.7'
 
-gem 'sass-rails'        , '~>4.0.0'
-gem 'haml-rails'        , '~>0.4'
-gem 'coffee-rails'      , '~>4.0.0'
-gem 'uglifier'          , '>=1.3.0'
-
-gem 'jquery-rails'      , '~>3.0.2'
+gem 'therubyracer', '~> 0.12.0'
+gem "slim-rails", '~> 2.0.3'
+gem 'jquery-rails', '~> 3.0.4'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'less-rails-bootstrap', '~> 3.0.5'
+gem "font-awesome-rails"
+gem 'uglifier', '>= 1.3.0'
 
 gem 'sdoc'              , require: false, group: :doc
 

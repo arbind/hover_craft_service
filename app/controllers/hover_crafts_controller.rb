@@ -1,4 +1,4 @@
-class HoverCraftsController < ApplicationController
+class HoverCraftsController < ApplicationProtectedController
   before_action :set_hover_craft, only: [:show, :edit, :update, :destroy]
 
   # GET /hover_crafts
@@ -43,6 +43,11 @@ class HoverCraftsController < ApplicationController
   def destroy
     @hover_craft.destroy
     redirect_to hover_crafts_url, notice: 'Hover craft was successfully destroyed.'
+  end
+
+  def populate_hover_crafts
+    WorkLauncher.launch :populate_hover_crafts
+    redirect_to hover_crafts_path, flash: {info: 'Scheduled to refresh existing HoverCrafts and to populate any new ones'}
   end
 
   private

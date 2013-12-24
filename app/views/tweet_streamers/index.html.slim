@@ -1,0 +1,45 @@
+- @page_title = 'Tweet Streamers'
+
+- content_for :navbar_menu
+  form.authorize-tweet-streamer.navbar-form.navbar-left(method=:POST action=tweet_streamers_path role="New TweetStreamer")
+      = token_tag
+      .input-group
+        span.input-group-addon @
+        input.form-control(type=:text name=:screen_name placeholder='twitter screen name')
+        span.input-group-btn
+          button.btn.btn-primary type=:submit + add
+  .btn-toolbar.navbar-btn.navbar-left
+    .btn-group
+      .btn
+        = post_link_to populate_from_streamers_tweet_streamers_path, 
+          class: 'fa fa-rocket',
+          title: "Schedule All TweetStreamers to populate HoverCrafts",  
+          confirm: true
+
+
+table.table.table-hover
+  tr
+    th
+    th Screen Name
+    th Name
+    th Address
+    th 
+
+  - @tweet_streamers.each do |tweet_streamer|
+    tr
+      td.menu 
+        = post_link_to tweet_streamer_populate_from_streamer_path(tweet_streamer), 
+          class: 'fa fa-rocket',
+          title: "Populate HoverCrafts from @#{tweet_streamer.screen_name} TweetStreamer"
+      td.screen_name
+        a href="https://twitter.com/#{tweet_streamer.screen_name}" title='View Twitter Profile' target='_twitter'
+          i.fa.fa-twitter.fa-lg &nbsp;
+          = tweet_streamer.screen_name
+      td.name=        tweet_streamer.name
+      td.address
+        a href="https://maps.google.com.au/maps?q=#{tweet_streamer.coordinates.reverse.join(',')}&spn=0.1,0.1" title='View Location' target='_map'
+          i.fa.fa-map-marker.fa-lg &nbsp;
+        = tweet_streamer.address
+      td
+        | &nbsp; &nbsp; &nbsp; &nbsp; 
+        = link_to(' ', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: 'btn delete fa fa-trash-o', confirm: "Delete @#{tweet_streamer.screen_name}?")

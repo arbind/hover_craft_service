@@ -12,4 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require twitter/bootstrap
+//= require marionette/1.3.0/backbone.marionette.min
 //= require_tree .

@@ -1,0 +1,35 @@
+@import "custom_bootstrap/variables.less";
+
+.counts {
+  width: 200px;
+}
+
+.hover-craft{
+  .name{
+    display: inline-block;
+    margin-left: 8px;
+  }
+
+  .list-group-item{
+    &:hover {
+      background-color: @gray-dark;
+    }
+    div {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .webcraft-id{
+      margin-left: 8px;
+      width: 280px;
+    }
+    .name{
+      width: 280px;
+      margin-left: 8px;
+    }
+    .website{
+      width: 280px;
+    }
+  }
+}
