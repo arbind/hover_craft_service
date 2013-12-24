@@ -13,7 +13,7 @@ if SECRET::TWITTER::KEY
     config.consumer_secret = SECRET::TWITTER::SECRET
   end
 else
-  abort "!! Twitter Client not configured: missing OAuth keys"
+  abort "!! Twitter Client not configured: missing OAuth keys" if ENV["IN_SERVER"]
 end
 
 # Eventually usr a pool of TwitterClients instead:

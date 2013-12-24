@@ -94,7 +94,7 @@ class HoverCraft
 
   before_save :format_hrefs
   before_save :score
-  after_save  :schedule_to_be_crafted, if: :ready_to_craft?
+  # after_save  :schedule_to_be_crafted, if: :ready_to_craft?
 
   def self.service
     ::HoverCraftSvc

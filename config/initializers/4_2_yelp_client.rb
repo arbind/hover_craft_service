@@ -14,7 +14,7 @@ end
 
 if SECRET::YELP::V2::TOKEN
 else
-  puts "!! Yelp Client not configured: missing keys"
+  abort "!! Yelp Client not configured: missing keys" if ENV["IN_SERVER"]
 end
 ENV["YELP_DAILY_REQUEST_LIMIT"] ||= "1000"
 YELP_REQUEST_LIMIT = ENV["YELP_DAILY_REQUEST_LIMIT"].to_i
