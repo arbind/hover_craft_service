@@ -5,6 +5,6 @@ unless $PROGRAM_NAME.end_with?('rake')
   # Add the twitter ids for any users you want to authorize
   AuthorizedUsers.service.authorize({
     '14956791' => 'Arbind Thakur',
-    # 'faeid???' => 'Fae ??',
+    '896339995' => 'Fae@food-truck.me',
   })
 end
