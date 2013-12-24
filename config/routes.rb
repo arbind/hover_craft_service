@@ -13,6 +13,8 @@ require 'sidekiq/web'
 
   get '/ping' => 'root#ping', as: :ping
 
+  get '/styleguide' => 'application#styleguide'
+
   root 'dashboard#show', as: :dashboard
   get '/settings' => 'dashboard#settings', as: :settings
 

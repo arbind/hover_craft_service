@@ -4,7 +4,7 @@
   .btn-toolbar.navbar-btn
     .btn-group
       .btn
-        .glyphicon.glyphicon-fire
+        .fa.fa-rocket
           = post_link_to populate_hover_crafts_hover_crafts_path, 
             class: 'fa fa-refresh',
             title: "Refresh and Populate All HoverCrafts",
@@ -12,7 +12,7 @@
 
 - @hover_crafts.each do |hover_craft|
 
-  .hover-craft.panel.panel-default
+  .hover-craft.panel(class=status_indicator(hover_craft))
     .panel-heading
       .btn-group
         a.btn.btn-default
@@ -49,7 +49,8 @@
             a.btn
               .fa.fa-flash
           a href=hover_craft.yelp_href target='_yelp'
-            i.fa.fa-search
+            i
+              .yelp-symbol
               .webcraft-id= hover_craft.yelp_id
           .name= hover_craft.yelp_name
           .website= url_domain hover_craft.yelp_website_url
@@ -84,8 +85,8 @@
             a.btn
               .fa.fa-flash
           a href=hover_craft.website_id target='_website'
-            i.fa.fa-tablet
-              .webcraft-id
+            i.fa.fa-home
+              .webcraft-id= url_domain hover_craft.website_id
           .name
           .website= url_domain hover_craft.website_id
           .score.badge=hover_craft.website_fit_score

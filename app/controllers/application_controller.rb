@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
 
+  def styleguide
+    redirect_to 'http://bootswatch.com/cyborg/'
+  end
+
   def current_user
     @current_user ||= TwitterUser.where(twitter_id: session[:current_user]).first
   rescue

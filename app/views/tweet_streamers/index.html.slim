@@ -12,7 +12,7 @@
     .btn-group
       .btn
         = post_link_to populate_from_streamers_tweet_streamers_path, 
-          class: 'glyphicon glyphicon-fire',
+          class: 'fa fa-rocket',
           title: "Schedule All TweetStreamers to populate HoverCrafts",  
           confirm: true
 
@@ -29,7 +29,7 @@ table.table.table-hover
     tr
       td.menu 
         = post_link_to tweet_streamer_populate_from_streamer_path(tweet_streamer), 
-          class: 'glyphicon glyphicon-fire',
+          class: 'fa fa-rocket',
           title: "Populate HoverCrafts from @#{tweet_streamer.screen_name} TweetStreamer"
       td.screen_name
         a href="https://twitter.com/#{tweet_streamer.screen_name}" title='View Twitter Profile' target='_twitter'
@@ -42,4 +42,4 @@ table.table.table-hover
         = tweet_streamer.address
       td
         | &nbsp; &nbsp; &nbsp; &nbsp; 
-        = link_to(' ', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: 'btn delete glyphicon glyphicon-remove', confirm: "Delete @#{tweet_streamer.screen_name}?")
+        = link_to(' ', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: 'btn delete fa fa-trash-o', confirm: "Delete @#{tweet_streamer.screen_name}?")
