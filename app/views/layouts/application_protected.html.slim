@@ -27,8 +27,23 @@ html
             a href=tweet_streamers_path title='Tweet Streamers'
               i.fa.fa-ellipsis-v.fa-lg
           .btn
-            a href=sidekiq_admin_index_path title='Sidekiq'
+            a href=sidekiq_admin_index_path
               =image_tag('sidekiq-logo.png')
+          .btn-group
+            .btn.dropdown-toggle type="button" data-toggle="dropdown"
+              i.fa.fa-gear.fa-lg
+              span.caret
+            .dropdown-menu
+              li
+                .btn
+                  a href='/auth/logout' target='_papertrail'
+                    i.fa.fa-times.fa-lg
+                    | &nbsp;&nbsp; Logout
+              li
+                .btn
+                  a href='https://addons-sso.heroku.com/apps/ft-ws-hover-craft/addons/papertrail:choklad'target='_papertrail'
+                    =image_tag('papertrail-logo.png')
+                    |  Papertrail
           .btn
             button.hamburger.dropdown-toggle type="button" data-toggle="dropdown"
               i.fa.fa-bars.fa-lg

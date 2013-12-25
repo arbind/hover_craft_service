@@ -1,6 +1,17 @@
+@import "custom_bootstrap/variables.less";
+
+@link-color:            #2A9FEF;
+
 // fixed nav bar
 body { 
   padding-top: 70px;
+}
+
+a {
+  &:hover {
+    text-decoration: none;
+    color: white;
+  }
 }
 
 .navbar{
@@ -14,7 +25,18 @@ body {
       height: 22px;
     }
   }
-
+  .btn.dropdown-toggle {
+    color: @link-color;
+    .caret {
+      border-top: 4px solid @link-color;
+    }
+    &:hover {
+      color: white;
+      .caret {
+        border-top: 4px solid white;
+      }
+    }    
+  }
 }
 .dropdown-menu {
   text-align: left;
