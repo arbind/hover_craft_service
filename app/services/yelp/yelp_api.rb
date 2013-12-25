@@ -16,10 +16,8 @@ class YelpApi
   def self.biz_for_id(yelp_id)
     query = v2({yelp_business_id: yelp_id})
     request = Yelp::V2::Business::Request::Id.new(query)
-    biz = yelp.search(request)
+    biz = yelp_search(request)
     YelpBiz.new biz if biz
-  rescue
-    nil
   end
 
   def self.website_for_id(yelp_id)
@@ -43,7 +41,7 @@ class YelpApi
     }
     query    = v2(query)
     request  = Yelp::V2::Search::Request::Location.new(query)
-    response = yelp.search(request)
+    response = yelp_search(request)
     businesses = response["businesses"] if response
     YelpBiz.new businesses.first if businesses and businesses.any?
   end
@@ -95,7 +93,7 @@ class YelpApi
     }
     query = v2(query)
     request = Yelp::V2::Search::Request::Location.new(query)
-    response = yelp.search(request)
+    response = yelp_search(request)
   end
 
   def self.search_for_term(term, location, radius_filter=10000) # API v2 specifies radius_filter (not radius) and is in meters (max 40000)
@@ -116,7 +114,7 @@ class YelpApi
       query = v2(query)
       request = Yelp::V2::Search::Request::Location.new(query)
     end
-    response = yelp.search(request)
+    response = yelp_search(request)
   end
 
   def self.search_for_category(category_array, location, radius_filter=10000)
@@ -136,10 +134,19 @@ class YelpApi
       query = v2(query)
       request = Yelp::V2::Search::Request::Location.new(query)
     end
-    response = yelp.search(request)
+    response = yelp_search(request)
   end
 
 private
+  def self.yelp_search(request)
+    response = yelp.search(request)
+    raise YelpError.new(response) if error?(response)
+  end
+
+  def self.error?(response)
+    response['error'].present?
+  end
+
   def self.v1(query={})
     {
       yws_id: SECRET::YELP::V1::YWS_ID
@@ -182,6 +189,14 @@ private
       display_address_tokens = location["display_address"]
       return nil unless display_address_tokens and display_address_tokens.any?
       display_address_tokens.join(", ")
+    end
+  end
+
+  # Error response when rate limit is exceeded:
+  # {"error"=>{"text"=>"Exceeded max daily requests", "id"=>"EXCEEDED_REQS"}}
+  class YelpError < StandardError
+    def initialize(api_response)
+      super "Yelp API: #{api_response['error']['text']}"
     end
   end
 end
