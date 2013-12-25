@@ -1,27 +1,65 @@
 - @page_title = 'Dashboard'
 
-- count = HoverCraft.count
-.counts.panel.panel-default.center-block
-  .panel-heading HoverCraft Count
-  ul.list-group
-    li.list-group-item
-      | Total
-      span.badge= count
+.row
+  - count = HoverCraft.count
+  .col-lg-4
+    .counts.panel.panel-info.center-block
+      .panel-heading HoverCrafts
+      ul.list-group
+        li.list-group-item
+          | Total
+          span.badge= count
 
-- count = count + 1 if 0.eql? count # avoid div by zero NaN
-.counts.panel.panel-default.center-block
-  .panel-heading WebCraft Count
-  ul.list-group
-    li.list-group-item
-      | Twitter 
-      span.badge= "#{(100 * HoverCraft.with_twitter.count.to_f / (count) ).to_i} %"
-    li.list-group-item
-      | Yelp
-      span.badge= "#{(100 * HoverCraft.with_yelp.count.to_f / (count) ).to_i} %"
-    li.list-group-item
-      | Facebook
-      span.badge= "#{(100 * HoverCraft.with_facebook.count.to_f / (count) ).to_i} %"
-    li.list-group-item
-      | Website
-      span.badge= "#{(100 * HoverCraft.with_website.count.to_f / (count) ).to_i} %"
-    
+    - count = count + 1 if 0.eql? count # avoid div by zero NaN
+    .counts.panel.panel-success.center-block
+      .panel-heading Crafts
+      ul.list-group
+        li.list-group-item
+          | Total
+          - progress = (100 * HoverCraft.crafted.count.to_f / (count) ).to_i
+          .progress style='background-color: black'
+            .progress-bar style="width: #{progress}%"
+              span.badge #{progress}%
+
+  .col-lg-4
+    .counts.panel.panel-primary.center-block
+      .panel-heading Identified WebCrafts
+      ul.list-group
+        li.list-group-item
+          | Twitter
+          - progress = (100 * HoverCraft.with_twitter.count.to_f / (count) ).to_i
+          .progress style='background-color: black'
+            .progress-bar style="width: #{progress}%"
+              span.badge #{progress}%
+        li.list-group-item
+          | Yelp
+          - progress = (100 * HoverCraft.with_yelp.count.to_f / (count) ).to_i
+          .progress style='background-color: black'
+            .progress-bar style="width: #{progress}%"
+              span.badge #{progress}%
+        li.list-group-item
+          | Facebook
+          - progress = (100 * HoverCraft.with_facebook.count.to_f / (count) ).to_i
+          .progress style='background-color: black'
+            .progress-bar style="width: #{progress}%"
+              span.badge #{progress}%
+        li.list-group-item
+          | Website
+          - progress = (100 * HoverCraft.with_website.count.to_f / (count) ).to_i
+          .progress style='background-color: black'
+            .progress-bar style="width: #{progress}%"
+              span.badge #{progress}%
+  .col-lg-4
+    .counts.panel.panel-default.center-block
+      .panel-heading Tweet Streamer
+      ul.list-group
+        li.list-group-item
+          | Accounts
+          span.badge= TweetStreamer.count
+        
+    .counts.panel.panel-default.center-block
+      .panel-heading Sidekiq
+      ul.list-group
+        li.list-group-item
+          | Jobs
+          span.badge= SidekiqService.num_scheduled_jobs
