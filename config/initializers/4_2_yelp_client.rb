@@ -1,4 +1,9 @@
-module SECRET::YELP # http://www.yelp.com/developers/manage_api_keys facebook[arbind.thakur] or arbind.thakur@gmail.com/!light
+# http://www.yelp.com/developers/manage_api_keys
+# Yelp Developer Accounts:
+# Production: underwatercrystals@gmail.com / horseback
+# Development: facebook[arbind.thakur] or arbind.thakur@gmail.com / WollyRiverNullDot
+
+module SECRET::YELP 
 end
 
 module SECRET::YELP::V1 # Yelp API V1.0 uses Yelp Web Service ID:
