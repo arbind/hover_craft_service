@@ -15,8 +15,10 @@
       .panel-heading Crafts
       ul.list-group
         li.list-group-item
+          - crafted = HoverCraft.crafted.count
+          - progress = (100.0 * crafted / (count) ).to_i
           | Total
-          - progress = (100 * HoverCraft.crafted.count.to_f / (count) ).to_i
+          span.badge= crafted
           .progress style='background-color: black'
             .progress-bar style="width: #{progress}%"
               span.badge #{progress}%
@@ -26,26 +28,34 @@
       .panel-heading Identified WebCrafts
       ul.list-group
         li.list-group-item
+          - with_twitter = HoverCraft.with_twitter.count
+          - progress = (100.0 * with_twitter / (count) ).to_i
           | Twitter
-          - progress = (100 * HoverCraft.with_twitter.count.to_f / (count) ).to_i
+          span.badge= with_twitter
           .progress style='background-color: black'
             .progress-bar style="width: #{progress}%"
               span.badge #{progress}%
         li.list-group-item
+          - with_yelp = HoverCraft.with_yelp.count
+          - progress = (100.0 * with_yelp / (count) ).to_i
           | Yelp
-          - progress = (100 * HoverCraft.with_yelp.count.to_f / (count) ).to_i
+          span.badge= with_yelp
           .progress style='background-color: black'
             .progress-bar style="width: #{progress}%"
               span.badge #{progress}%
         li.list-group-item
+          - with_facebook = HoverCraft.with_facebook.count
+          - progress = (100.0 * with_facebook / (count) ).to_i
           | Facebook
-          - progress = (100 * HoverCraft.with_facebook.count.to_f / (count) ).to_i
+          span.badge= with_facebook
           .progress style='background-color: black'
             .progress-bar style="width: #{progress}%"
               span.badge #{progress}%
         li.list-group-item
+          - with_website = HoverCraft.with_website.count
+          - progress = (100.0 * with_website / (count) ).to_i
           | Website
-          - progress = (100 * HoverCraft.with_website.count.to_f / (count) ).to_i
+          span.badge= with_website
           .progress style='background-color: black'
             .progress-bar style="width: #{progress}%"
               span.badge #{progress}%
