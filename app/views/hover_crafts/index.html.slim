@@ -4,11 +4,10 @@
   .btn-toolbar.navbar-btn
     .btn-group
       .btn
-        .fa.fa-rocket
-          = post_link_to populate_hover_crafts_hover_crafts_path, 
-            class: 'fa fa-refresh',
-            title: "Refresh and Populate All HoverCrafts",
-            confirm: true
+        = post_link_to populate_hover_crafts_hover_crafts_path, 
+          class: 'fa fa-rocket',
+          title: "Re-populate All HoverCrafts",
+          confirm: true
 
 - @hover_crafts.each do |hover_craft|
 

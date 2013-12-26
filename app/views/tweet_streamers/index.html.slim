@@ -11,15 +11,15 @@
   .btn-toolbar.navbar-btn.navbar-left
     .btn-group
       .btn
-        = post_link_to populate_from_streamers_tweet_streamers_path, 
-          class: 'fa fa-rocket',
-          title: "Schedule All TweetStreamers to populate HoverCrafts",  
-          confirm: true
 
 
 table.table.table-hover
   tr
     th
+      = post_link_to populate_from_streamers_tweet_streamers_path, 
+        class: 'fa fa-rocket',
+        title: "Populate HoverCrafts with all TweetStreamers",
+        confirm: true
     th Screen Name
     th Name
     th Address
