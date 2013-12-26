@@ -141,6 +141,7 @@ private
   def self.yelp_search(request)
     response = yelp.search(request)
     raise YelpError.new(response) if error?(response)
+    response
   end
 
   def self.error?(response)
