@@ -9,22 +9,12 @@
         li.list-group-item
           | Total
           span.badge= count
+          .progress style='background-color: black'
+            .progress-bar style="width: 100%"
+              span.badge 100%
 
     - count = count + 1 if 0.eql? count # avoid div by zero NaN
-    .counts.panel.panel-success.center-block
-      .panel-heading Crafts
-      ul.list-group
-        li.list-group-item
-          - crafted = HoverCraft.crafted.count
-          - progress = (100.0 * crafted / (count) ).to_i
-          | Total
-          span.badge= crafted
-          .progress style='background-color: black'
-            .progress-bar style="width: #{progress}%"
-              span.badge #{progress}%
-
-  .col-lg-4
-    .counts.panel.panel-primary.center-block
+    .counts.panel.panel-info.center-block
       .panel-heading Identified WebCrafts
       ul.list-group
         li.list-group-item
@@ -59,6 +49,19 @@
           .progress style='background-color: black'
             .progress-bar style="width: #{progress}%"
               span.badge #{progress}%
+  .col-lg-4
+    .counts.panel.panel-success.center-block
+      .panel-heading Crafts
+      ul.list-group
+        li.list-group-item
+          - crafted = HoverCraft.crafted.count
+          - progress = (100.0 * crafted / (count) ).to_i
+          | Total
+          span.badge= crafted
+          .progress style='background-color: black'
+            .progress-bar style="width: #{progress}%"
+              span.badge #{progress}%
+
   .col-lg-4
     .counts.panel.panel-default.center-block
       .panel-heading Tweet Streamer

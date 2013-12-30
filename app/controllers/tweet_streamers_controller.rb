@@ -14,8 +14,11 @@ class TweetStreamersController < ApplicationProtectedController
   end
 
   def destroy
+    hover_crafts_deps = HoverCraft.where(tweet_streamer_id: @tweet_streamer.id)
+    delete_count = hover_crafts_deps.count
+    hover_crafts_deps.delete_all
     @tweet_streamer.delete
-    notice = "#{@tweet_streamer.screen_name} removed as a TweetStreamer"
+    notice = "Deleted #{@tweet_streamer.screen_name} TweetStreamer and #{delete_count} hover crafts"
     redirect_to tweet_streamers_path notice: notice
   end
 

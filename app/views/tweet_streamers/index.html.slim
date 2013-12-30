@@ -42,4 +42,4 @@ table.table.table-hover
         = tweet_streamer.address
       td
         | &nbsp; &nbsp; &nbsp; &nbsp; 
-        = link_to(' ', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: 'btn delete fa fa-trash-o', confirm: "Delete @#{tweet_streamer.screen_name}?")
+        = link_to(' ', tweet_streamer_path(tweet_streamer), method: :delete, action: :delete, class: 'btn delete fa fa-trash-o', confirm: "Delete @#{tweet_streamer.screen_name}? and its dependent HoverCrafts?")
