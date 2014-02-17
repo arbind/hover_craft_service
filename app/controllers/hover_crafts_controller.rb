@@ -3,7 +3,8 @@ class HoverCraftsController < ApplicationProtectedController
 
   # GET /hover_crafts
   def index
-    @hover_crafts = HoverCraft.all
+    # @hover_crafts = HoverCraft.all - add some pagination.
+    @hover_crafts = HoverCraft.limit(300)
   end
 
   # GET /hover_crafts/1
