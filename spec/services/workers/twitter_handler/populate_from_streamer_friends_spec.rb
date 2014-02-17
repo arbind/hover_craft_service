@@ -61,11 +61,11 @@ describe :populate_from_streamer_friends do
             TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
           }.to change(HoverCraftResolveUrl.jobs, :size).by(first_batch_of_ids.size)
         end
-        it 'schedules CreateCraft jobs for each new HoverCraft (to create a craft)' do
-          expect {
-            TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
-          }.to change(BeamUpCraft.jobs, :size).by(first_batch_of_ids.size)
-        end
+        # it 'schedules CreateCraft jobs for each new HoverCraft (to create a craft)' do
+        #   expect {
+        #     TwitterHandler.populate_from_streamer_friends streamer, new_friend_ids
+        #   }.to change(BeamUpCraft.jobs, :size).by(first_batch_of_ids.size)
+        # end
       end
     end
   end
